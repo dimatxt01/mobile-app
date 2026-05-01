@@ -1,7 +1,8 @@
 {
   "expo": {
-    "name": "test-app",
-    "slug": "test-app",
+    "name": "CoolifyAI",
+    "slug": "coolify-ai",
+    "scheme": "coolify-ai",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
@@ -13,13 +14,15 @@
       "backgroundColor": "#ffffff"
     },
     "ios": {
-      "supportsTablet": true
+      "supportsTablet": true,
+      "bundleIdentifier": "com.placeholder.coolifyai"
     },
     "android": {
       "adaptiveIcon": {
         "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#ffffff"
       },
+      "package": "com.placeholder.coolifyai",
       "edgeToEdgeEnabled": true,
       "predictiveBackGestureEnabled": false
     },
@@ -28,8 +31,10 @@
     },
     "plugins": [
       "expo-router",
-      "expo-secure-store",
-      "expo-web-browser"
-    ]
+      "expo-secure-store"
+    ],
+    "experiments": {
+      "typedRoutes": true
+    }
   }
 }
