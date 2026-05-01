@@ -1,4 +1,4 @@
-<<<<<<< HEAD
+
 # Half Milly Club (HMC) — Project Reference
 
 ## What This App Is
@@ -119,12 +119,14 @@ Fonts:
 ```
 
 **Typography rules:**
+
 - Numbers: JetBrains Mono, tabular figures (`fontVariant: ['tabular-nums']`)
 - Labels/eyebrows: JetBrains Mono uppercase, letterSpacing 1.5
 - Body: Inter
 - Amber ONLY on: active tab underline, locked total, active CTA, amber accent text
 
 **Spacing:**
+
 - Horizontal padding: 20px
 - Section gap: 24px
 - Hairline: `height: StyleSheet.hairlineWidth`
@@ -156,12 +158,12 @@ app/(app)/_layout.tsx:
 
 ## Database RPCs
 
-| RPC | Args | Returns | When called |
-|-----|------|---------|-------------|
-| `seed_default_habits(user_id)` | uuid | void | End of onboarding |
-| `lock_checkin(id, identity, execution, outcome, penalty)` | uuid + 4 ints | int (final total) | Lock CTA tap |
-| `get_user_stats()` | — | {streak, day_count, lifetime_avg, best_score, best_date} | YOU tab header |
-| `get_history(days)` | int (default 30) | rows | WEEK/TRENDS data |
+| RPC                                                       | Args             | Returns                                                  | When called       |
+| --------------------------------------------------------- | ---------------- | -------------------------------------------------------- | ----------------- |
+| `seed_default_habits(user_id)`                            | uuid             | void                                                     | End of onboarding |
+| `lock_checkin(id, identity, execution, outcome, penalty)` | uuid + 4 ints    | int (final total)                                        | Lock CTA tap      |
+| `get_user_stats()`                                        | —                | {streak, day_count, lifetime_avg, best_score, best_date} | YOU tab header    |
+| `get_history(days)`                                       | int (default 30) | rows                                                     | WEEK/TRENDS data  |
 
 ## Coding Conventions
 
@@ -176,17 +178,17 @@ app/(app)/_layout.tsx:
 
 ## Packages — Status
 
-| Package | Status | Notes |
-|---------|--------|-------|
-| expo-font | needs install | font loading |
-| @expo-google-fonts/inter | needs install | Inter display font |
-| @expo-google-fonts/jetbrains-mono | needs install | JetBrains Mono |
-| expo-camera | needs install | MIRROR tab |
-| expo-image-picker | needs install | MIRROR tab alt |
-| expo-notifications | needs install | local reminders |
-| expo-file-system | needs install | photo handling |
-| react-native-svg | SKIP (Expo Go) | use View-based charts |
-| react-native-purchases | SKIP (stub) | paywall "coming soon" |
+| Package                           | Status         | Notes                 |
+| --------------------------------- | -------------- | --------------------- |
+| expo-font                         | needs install  | font loading          |
+| @expo-google-fonts/inter          | needs install  | Inter display font    |
+| @expo-google-fonts/jetbrains-mono | needs install  | JetBrains Mono        |
+| expo-camera                       | needs install  | MIRROR tab            |
+| expo-image-picker                 | needs install  | MIRROR tab alt        |
+| expo-notifications                | needs install  | local reminders       |
+| expo-file-system                  | needs install  | photo handling        |
+| react-native-svg                  | SKIP (Expo Go) | use View-based charts |
+| react-native-purchases            | SKIP (stub)    | paywall "coming soon" |
 
 All packages except react-native-svg and react-native-purchases work in Expo Go SDK 54.
 
@@ -212,7 +214,9 @@ See `.archon/logs/progress.md` for current status of each phase.
 - **Phase 7** — YOU tab + edit modals
 - **Phase 8** — Post-lock triggers + notifications
 - **Phase 9** — Stub modals: paywall, subscription, privacy, whoop
-=======
+
+---
+
 # HMC Habit-Scoring App — Developer Guide
 
 ## Setup
@@ -247,27 +251,27 @@ supabase db push
 
 This applies all 7 migrations in `supabase/migrations/` in order:
 
-| File | Contents |
-|------|----------|
-| `0001_init.sql` | Auth + base schema |
-| `0002_hmc_profile.sql` | User profiles |
-| `0003_hmc_habits.sql` | Habits table |
-| `0004_hmc_checkins.sql` | Daily check-ins |
-| `0005_hmc_mirror.sql` | Mirror photos |
-| `0006_hmc_reviews.sql` | Weekly/monthly reviews |
+| File                     | Contents                              |
+| ------------------------ | ------------------------------------- |
+| `0001_init.sql`          | Auth + base schema                    |
+| `0002_hmc_profile.sql`   | User profiles                         |
+| `0003_hmc_habits.sql`    | Habits table                          |
+| `0004_hmc_checkins.sql`  | Daily check-ins                       |
+| `0005_hmc_mirror.sql`    | Mirror photos                         |
+| `0006_hmc_reviews.sql`   | Weekly/monthly reviews                |
 | `0007_hmc_functions.sql` | `lock_checkin` and `get_history` RPCs |
 
 ## Commands
 
-| Command | Description |
-|---------|-------------|
-| `npm start` | Start Expo dev server |
-| `npm run ios` | Run on iOS simulator |
-| `npm run android` | Run on Android emulator |
-| `npm test` | Run Jest test suite |
+| Command             | Description                     |
+| ------------------- | ------------------------------- |
+| `npm start`         | Start Expo dev server           |
+| `npm run ios`       | Run on iOS simulator            |
+| `npm run android`   | Run on Android emulator         |
+| `npm test`          | Run Jest test suite             |
 | `npm run typecheck` | TypeScript type check (no emit) |
-| `npm run lint` | ESLint |
-| `npm run format` | Prettier |
+| `npm run lint`      | ESLint                          |
+| `npm run format`    | Prettier                        |
 
 ## Architecture
 
@@ -307,4 +311,3 @@ In `src/features/mirror/upload-photo.ts`, `encoding: 'base64'` is passed as a st
 
 - Paywall / subscription gating
 - Whoop OAuth integration (stub: `whoop_score_adj` field exists in check-ins)
->>>>>>> 35ae86c4ddb1472145ca485587f2c87162186555

@@ -1,11 +1,12 @@
 import { useState } from 'react';
-import { Text, TouchableOpacity, View } from 'react-native';
+import { StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import { Link, router } from 'expo-router';
 import { Screen } from '@/components/ui/Screen';
 import { Input } from '@/components/ui/Input';
 import { Button } from '@/components/ui/Button';
 import { useAuth } from '@/features/auth/hooks/use-auth';
 import { signInSchema } from '@/features/auth/schemas/auth-schemas';
+import { colors, fonts } from '@/lib/hmc-colors';
 
 export default function SignInScreen() {
   const { signIn, signInWithGoogle } = useAuth();
@@ -52,13 +53,13 @@ export default function SignInScreen() {
 
   return (
     <Screen scroll>
-      <Text className="mb-2 text-3xl font-bold text-gray-900">Welcome back</Text>
-      <Text className="mb-8 text-gray-500">Sign in to CoolifyAI</Text>
+      <Text style={s.title}>Welcome back</Text>
+      <Text style={s.subtitle}>Sign in to HMC.</Text>
 
       {errors.general ? (
-        <Text className="mb-4 rounded-lg bg-red-50 px-4 py-3 text-center text-red-600">
-          {errors.general}
-        </Text>
+        <View style={s.error}>
+          <Text style={s.errorText}>{errors.general}</Text>
+        </View>
       ) : null}
 
       <Input
@@ -80,9 +81,9 @@ export default function SignInScreen() {
         placeholder="••••••••"
       />
 
-      <TouchableOpacity className="mb-6 self-end">
+      <TouchableOpacity style={s.forgotRow}>
         <Link href="/(auth)/forgot-password">
-          <Text className="text-sm text-blue-600">Forgot password?</Text>
+          <Text style={s.forgotText}>Forgot password?</Text>
         </Link>
       </TouchableOpacity>
 
@@ -94,12 +95,37 @@ export default function SignInScreen() {
         onPress={handleGoogleSignIn}
       />
 
-      <View className="mt-6 flex-row justify-center">
-        <Text className="text-gray-500">{"Don't have an account?"} </Text>
+      <View style={s.footer}>
+        <Text style={s.footerText}>{"Don't have an account?"} </Text>
         <Link href="/(auth)/sign-up">
-          <Text className="font-semibold text-blue-600">Sign up</Text>
+          <Text style={s.footerLink}>Sign up</Text>
         </Link>
       </View>
     </Screen>
   );
 }
+
+const s = StyleSheet.create({
+  title: { fontFamily: fonts.monoBold, fontSize: 28, color: colors.textPrimary, marginBottom: 4 },
+  subtitle: {
+    fontFamily: fonts.display,
+    fontSize: 14,
+    color: colors.textSecondary,
+    marginBottom: 32,
+  },
+  error: {
+    backgroundColor: colors.elevated,
+    borderRadius: 8,
+    paddingHorizontal: 16,
+    paddingVertical: 12,
+    marginBottom: 16,
+    borderWidth: StyleSheet.hairlineWidth,
+    borderColor: colors.danger,
+  },
+  errorText: { fontFamily: fonts.display, fontSize: 13, color: colors.danger, textAlign: 'center' },
+  forgotRow: { alignSelf: 'flex-end', marginBottom: 24 },
+  forgotText: { fontFamily: fonts.mono, fontSize: 12, letterSpacing: 1.5, color: colors.amber },
+  footer: { marginTop: 24, flexDirection: 'row', justifyContent: 'center' },
+  footerText: { fontFamily: fonts.display, fontSize: 14, color: colors.textSecondary },
+  footerLink: { fontFamily: fonts.displayMedium, fontSize: 14, color: colors.amber },
+});

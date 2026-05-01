@@ -1,24 +1,30 @@
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { ScrollView, View } from 'react-native';
+import { ScrollView, View, StyleSheet } from 'react-native';
+import { colors, spacing } from '@/lib/hmc-colors';
 
 type ScreenProps = {
   children: React.ReactNode;
   scroll?: boolean;
-  className?: string;
 };
 
-export function Screen({ children, scroll = false, className = '' }: ScreenProps) {
+export function Screen({ children, scroll = false }: ScreenProps) {
   const inner = scroll ? (
     <ScrollView
-      className="flex-1"
-      contentContainerClassName="px-6 py-8"
+      style={styles.flex}
+      contentContainerStyle={styles.content}
       keyboardShouldPersistTaps="handled"
     >
       {children}
     </ScrollView>
   ) : (
-    <View className={`flex-1 px-6 py-8 ${className}`}>{children}</View>
+    <View style={[styles.flex, styles.content]}>{children}</View>
   );
 
-  return <SafeAreaView className="flex-1 bg-white">{inner}</SafeAreaView>;
+  return <SafeAreaView style={styles.container}>{inner}</SafeAreaView>;
 }
+
+const styles = StyleSheet.create({
+  container: { flex: 1, backgroundColor: colors.base },
+  flex: { flex: 1 },
+  content: { paddingHorizontal: spacing.pagePad, paddingVertical: 32 },
+});

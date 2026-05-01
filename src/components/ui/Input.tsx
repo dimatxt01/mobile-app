@@ -1,23 +1,52 @@
-import { Text, TextInput, TextInputProps, View } from 'react-native';
+import { Text, TextInput, TextInputProps, View, StyleSheet } from 'react-native';
+import { colors, fonts } from '@/lib/hmc-colors';
 
 type InputProps = TextInputProps & {
   label?: string;
   error?: string;
 };
 
-export function Input({ label, error, ...props }: InputProps) {
+export function Input({ label, error, style, ...props }: InputProps) {
   return (
-    <View className="mb-4">
-      {label ? <Text className="mb-1 text-sm font-medium text-gray-700">{label}</Text> : null}
+    <View style={styles.wrapper}>
+      {label ? <Text style={styles.label}>{label}</Text> : null}
       <TextInput
-        className={`rounded-lg border px-4 py-3 text-base text-gray-900 ${
-          error ? 'border-red-500' : 'border-gray-300'
-        }`}
-        placeholderTextColor="#9CA3AF"
+        style={[styles.input, error && styles.inputError, style]}
+        placeholderTextColor={colors.textTertiary}
         autoCapitalize="none"
         {...props}
       />
-      {error ? <Text className="mt-1 text-xs text-red-500">{error}</Text> : null}
+      {error ? <Text style={styles.errorText}>{error}</Text> : null}
     </View>
   );
 }
+
+const styles = StyleSheet.create({
+  wrapper: { marginBottom: 16 },
+  label: {
+    fontFamily: fonts.mono,
+    fontSize: 11,
+    letterSpacing: 1.5,
+    color: colors.textTertiary,
+    marginBottom: 6,
+    textTransform: 'uppercase',
+  },
+  input: {
+    fontFamily: fonts.display,
+    fontSize: 16,
+    color: colors.textPrimary,
+    backgroundColor: colors.elevated,
+    borderRadius: 8,
+    paddingHorizontal: 16,
+    paddingVertical: 14,
+    borderWidth: StyleSheet.hairlineWidth,
+    borderColor: colors.lineStrong,
+  },
+  inputError: { borderColor: colors.danger },
+  errorText: {
+    fontFamily: fonts.display,
+    fontSize: 12,
+    color: colors.danger,
+    marginTop: 4,
+  },
+});
