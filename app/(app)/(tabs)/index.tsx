@@ -1,18 +1,3 @@
-<<<<<<< HEAD
-import { Text, View } from 'react-native';
-import { Screen } from '@/components/ui/Screen';
-
-export default function HomeScreen() {
-  return (
-    <Screen>
-      <View className="flex-1 items-center justify-center">
-        <Text className="text-2xl font-bold text-gray-900">CoolifyAI</Text>
-        <Text className="mt-2 text-gray-500">Welcome! More features coming soon.</Text>
-      </View>
-    </Screen>
-  );
-}
-=======
 import { useState, useEffect, useMemo } from 'react';
 import { View, Text, ScrollView, TouchableOpacity, StyleSheet } from 'react-native';
 import { router } from 'expo-router';
@@ -278,4 +263,3 @@ const styles = StyleSheet.create({
     color: colors.amber,
   },
 });
->>>>>>> 35ae86c4ddb1472145ca485587f2c87162186555

@@ -1,15 +1,6 @@
-<<<<<<< HEAD
-// Placeholder — generate the full types file from your live Supabase project:
-//   npx supabase gen types typescript --project-id <your-project-id> > src/types/database.ts
-
-export type Json = string | number | boolean | null | { [key: string]: Json | undefined } | Json[];
-
-export type AppRole = 'agency' | 'client';
-=======
 export type Json = string | number | boolean | null | { [key: string]: Json | undefined } | Json[];
 
 export type HabitType = 'identity' | 'execution';
->>>>>>> 35ae86c4ddb1472145ca485587f2c87162186555
 
 export interface Database {
   public: {
@@ -23,8 +14,6 @@ export interface Database {
           agency_id: string | null;
           client_id: string | null;
           onboarding_completed: boolean;
-<<<<<<< HEAD
-=======
           identity_sentence: string | null;
           vision: string | null;
           reminder_time: string;
@@ -37,7 +26,6 @@ export interface Database {
           whoop_refresh_token: string | null;
           subscription_status: string;
           trial_ends_at: string | null;
->>>>>>> 35ae86c4ddb1472145ca485587f2c87162186555
           created_at: string;
           updated_at: string;
         };
@@ -49,8 +37,6 @@ export interface Database {
           agency_id?: string | null;
           client_id?: string | null;
           onboarding_completed?: boolean;
-<<<<<<< HEAD
-=======
           identity_sentence?: string | null;
           vision?: string | null;
           reminder_time?: string;
@@ -63,7 +49,6 @@ export interface Database {
           whoop_refresh_token?: string | null;
           subscription_status?: string;
           trial_ends_at?: string | null;
->>>>>>> 35ae86c4ddb1472145ca485587f2c87162186555
           created_at?: string;
           updated_at?: string;
         };
@@ -75,8 +60,6 @@ export interface Database {
           agency_id?: string | null;
           client_id?: string | null;
           onboarding_completed?: boolean;
-<<<<<<< HEAD
-=======
           identity_sentence?: string | null;
           vision?: string | null;
           reminder_time?: string;
@@ -381,7 +364,6 @@ export interface Database {
           best_day_date?: string | null;
           best_day_score?: number | null;
           streak_during?: number | null;
->>>>>>> 35ae86c4ddb1472145ca485587f2c87162186555
           updated_at?: string;
         };
       };
@@ -389,32 +371,19 @@ export interface Database {
         Row: {
           id: string;
           user_id: string;
-<<<<<<< HEAD
-          role: AppRole;
-=======
           role: 'agency' | 'client';
->>>>>>> 35ae86c4ddb1472145ca485587f2c87162186555
         };
         Insert: {
           id?: string;
           user_id: string;
-<<<<<<< HEAD
-          role?: AppRole;
-        };
-        Update: {
-          role?: AppRole;
-=======
           role?: 'agency' | 'client';
         };
         Update: {
           role?: 'agency' | 'client';
->>>>>>> 35ae86c4ddb1472145ca485587f2c87162186555
         };
       };
     };
     Functions: {
-<<<<<<< HEAD
-=======
       seed_default_habits: {
         Args: { p_user_id: string };
         Returns: undefined;
@@ -455,27 +424,16 @@ export interface Database {
           is_late_checkin: boolean;
         }>;
       };
->>>>>>> 35ae86c4ddb1472145ca485587f2c87162186555
       ensure_user_dashboard_setup: {
         Args: Record<string, never>;
         Returns: string;
       };
       has_role: {
-<<<<<<< HEAD
-        Args: { _user_id: string; _role: AppRole };
-=======
         Args: { _user_id: string; _role: 'agency' | 'client' };
->>>>>>> 35ae86c4ddb1472145ca485587f2c87162186555
         Returns: boolean;
       };
     };
     Enums: {
-<<<<<<< HEAD
-      app_role: AppRole;
-    };
-  };
-}
-=======
       app_role: 'agency' | 'client';
       habit_type: HabitType;
     };
@@ -490,4 +448,3 @@ export type DailyCheckin = Database['public']['Tables']['daily_checkins']['Row']
 export type MirrorPhoto = Database['public']['Tables']['mirror_photos']['Row'];
 export type WeeklyReview = Database['public']['Tables']['weekly_reviews']['Row'];
 export type MonthlyReview = Database['public']['Tables']['monthly_reviews']['Row'];
->>>>>>> 35ae86c4ddb1472145ca485587f2c87162186555

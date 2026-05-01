@@ -293,16 +293,6 @@ _Add notes during implementation here_
 
 ## Decisions Log
 
-<<<<<<< HEAD
-| Date | Decision | Reason |
-|------|----------|--------|
-| 2026-05-01 | StyleSheet for HMC components, not NativeWind | Simpler to debug for first-time Expo dev |
-| 2026-05-01 | Skip react-native-svg — use View-based charts | Not bundled in Expo Go SDK 54 |
-| 2026-05-01 | Skip react-native-purchases — paywall stub | Native module, not needed for MVP |
-| 2026-05-01 | expo-font + Google Fonts for Inter + JetBrains Mono | Standard Expo approach, works in Expo Go |
-| 2026-05-01 | perf_9to5 folded into execution_score for lock_checkin RPC | RPC signature takes 4 bracket scores; perf_9to5 stored separately via upsert |
-| 2026-05-01 | Profile state in Zustand store (profile-store.ts) | Needs onboarding_completed for routing; avoids extra query on every nav guard |
-=======
 | Date       | Decision                                                   | Reason                                                                        |
 | ---------- | ---------------------------------------------------------- | ----------------------------------------------------------------------------- |
 | 2026-05-01 | StyleSheet for HMC components, not NativeWind              | Simpler to debug for first-time Expo dev                                      |
@@ -311,7 +301,6 @@ _Add notes during implementation here_
 | 2026-05-01 | expo-font + Google Fonts for Inter + JetBrains Mono        | Standard Expo approach, works in Expo Go                                      |
 | 2026-05-01 | perf_9to5 folded into execution_score for lock_checkin RPC | RPC signature takes 4 bracket scores; perf_9to5 stored separately via upsert  |
 | 2026-05-01 | Profile state in Zustand store (profile-store.ts)          | Needs onboarding_completed for routing; avoids extra query on every nav guard |
->>>>>>> 35ae86c4ddb1472145ca485587f2c87162186555
 
 ---
 

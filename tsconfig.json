@@ -4,20 +4,9 @@
     "strict": true,
     "baseUrl": ".",
     "paths": {
-<<<<<<< HEAD
-      "@/*": [
-        "./src/*"
-      ]
-    },
-    "types": [
-      "jest",
-      "nativewind/types"
-    ]
-=======
       "@/*": ["./src/*"]
     },
     "types": ["jest", "nativewind/types"]
->>>>>>> 35ae86c4ddb1472145ca485587f2c87162186555
   },
   "include": [
     "**/*.ts",
