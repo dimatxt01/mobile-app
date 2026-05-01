@@ -53,6 +53,7 @@ See `CLAUDE.md` for full architecture reference.
 - [ ] Verify: Expo Go loads, 5 tabs visible with correct fonts + colors
 
 ### Notes
+
 _Add notes during implementation here_
 
 ---
@@ -72,6 +73,7 @@ _Add notes during implementation here_
 - [ ] Create `src/features/history/use-history.ts` — calls `get_history(days)` RPC
 
 ### Notes
+
 _Add notes during implementation here_
 
 ---
@@ -103,6 +105,7 @@ _Add notes during implementation here_
   13. (completion) — writes profile (name, vision, identity_sentence, reminder_time), calls `seed_default_habits()`, sets `onboarding_completed=true`, navigates to `/(app)/(tabs)`
 
 ### Notes
+
 _Add notes during implementation here_
 
 ---
@@ -129,6 +132,7 @@ _Add notes during implementation here_
 - [ ] Create `app/(app)/modal/score-breakdown.tsx` — bracket subtotals breakdown sheet
 
 ### Notes
+
 _Add notes during implementation here_
 
 ---
@@ -153,6 +157,7 @@ _Add notes during implementation here_
 - [ ] Create `app/(app)/modal/week-day/[date].tsx` — single day detail (scores by bracket + reflection)
 
 ### Notes
+
 _Add notes during implementation here_
 
 ---
@@ -174,6 +179,7 @@ _Add notes during implementation here_
 - [ ] Create `app/(app)/modal/mirror-day/[date].tsx` — fullscreen photo + score card overlay
 
 ### Notes
+
 _Add notes during implementation here_
 
 ---
@@ -198,6 +204,7 @@ _Add notes during implementation here_
 - [ ] Create `app/(app)/modal/notification-settings.tsx`
 
 ### Notes
+
 _Add notes during implementation here_
 
 ---
@@ -221,6 +228,7 @@ _Add notes during implementation here_
 - [ ] Create `app/(app)/modal/returning-user.tsx` — "Welcome back" prompt
 
 ### Notes
+
 _Add notes during implementation here_
 
 ---
@@ -237,6 +245,7 @@ _Add notes during implementation here_
 - [ ] Create `app/(app)/modal/whoop-connect.tsx` — stub ("Whoop integration coming soon")
 
 ### Notes
+
 _Add notes during implementation here_
 
 ---
@@ -257,6 +266,7 @@ _Add notes during implementation here_
 ## Agent Handoff Notes
 
 When picking up this project:
+
 1. Read `CLAUDE.md` first — full architecture reference
 2. Check Phase Status table above for current state
 3. Check the Notes section under each in-progress phase for context

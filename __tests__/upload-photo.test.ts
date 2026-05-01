@@ -1,12 +1,10 @@
 /* eslint-disable import/first */
 // jest.mock must appear before imports so Jest can hoist it correctly.
-jest.mock('expo-file-system', () => ({
-  readAsStringAsync: jest.fn(),
-}));
-
 jest.mock('../src/lib/supabase', () => {
   const mockUpload = jest.fn();
-  const mockGetPublicUrl = jest.fn().mockReturnValue({ data: { publicUrl: 'https://example.com/photo.jpg' } });
+  const mockGetPublicUrl = jest
+    .fn()
+    .mockReturnValue({ data: { publicUrl: 'https://example.com/photo.jpg' } });
   const mockSingle = jest.fn();
   return {
     supabase: {
@@ -25,17 +23,24 @@ jest.mock('../src/lib/supabase', () => {
 });
 
 import { uploadMirrorPhoto } from '../src/features/mirror/upload-photo';
-import * as FileSystem from 'expo-file-system';
 /* eslint-enable import/first */
 
-// polyfill atob for Node.js test environment
-global.atob = (str: string) => Buffer.from(str, 'base64').toString('binary');
+const mockBlob = new Blob(['test'], { type: 'image/jpeg' });
+
+function mockFetchSuccess() {
+  jest.spyOn(globalThis, 'fetch').mockResolvedValue({
+    blob: () => Promise.resolve(mockBlob),
+  } as unknown as Response);
+}
+
+function mockFetchFailure() {
+  jest.spyOn(globalThis, 'fetch').mockRejectedValue(new Error('URI cleared by OS'));
+}
 
 function getMocks() {
   // eslint-disable-next-line @typescript-eslint/no-require-imports
   const mod = require('../src/lib/supabase') as { __mockUpload: jest.Mock; __mockSingle: jest.Mock };
   return {
-    readAsStringAsync: FileSystem.readAsStringAsync as jest.Mock,
     upload: mod.__mockUpload,
     single: mod.__mockSingle,
   };
@@ -44,14 +49,13 @@ function getMocks() {
 describe('uploadMirrorPhoto', () => {
   beforeEach(() => {
     const m = getMocks();
-    m.readAsStringAsync.mockReset();
     m.upload.mockReset();
     m.single.mockReset();
   });
 
   it('returns { data: null, error } when storage upload fails', async () => {
-    const { readAsStringAsync, upload } = getMocks();
-    readAsStringAsync.mockResolvedValue('dGVzdA==');
+    mockFetchSuccess();
+    const { upload } = getMocks();
     const uploadErr = new Error('Storage quota exceeded');
     upload.mockResolvedValue({ error: uploadErr });
 
@@ -62,8 +66,8 @@ describe('uploadMirrorPhoto', () => {
   });
 
   it('returns { data: null, error } when DB upsert fails', async () => {
-    const { readAsStringAsync, upload, single } = getMocks();
-    readAsStringAsync.mockResolvedValue('dGVzdA==');
+    mockFetchSuccess();
+    const { upload, single } = getMocks();
     upload.mockResolvedValue({ error: null });
     const dbErr = new Error('Unique constraint violation');
     single.mockResolvedValue({ data: null, error: dbErr });
@@ -74,19 +78,26 @@ describe('uploadMirrorPhoto', () => {
     expect(result.error).toBe(dbErr);
   });
 
-  it('propagates readAsStringAsync rejection', async () => {
-    const { readAsStringAsync } = getMocks();
-    readAsStringAsync.mockRejectedValue(new Error('URI cleared by OS'));
+  it('returns { data: null, error } when fetch fails', async () => {
+    mockFetchFailure();
 
-    await expect(
-      uploadMirrorPhoto('user1', 'file://stale.jpg', '2026-05-01', 1)
-    ).rejects.toThrow('URI cleared by OS');
+    const result = await uploadMirrorPhoto('user1', 'file://stale.jpg', '2026-05-01', 1);
+
+    expect(result.data).toBeNull();
+    expect(result.error).toBeInstanceOf(Error);
+    expect((result.error as Error).message).toBe('Failed to read image file');
   });
 
   it('returns photo data on success', async () => {
-    const { readAsStringAsync, upload, single } = getMocks();
-    const photo = { id: 'p1', user_id: 'user1', date: '2026-05-01', day_number: 1, photo_url: 'https://example.com/photo.jpg' };
-    readAsStringAsync.mockResolvedValue('dGVzdA==');
+    mockFetchSuccess();
+    const { upload, single } = getMocks();
+    const photo = {
+      id: 'p1',
+      user_id: 'user1',
+      date: '2026-05-01',
+      day_number: 1,
+      photo_url: 'https://example.com/photo.jpg',
+    };
     upload.mockResolvedValue({ error: null });
     single.mockResolvedValue({ data: photo, error: null });
 

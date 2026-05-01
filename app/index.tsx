@@ -29,7 +29,9 @@ export default function Index() {
         }
         setProfile(data);
       });
-    return () => { cancelled = true; };
+    return () => {
+      cancelled = true;
+    };
   }, [session?.user?.id]);
 
   if (!isInitialized || (session && isLoading)) {

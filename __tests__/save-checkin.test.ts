@@ -47,7 +47,9 @@ describe('useSaveCheckin debounce', () => {
 
   it('does not fire before the debounce window elapses', () => {
     const { result } = renderHook(() => useSaveCheckin());
-    act(() => { result.current.save({ perf_9to5: 5 }); });
+    act(() => {
+      result.current.save({ perf_9to5: 5 });
+    });
     act(() => jest.advanceTimersByTime(799));
     expect(mockMutate).not.toHaveBeenCalled();
     act(() => jest.advanceTimersByTime(1));
@@ -56,8 +58,12 @@ describe('useSaveCheckin debounce', () => {
 
   it('cancel prevents pending save from firing', () => {
     const { result } = renderHook(() => useSaveCheckin());
-    act(() => { result.current.save({ perf_9to5: 5 }); });
-    act(() => { result.current.cancel(); });
+    act(() => {
+      result.current.save({ perf_9to5: 5 });
+    });
+    act(() => {
+      result.current.cancel();
+    });
     act(() => jest.advanceTimersByTime(1000));
     expect(mockMutate).not.toHaveBeenCalled();
   });

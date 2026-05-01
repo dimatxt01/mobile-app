@@ -42,6 +42,11 @@ const styles = StyleSheet.create({
     borderRadius: 8,
     paddingVertical: 16,
     alignItems: 'center',
+    shadowColor: colors.accentGlow,
+    shadowOffset: { width: 0, height: 8 },
+    shadowOpacity: 1,
+    shadowRadius: 24,
+    elevation: 8,
   },
   btnDisabled: { backgroundColor: colors.lineStrong },
   label: {
