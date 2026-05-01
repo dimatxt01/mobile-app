@@ -124,7 +124,7 @@ nodes:
       properties:
         testable:
           type: string
-          enum: ["e2e_testable", "code_review_only"]
+          enum: ['e2e_testable', 'code_review_only']
         reasoning:
           type: string
         test_plan:
@@ -133,7 +133,8 @@ nodes:
 
   - id: e2e-test-main
     command: archon-validate-pr-e2e-main
-    depends_on: [classify-testability, find-ports, resolve-paths, code-review-main, code-review-feature]
+    depends_on:
+      [classify-testability, find-ports, resolve-paths, code-review-main, code-review-feature]
     when: "$classify-testability.output.testable == 'e2e_testable'"
     context: fresh
     idle_timeout: 1800000
@@ -206,6 +207,14 @@ nodes:
 
   - id: final-report
     command: archon-validate-pr-report
-    depends_on: [code-review-main, code-review-feature, e2e-test-main, e2e-test-feature, classify-testability, cleanup-processes]
+    depends_on:
+      [
+        code-review-main,
+        code-review-feature,
+        e2e-test-main,
+        e2e-test-feature,
+        classify-testability,
+        cleanup-processes,
+      ]
     trigger_rule: all_done
     context: fresh

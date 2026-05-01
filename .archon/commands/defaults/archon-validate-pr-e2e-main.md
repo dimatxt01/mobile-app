@@ -17,6 +17,7 @@ Example: `agent-browser --session $WORKFLOW_ID open "http://..."`, `agent-browse
 The session ID is written to `$ARTIFACTS_DIR/.browser-session` for cleanup.
 
 **ABSOLUTELY FORBIDDEN — NEVER DO ANY OF THESE**:
+
 - `taskkill //F //IM chrome.exe` or ANY variant that kills chrome by image name — this kills the USER's browser
 - `taskkill //F //IM node.exe` or `taskkill //F //IM bun.exe` — this kills Claude Code, the Archon server, and all other workflows
 - `pkill chrome`, `pkill node`, `pkill bun`, or any broad process-name kill
@@ -56,11 +57,13 @@ cat $ARTIFACTS_DIR/code-review-main.md 2>/dev/null || echo "No main branch revie
 ### 1.3 Testability Classification
 
 The testability classifier determined:
+
 - **Decision**: $classify-testability.output.testable
 - **Reasoning**: $classify-testability.output.reasoning
 - **Test Plan**: $classify-testability.output.test_plan
 
 Use the test plan above combined with the PR description and code review to build your execution plan:
+
 - What user journeys reproduce the bug?
 - What should the broken behavior look like?
 - What screenshots would prove the bug exists?
@@ -312,30 +315,34 @@ Write to `$ARTIFACTS_DIR/e2e-main.md`:
 **Branch**: main @ {commit}
 **Backend Port**: {port}
 **Frontend Port**: {port}
-**Screenshots**: $ARTIFACTS_DIR/e2e-main-*.png
+**Screenshots**: $ARTIFACTS_DIR/e2e-main-\*.png
 
 ## Test Summary
 
-| Test Case | Result | Evidence |
-|-----------|--------|----------|
-| {test 1} | BUG REPRODUCED / NOT REPRODUCED | e2e-main-{N}.png |
-| {test 2} | BUG REPRODUCED / NOT REPRODUCED | e2e-main-{N}.png |
+| Test Case | Result                          | Evidence         |
+| --------- | ------------------------------- | ---------------- |
+| {test 1}  | BUG REPRODUCED / NOT REPRODUCED | e2e-main-{N}.png |
+| {test 2}  | BUG REPRODUCED / NOT REPRODUCED | e2e-main-{N}.png |
 
 ## Detailed Findings
 
 ### Test 1: {description}
+
 **Steps**: {what was done}
 **Expected**: {what should happen on a fixed version}
 **Actual**: {what happened on main — the bug}
 **Screenshot**: `$ARTIFACTS_DIR/e2e-main-{N}.png`
 
 ### Test 2: {description}
+
 {Same structure...}
 
 ## Additional Issues Discovered
+
 {Any other bugs or UX issues noticed during testing}
 
 ## Reproduction Confidence
+
 **HIGH / MEDIUM / LOW / NOT REPRODUCIBLE**
 
 {Explain confidence level. If not reproducible, explain what was tried.}

@@ -44,6 +44,7 @@ cat CLAUDE.md | grep -A 20 -i "error"
 ```
 
 **PHASE_1_CHECKPOINT:**
+
 - [ ] PR number identified
 - [ ] Scope loaded
 - [ ] Diff available
@@ -55,6 +56,7 @@ cat CLAUDE.md | grep -A 20 -i "error"
 ### 2.1 Find All Error Handling Code
 
 Search for:
+
 - `try { ... } catch` blocks
 - `.catch(` handlers
 - `|| fallback` patterns
@@ -68,21 +70,25 @@ Search for:
 For every error handling location, evaluate:
 
 **Logging Quality:**
+
 - Is error logged with appropriate severity?
 - Does log include sufficient context?
 - Would this help debugging in 6 months?
 
 **User Feedback:**
+
 - Does user receive actionable feedback?
 - Is the error message specific and helpful?
 - Are technical details appropriately hidden/shown?
 
 **Catch Block Specificity:**
+
 - Does it catch only expected error types?
 - Could it accidentally suppress unrelated errors?
 - Should it be multiple catch blocks?
 
 **Fallback Behavior:**
+
 - Is fallback explicitly documented/intended?
 - Does fallback mask the underlying problem?
 - Is user aware they're seeing fallback behavior?
@@ -96,6 +102,7 @@ grep -r "console.error" src/ --include="*.ts" -B 2 -A 2 | head -30
 ```
 
 **PHASE_2_CHECKPOINT:**
+
 - [ ] All error handlers identified
 - [ ] Each handler evaluated
 - [ ] Codebase patterns found
@@ -106,7 +113,7 @@ grep -r "console.error" src/ --include="*.ts" -B 2 -A 2 | head -30
 
 Write to `$ARTIFACTS_DIR/review/error-handling-findings.md`:
 
-```markdown
+````markdown
 # Error Handling Findings: PR #{number}
 
 **Reviewer**: error-handling-agent
@@ -135,13 +142,16 @@ Write to `$ARTIFACTS_DIR/review/error-handling-findings.md`:
 {Clear description of the error handling problem}
 
 **Evidence**:
+
 ```typescript
 // Current error handling at {file}:{line}
 {problematic code}
 ```
+````
 
 **Hidden Errors**:
 This catch block could silently hide:
+
 - {Error type 1}: {scenario when it occurs}
 - {Error type 2}: {scenario when it occurs}
 - {Error type 3}: {scenario when it occurs}
@@ -153,28 +163,31 @@ This catch block could silently hide:
 
 #### Fix Suggestions
 
-| Option | Approach | Pros | Cons |
-|--------|----------|------|------|
-| A | {e.g., Add specific error types} | {benefits} | {drawbacks} |
-| B | {e.g., Add logging + user message} | {benefits} | {drawbacks} |
-| C | {e.g., Propagate error instead} | {benefits} | {drawbacks} |
+| Option | Approach                           | Pros       | Cons        |
+| ------ | ---------------------------------- | ---------- | ----------- |
+| A      | {e.g., Add specific error types}   | {benefits} | {drawbacks} |
+| B      | {e.g., Add logging + user message} | {benefits} | {drawbacks} |
+| C      | {e.g., Propagate error instead}    | {benefits} | {drawbacks} |
 
 **Recommended**: Option {X}
 
 **Reasoning**:
 {Explain why this option is preferred:
+
 - Aligns with project error handling patterns
 - Provides better debugging experience
 - Gives users actionable feedback
 - Follows CLAUDE.md rules}
 
 **Recommended Fix**:
+
 ```typescript
 // Improved error handling
 {corrected code with proper logging, specific catches, user feedback}
 ```
 
 **Codebase Pattern Reference**:
+
 ```typescript
 // SOURCE: {file}:{lines}
 // This is how similar errors are handled elsewhere
@@ -191,39 +204,39 @@ This catch block could silently hide:
 
 ## Error Handler Audit
 
-| Location | Type | Logging | User Feedback | Specificity | Verdict |
-|----------|------|---------|---------------|-------------|---------|
-| `file:line` | try-catch | GOOD/BAD | GOOD/BAD | GOOD/BAD | PASS/FAIL |
-| ... | ... | ... | ... | ... | ... |
+| Location    | Type      | Logging  | User Feedback | Specificity | Verdict   |
+| ----------- | --------- | -------- | ------------- | ----------- | --------- |
+| `file:line` | try-catch | GOOD/BAD | GOOD/BAD      | GOOD/BAD    | PASS/FAIL |
+| ...         | ...       | ...      | ...           | ...         | ...       |
 
 ---
 
 ## Statistics
 
 | Severity | Count | Auto-fixable |
-|----------|-------|--------------|
-| CRITICAL | {n} | {n} |
-| HIGH | {n} | {n} |
-| MEDIUM | {n} | {n} |
-| LOW | {n} | {n} |
+| -------- | ----- | ------------ |
+| CRITICAL | {n}   | {n}          |
+| HIGH     | {n}   | {n}          |
+| MEDIUM   | {n}   | {n}          |
+| LOW      | {n}   | {n}          |
 
 ---
 
 ## Silent Failure Risk Assessment
 
-| Risk | Likelihood | Impact | Mitigation |
-|------|------------|--------|------------|
+| Risk                       | Likelihood   | Impact        | Mitigation   |
+| -------------------------- | ------------ | ------------- | ------------ |
 | {potential silent failure} | HIGH/MED/LOW | {user impact} | {fix needed} |
-| ... | ... | ... | ... |
+| ...                        | ...          | ...           | ...          |
 
 ---
 
 ## Patterns Referenced
 
-| File | Lines | Pattern |
-|------|-------|---------|
+| File             | Lines | Pattern                  |
+| ---------------- | ----- | ------------------------ |
 | `src/example.ts` | 42-50 | {error handling pattern} |
-| ... | ... | ... |
+| ...              | ...   | ...                      |
 
 ---
 
@@ -238,6 +251,7 @@ This catch block could silently hide:
 - **Agent**: error-handling-agent
 - **Timestamp**: {ISO timestamp}
 - **Artifact**: `$ARTIFACTS_DIR/review/error-handling-findings.md`
+
 ```
 
 **PHASE_3_CHECKPOINT:**
@@ -254,3 +268,4 @@ This catch block could silently hide:
 - **EACH_HANDLER_AUDITED**: Logging, feedback, specificity evaluated
 - **HIDDEN_ERRORS_LISTED**: Each finding lists what could be hidden
 - **ARTIFACT_CREATED**: Findings file written with complete structure
+```

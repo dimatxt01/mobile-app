@@ -33,6 +33,7 @@ cat $ARTIFACTS_DIR/.pr-base
 ### 1.3 Understand What the PR Claims to Fix
 
 From the PR title, body, and linked issue(s):
+
 - What bug or gap does the PR claim exists?
 - What is the expected behavior vs actual behavior?
 - Which files/components are involved?
@@ -74,6 +75,7 @@ cat "$CANONICAL_REPO/<file-path>"
 ### 2.2 Trace the Bug or Gap
 
 For each claim in the PR:
+
 1. **Find the relevant code** on main — read the specific functions, components, hooks
 2. **Trace the data flow** — where does the data come from? How does it transform?
 3. **Identify the root cause** — can you see the bug in the code?
@@ -92,7 +94,7 @@ For each claim in the PR:
 
 Write your analysis to `$ARTIFACTS_DIR/code-review-main.md`:
 
-```markdown
+````markdown
 # Main Branch Code Review: PR #{number}
 
 **PR Title**: {title}
@@ -102,9 +104,11 @@ Write your analysis to `$ARTIFACTS_DIR/code-review-main.md`:
 ## Bug/Gap Assessment
 
 ### Claimed Issue
+
 {What the PR claims to fix}
 
 ### Confirmed on Main?
+
 **YES / NO / PARTIAL**
 
 ### Evidence
@@ -112,31 +116,39 @@ Write your analysis to `$ARTIFACTS_DIR/code-review-main.md`:
 {For each claim, provide specific code evidence:}
 
 #### Claim 1: {description}
+
 **Status**: Confirmed / Not Found / Partially Confirmed
 
 **Code Location**: `{file}:{lines}`
+
 ```{language}
 {actual code on main showing the bug/gap}
 ```
+````
 
 **Analysis**: {Why this code is buggy/incomplete}
 
 #### Claim 2: {description}
+
 {Same structure...}
 
 ### Related Issues Found
+
 {Any additional problems discovered in the same code areas}
 
 ### Severity Assessment
-| Factor | Rating |
-|--------|--------|
-| User Impact | High / Medium / Low |
-| Frequency | Common / Uncommon / Rare |
-| Core Feature | Yes / No |
-| Data Loss Risk | Yes / No |
+
+| Factor         | Rating                   |
+| -------------- | ------------------------ |
+| User Impact    | High / Medium / Low      |
+| Frequency      | Common / Uncommon / Rare |
+| Core Feature   | Yes / No                 |
+| Data Loss Risk | Yes / No                 |
 
 ## Summary
+
 {2-3 sentence summary: Is the bug real? How bad is it? Is the PR's scope appropriate?}
+
 ```
 
 ---
@@ -147,3 +159,4 @@ Write your analysis to `$ARTIFACTS_DIR/code-review-main.md`:
 - **MAIN_CODE_ANALYZED**: Changed files read from main branch
 - **BUG_ASSESSED**: Each PR claim verified against main branch code
 - **ARTIFACT_WRITTEN**: `$ARTIFACTS_DIR/code-review-main.md` created
+```

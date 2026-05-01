@@ -20,12 +20,12 @@ Generate production-quality Ralph PRD files — `prd.md` (full context document)
 
 ## Phase 0: DETECT — Determine Input Type
 
-| Input Pattern | Type | Action |
-|---------------|------|--------|
-| Path to `.md` file that exists | Existing PRD | Read it, generate prd.json stories from it |
-| `.archon/ralph/{slug}/prd.md` exists | Existing PRD in ralph dir | Generate prd.json alongside it |
-| Free-form text | Feature idea | Generate both prd.md and prd.json |
-| Empty/blank | Error | STOP — require input |
+| Input Pattern                        | Type                      | Action                                     |
+| ------------------------------------ | ------------------------- | ------------------------------------------ |
+| Path to `.md` file that exists       | Existing PRD              | Read it, generate prd.json stories from it |
+| `.archon/ralph/{slug}/prd.md` exists | Existing PRD in ralph dir | Generate prd.json alongside it             |
+| Free-form text                       | Feature idea              | Generate both prd.md and prd.json          |
+| Empty/blank                          | Error                     | STOP — require input                       |
 
 ### If existing PRD detected:
 
@@ -53,6 +53,7 @@ Generate production-quality Ralph PRD files — `prd.md` (full context document)
 Base these on the input description and your understanding of the codebase.
 
 **PHASE_1_CHECKPOINT:**
+
 - [ ] Problem clearly articulated
 - [ ] Target user identified
 - [ ] Goals and success metrics defined
@@ -74,6 +75,7 @@ If the feature has a UI component, describe the visual requirements.
 If it's backend-only, describe the API surface.
 
 **PHASE_2_CHECKPOINT:**
+
 - [ ] User journey mapped
 - [ ] States enumerated
 - [ ] Edge cases identified
@@ -120,6 +122,7 @@ cat CLAUDE.md
 Extract: coding standards, naming conventions, testing requirements, lint rules.
 
 **PHASE_3_CHECKPOINT:**
+
 - [ ] Similar implementations found with file:line references
 - [ ] Types and interfaces identified
 - [ ] Integration points mapped
@@ -133,19 +136,20 @@ Extract: coding standards, naming conventions, testing requirements, lint rules.
 
 Break the feature into implementation layers:
 
-| Layer | Examples | Typical story count |
-|-------|---------|-------------------|
-| Schema/types | DB columns, interfaces, Zod schemas | 1-2 |
-| Backend logic | Services, utilities, API endpoints | 2-4 |
-| UI components | New components, modifications | 1-3 |
-| Integration | Wiring, config, exports | 1-2 |
-| Tests | Dedicated test stories (if complex) | 0-2 |
+| Layer         | Examples                            | Typical story count |
+| ------------- | ----------------------------------- | ------------------- |
+| Schema/types  | DB columns, interfaces, Zod schemas | 1-2                 |
+| Backend logic | Services, utilities, API endpoints  | 2-4                 |
+| UI components | New components, modifications       | 1-3                 |
+| Integration   | Wiring, config, exports             | 1-2                 |
+| Tests         | Dedicated test stories (if complex) | 0-2                 |
 
 ### 4.2 Sizing Rules
 
 Each story must be completable in ONE iteration (~15-30 min of AI work):
 
 **Right-sized (ONE iteration):**
+
 - Add a database column + migration
 - Create one utility function + tests
 - Add one UI component
@@ -153,6 +157,7 @@ Each story must be completable in ONE iteration (~15-30 min of AI work):
 - Write integration tests for one feature
 
 **TOO BIG (must split):**
+
 - "Build entire feature" → split into schema, types, backend, UI
 - "Add authentication" → split into schema, middleware, login UI, token handling
 - "Refactor module" → split by file or concern
@@ -167,12 +172,14 @@ Each story must be completable in ONE iteration (~15-30 min of AI work):
 ### 4.4 Acceptance Criteria Rules
 
 **GOOD (verifiable):**
+
 - "Add `priority` column with type `'high' | 'medium' | 'low'`"
 - "Function returns empty array when input is null"
 - "Button shows loading state while submitting"
 - "Type-check passes with zero errors"
 
 **BAD (vague):**
+
 - "Works correctly"
 - "Good UX"
 - "Handles edge cases"
@@ -180,6 +187,7 @@ Each story must be completable in ONE iteration (~15-30 min of AI work):
 Every criterion must be pass/fail testable.
 
 **PHASE_4_CHECKPOINT:**
+
 - [ ] Stories sized for single iterations
 - [ ] Dependencies form a valid DAG (no cycles)
 - [ ] Acceptance criteria are all verifiable
@@ -192,6 +200,7 @@ Every criterion must be pass/fail testable.
 ### 5.1 Determine Feature Slug
 
 Generate a kebab-case slug from the feature name:
+
 - "Workflow Lifecycle Overhaul" → `workflow-lifecycle-overhaul`
 - "Dark Mode Toggle" → `dark-mode-toggle`
 - Max 50 characters
@@ -208,7 +217,7 @@ mkdir -p .archon/ralph/{slug}
 
 Include ALL of the following sections:
 
-```markdown
+````markdown
 # {Feature Name} — Product Requirements
 
 ## Overview
@@ -222,14 +231,17 @@ Include ALL of the following sections:
 ## Goals & Success
 
 ### Primary Goal
+
 {The main outcome}
 
 ### Success Metrics
-| Metric | Target | How Measured |
-|--------|--------|--------------|
-| {metric} | {target} | {method} |
+
+| Metric   | Target   | How Measured |
+| -------- | -------- | ------------ |
+| {metric} | {target} | {method}     |
 
 ### Non-Goals (Out of Scope)
+
 - {Item 1} — {why excluded}
 - {Item 2} — {why excluded}
 
@@ -238,11 +250,13 @@ Include ALL of the following sections:
 ## User & Context
 
 ### Target User
+
 - **Who**: {description}
 - **Role**: {their context}
 - **Current Pain**: {what they struggle with}
 
 ### User Journey
+
 1. **Trigger**: {what prompts the need}
 2. **Action**: {what they do}
 3. **Outcome**: {success state}
@@ -252,32 +266,38 @@ Include ALL of the following sections:
 ## UX Requirements
 
 ### Interaction Model
+
 {How users interact — CLI commands, API endpoints, UI components}
 
 ### States to Handle
-| State | Description | Behavior |
-|-------|-------------|----------|
-| Empty | {when} | {what happens} |
-| Loading | {when} | {what happens} |
-| Error | {when} | {what happens} |
-| Success | {when} | {what happens} |
+
+| State   | Description | Behavior       |
+| ------- | ----------- | -------------- |
+| Empty   | {when}      | {what happens} |
+| Loading | {when}      | {what happens} |
+| Error   | {when}      | {what happens} |
+| Success | {when}      | {what happens} |
 
 ---
 
 ## Technical Context
 
 ### Patterns to Follow
+
 - **Similar implementation**: `{file:lines}` — {what to mirror}
 - **Component pattern**: `{file:lines}` — {pattern description}
 - **Test pattern**: `{file:lines}` — {how to test}
 
 ### Types & Interfaces
+
 ```typescript
 // Key types to use or extend
 {relevant type definitions from codebase exploration}
 ```
+````
 
 ### Architecture Notes
+
 - {Key technical decisions}
 - {Integration points from Phase 3}
 - {Dependencies}
@@ -287,12 +307,14 @@ Include ALL of the following sections:
 ## Implementation Summary
 
 ### Story Overview
-| ID | Title | Priority | Dependencies |
-|----|-------|----------|--------------|
-| US-001 | {title} | 1 | — |
-| US-002 | {title} | 2 | US-001 |
+
+| ID     | Title   | Priority | Dependencies |
+| ------ | ------- | -------- | ------------ |
+| US-001 | {title} | 1        | —            |
+| US-002 | {title} | 2        | US-001       |
 
 ### Dependency Graph
+
 ```
 US-001 (schema/types)
     ↓
@@ -306,6 +328,7 @@ US-003 (UI) → US-004 (integration)
 ## Validation Requirements
 
 Every story must pass:
+
 - [ ] Type-check: `bun run type-check`
 - [ ] Lint: `bun run lint`
 - [ ] Tests: `bun run test`
@@ -313,8 +336,9 @@ Every story must pass:
 
 ---
 
-*Generated: {ISO timestamp}*
-```
+_Generated: {ISO timestamp}_
+
+````
 
 **If input was an existing PRD**: Incorporate its content into this structure. Don't lose information — merge the existing PRD's goals, context, and requirements into the appropriate sections. Add the technical context from your codebase exploration (Phase 3).
 
@@ -347,7 +371,7 @@ Every story must pass:
     }
   ]
 }
-```
+````
 
 ### 5.5 Commit PRD Files
 
@@ -357,6 +381,7 @@ git commit -m "docs: add Ralph PRD for {feature name}"
 ```
 
 **PHASE_5_CHECKPOINT:**
+
 - [ ] `.archon/ralph/{slug}/prd.md` written with all sections
 - [ ] `.archon/ralph/{slug}/prd.json` written with properly sized stories
 - [ ] Stories have verifiable acceptance criteria

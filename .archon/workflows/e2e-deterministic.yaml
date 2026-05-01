@@ -2,12 +2,12 @@
 # Verifies: bash nodes, script nodes (bun + uv), $nodeId.output substitution,
 #           when conditions, trigger_rule join semantics
 name: e2e-deterministic
-description: "Pure DAG engine test. Exercises bash, script (bun/uv), conditions, and trigger rules with zero API calls."
+description: 'Pure DAG engine test. Exercises bash, script (bun/uv), conditions, and trigger rules with zero API calls.'
 
 nodes:
   # Layer 0 — parallel deterministic nodes
   - id: bash-echo
-    bash: "echo '{\"status\":\"ok\",\"value\":42}'"
+    bash: 'echo ''{"status":"ok","value":42}'''
 
   - id: script-bun
     script: echo-args

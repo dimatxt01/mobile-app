@@ -77,7 +77,7 @@ nodes:
           type: string
         execution_mode:
           type: string
-          enum: ["dag", "loop"]
+          enum: ['dag', 'loop']
       required: [workflow_name, description, trigger_phrases, proposed_nodes, execution_mode]
     depends_on: [scan-codebase]
 

@@ -1,0 +1,60 @@
+import { View, TouchableOpacity, Text, StyleSheet } from 'react-native';
+import { colors, fonts } from '@/lib/hmc-colors';
+
+type Props = {
+  label: string;
+  value: number;
+  onChange: (v: number) => void;
+  danger?: boolean;
+  disabled?: boolean;
+};
+
+export function Step05({ label, value, onChange, danger = false, disabled = false }: Props) {
+  const accent = danger ? colors.danger : colors.amber;
+  return (
+    <View style={styles.row}>
+      <Text style={styles.label} numberOfLines={1}>
+        {label}
+      </Text>
+      <View style={styles.controls}>
+        <TouchableOpacity
+          style={styles.btn}
+          onPress={() => onChange(Math.max(0, value - 1))}
+          disabled={disabled || value === 0}
+          activeOpacity={0.7}
+        >
+          <Text style={[styles.btnText, { color: value === 0 ? colors.textTertiary : accent }]}>
+            −
+          </Text>
+        </TouchableOpacity>
+        <Text style={[styles.val, value > 0 && { color: accent }]}>{value}</Text>
+        <TouchableOpacity
+          style={styles.btn}
+          onPress={() => onChange(Math.min(5, value + 1))}
+          disabled={disabled || value === 5}
+          activeOpacity={0.7}
+        >
+          <Text style={[styles.btnText, { color: value === 5 ? colors.textTertiary : accent }]}>
+            +
+          </Text>
+        </TouchableOpacity>
+      </View>
+    </View>
+  );
+}
+
+const styles = StyleSheet.create({
+  row: { flexDirection: 'row', alignItems: 'center', paddingVertical: 10, gap: 12 },
+  label: { flex: 1, fontFamily: fonts.display, fontSize: 15, color: colors.textSecondary },
+  controls: { flexDirection: 'row', alignItems: 'center', gap: 16 },
+  btn: { width: 32, height: 32, alignItems: 'center', justifyContent: 'center' },
+  btnText: { fontFamily: fonts.monoBold, fontSize: 20 },
+  val: {
+    fontFamily: fonts.monoBold,
+    fontSize: 18,
+    color: colors.textPrimary,
+    fontVariant: ['tabular-nums'],
+    minWidth: 20,
+    textAlign: 'center',
+  },
+});

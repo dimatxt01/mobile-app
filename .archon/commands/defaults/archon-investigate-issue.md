@@ -39,6 +39,7 @@ gh issue view {number} --json title,body,labels,comments,state,url,author
 ### 1.2 Extract Context
 
 **If GitHub issue:**
+
 - Title: What's the reported problem?
 - Body: Details, reproduction steps, expected vs actual
 - Labels: bug? enhancement? documentation?
@@ -46,18 +47,19 @@ gh issue view {number} --json title,body,labels,comments,state,url,author
 - State: Is it still open?
 
 **If free-form:**
+
 - Parse as problem description
 - Note: No GitHub posting (artifact only)
 
 ### 1.3 Classify Issue Type
 
-| Type | Indicators |
-|------|------------|
-| BUG | "broken", "error", "crash", "doesn't work", stack trace |
-| ENHANCEMENT | "add", "support", "feature", "would be nice" |
-| REFACTOR | "clean up", "improve", "simplify", "reorganize" |
-| CHORE | "update", "upgrade", "maintenance", "dependency" |
-| DOCUMENTATION | "docs", "readme", "clarify", "example" |
+| Type          | Indicators                                              |
+| ------------- | ------------------------------------------------------- |
+| BUG           | "broken", "error", "crash", "doesn't work", stack trace |
+| ENHANCEMENT   | "add", "support", "feature", "would be nice"            |
+| REFACTOR      | "clean up", "improve", "simplify", "reorganize"         |
+| CHORE         | "update", "upgrade", "maintenance", "dependency"        |
+| DOCUMENTATION | "docs", "readme", "clarify", "example"                  |
 
 ### 1.4 Assess Severity/Priority, Complexity, and Confidence
 
@@ -65,38 +67,39 @@ Each assessment requires a **one-sentence reasoning** explaining WHY you chose t
 
 **For BUG issues - Severity:**
 
-| Severity | Criteria |
-|----------|----------|
-| CRITICAL | System down, data loss, security vulnerability, no workaround |
-| HIGH | Major feature broken, significant user impact, difficult workaround |
-| MEDIUM | Feature partially broken, moderate impact, workaround exists |
-| LOW | Minor issue, cosmetic, edge case, easy workaround |
+| Severity | Criteria                                                            |
+| -------- | ------------------------------------------------------------------- |
+| CRITICAL | System down, data loss, security vulnerability, no workaround       |
+| HIGH     | Major feature broken, significant user impact, difficult workaround |
+| MEDIUM   | Feature partially broken, moderate impact, workaround exists        |
+| LOW      | Minor issue, cosmetic, edge case, easy workaround                   |
 
 **For ENHANCEMENT/REFACTOR/CHORE/DOCUMENTATION - Priority:**
 
-| Priority | Criteria |
-|----------|----------|
-| HIGH | Blocking other work, frequently requested, high user value |
-| MEDIUM | Important but not urgent, moderate user value |
-| LOW | Nice to have, low urgency, minimal user impact |
+| Priority | Criteria                                                   |
+| -------- | ---------------------------------------------------------- |
+| HIGH     | Blocking other work, frequently requested, high user value |
+| MEDIUM   | Important but not urgent, moderate user value              |
+| LOW      | Nice to have, low urgency, minimal user impact             |
 
 **Complexity** (based on codebase findings):
 
-| Complexity | Criteria |
-|------------|----------|
-| HIGH | 5+ files, multiple integration points, architectural changes, high risk |
-| MEDIUM | 2-4 files, some integration points, moderate risk |
-| LOW | 1-2 files, isolated change, low risk |
+| Complexity | Criteria                                                                |
+| ---------- | ----------------------------------------------------------------------- |
+| HIGH       | 5+ files, multiple integration points, architectural changes, high risk |
+| MEDIUM     | 2-4 files, some integration points, moderate risk                       |
+| LOW        | 1-2 files, isolated change, low risk                                    |
 
 **Confidence** (based on evidence quality):
 
-| Confidence | Criteria |
-|------------|----------|
-| HIGH | Clear root cause, strong evidence, well-understood code path |
-| MEDIUM | Likely root cause, some assumptions, partially understood |
-| LOW | Uncertain root cause, limited evidence, many unknowns |
+| Confidence | Criteria                                                     |
+| ---------- | ------------------------------------------------------------ |
+| HIGH       | Clear root cause, strong evidence, well-understood code path |
+| MEDIUM     | Likely root cause, some assumptions, partially understood    |
+| LOW        | Uncertain root cause, limited evidence, many unknowns        |
 
 **PHASE_1_CHECKPOINT:**
+
 - [ ] Input type identified (GH issue or free-form)
 - [ ] Issue content extracted
 - [ ] Type classified
@@ -134,15 +137,16 @@ Return:
 
 ### 2.2 Document Findings
 
-| Area | File:Lines | Notes |
-|------|-----------|-------|
-| Core logic | `src/x.ts:10-50` | Main function affected |
-| Callers | `src/y.ts:20-30` | Uses the core function |
-| Types | `src/types/x.ts:5-15` | Relevant interfaces |
-| Tests | `src/x.test.ts:1-100` | Existing test patterns |
-| Similar | `src/z.ts:40-60` | Pattern to mirror |
+| Area       | File:Lines            | Notes                  |
+| ---------- | --------------------- | ---------------------- |
+| Core logic | `src/x.ts:10-50`      | Main function affected |
+| Callers    | `src/y.ts:20-30`      | Uses the core function |
+| Types      | `src/types/x.ts:5-15` | Relevant interfaces    |
+| Tests      | `src/x.test.ts:1-100` | Existing test patterns |
+| Similar    | `src/z.ts:40-60`      | Pattern to mirror      |
 
 **PHASE_2_CHECKPOINT:**
+
 - [ ] Explore agent completed successfully
 - [ ] Core files identified with line numbers
 - [ ] Integration points mapped
@@ -168,8 +172,8 @@ Before diving into bug analysis or enhancement scoping, identify the primitive:
 5. **What does this unlock?** If we add/change a primitive, what other improvements
    become possible?
 
-| Primitive | File:Lines | Sound? | Notes |
-|-----------|-----------|--------|-------|
+| Primitive          | File:Lines       | Sound?         | Notes                           |
+| ------------------ | ---------------- | -------------- | ------------------------------- |
 | {abstraction name} | `src/x.ts:10-30` | Yes/No/Partial | {if incomplete: what's missing} |
 
 ### 3.1 For BUG Issues - Root Cause Analysis
@@ -192,6 +196,7 @@ Evidence: `source.ts:456` - {the problematic code}
 ```
 
 **Check git history:**
+
 ```bash
 git log --oneline -10 -- {affected-file}
 git blame -L {start},{end} {affected-file}
@@ -200,6 +205,7 @@ git blame -L {start},{end} {affected-file}
 ### 3.2 For ENHANCEMENT/REFACTOR Issues
 
 **Identify:**
+
 - What needs to be added/changed?
 - Where does it integrate?
 - What are the scope boundaries?
@@ -208,6 +214,7 @@ git blame -L {start},{end} {affected-file}
 ### 3.3 For All Issues
 
 **Determine:**
+
 - Files to CREATE (new files)
 - Files to UPDATE (existing files)
 - Files to DELETE (if any)
@@ -216,6 +223,7 @@ git blame -L {start},{end} {affected-file}
 - Validation strategy
 
 **PHASE_3_CHECKPOINT:**
+
 - [ ] Root cause identified (for bugs) OR change rationale clear (for enhancements)
 - [ ] All affected files listed with specific changes
 - [ ] Scope boundaries defined (what NOT to change)
@@ -229,6 +237,7 @@ git blame -L {start},{end} {affected-file}
 ### 4.1 Artifact Path
 
 ```bash
+
 ```
 
 **Path:** `$ARTIFACTS_DIR/investigation.md`
@@ -240,12 +249,13 @@ This unified path allows review agents to find the artifact regardless of workfl
 Write this structure to the artifact file.
 
 **Note on Severity vs Priority:**
+
 - Use **Severity** for BUG type (CRITICAL, HIGH, MEDIUM, LOW)
 - Use **Priority** for all other types (HIGH, MEDIUM, LOW)
 
 **Important:** Each assessment must include a one-sentence reasoning based on your investigation findings.
 
-```markdown
+````markdown
 # Investigation: {Title}
 
 **Issue**: #{number} ({url})
@@ -254,11 +264,11 @@ Write this structure to the artifact file.
 
 ### Assessment
 
-| Metric | Value | Reasoning |
-|--------|-------|-----------|
-| Severity | {CRITICAL\|HIGH\|MEDIUM\|LOW} | {Why this severity? Based on user impact, workarounds, scope of failure} |
-| Complexity | {LOW\|MEDIUM\|HIGH} | {Why this complexity? Based on files affected, integration points, risk} |
-| Confidence | {HIGH\|MEDIUM\|LOW} | {Why this confidence? Based on evidence quality, unknowns, assumptions} |
+| Metric     | Value                         | Reasoning                                                                |
+| ---------- | ----------------------------- | ------------------------------------------------------------------------ |
+| Severity   | {CRITICAL\|HIGH\|MEDIUM\|LOW} | {Why this severity? Based on user impact, workarounds, scope of failure} |
+| Complexity | {LOW\|MEDIUM\|HIGH}           | {Why this complexity? Based on files affected, integration points, risk} |
+| Confidence | {HIGH\|MEDIUM\|LOW}           | {Why this confidence? Based on evidence quality, unknowns, assumptions}  |
 
 <!-- For non-BUG types, replace Severity row with Priority:
 | Priority | {HIGH\|MEDIUM\|LOW} | {Why this priority? Based on user value, blocking status, frequency} |
@@ -283,20 +293,20 @@ Write this structure to the artifact file.
 
 WHY: {symptom}
 ↓ BECAUSE: {cause 1}
-  Evidence: `file.ts:123` - `{code snippet}`
+Evidence: `file.ts:123` - `{code snippet}`
 
 ↓ BECAUSE: {cause 2}
-  Evidence: `file.ts:456` - `{code snippet}`
+Evidence: `file.ts:456` - `{code snippet}`
 
 ↓ ROOT CAUSE: {the fixable thing}
-  Evidence: `file.ts:789` - `{problematic code}`
+Evidence: `file.ts:789` - `{problematic code}`
 
 ### Affected Files
 
-| File | Lines | Action | Description |
-|------|-------|--------|-------------|
-| `src/x.ts` | 45-60 | UPDATE | {what changes} |
-| `src/x.test.ts` | NEW | CREATE | {test to add} |
+| File            | Lines | Action | Description    |
+| --------------- | ----- | ------ | -------------- |
+| `src/x.ts`      | 45-60 | UPDATE | {what changes} |
+| `src/x.test.ts` | NEW   | CREATE | {test to add}  |
 
 ### Integration Points
 
@@ -321,12 +331,15 @@ WHY: {symptom}
 **Action**: UPDATE
 
 **Current code:**
+
 ```typescript
 // Line 45-50
 {actual current code}
 ```
+````
 
 **Required change:**
+
 ```typescript
 // What it should become
 {the fix/change}
@@ -348,6 +361,7 @@ WHY: {symptom}
 **Action**: {CREATE|UPDATE}
 
 **Test cases to add:**
+
 ```typescript
 describe('{feature}', () => {
   it('should {expected behavior}', () => {
@@ -376,10 +390,10 @@ describe('{feature}', () => {
 
 ## Edge Cases & Risks
 
-| Risk/Edge Case | Mitigation |
-|----------------|------------|
-| {risk 1} | {how to handle} |
-| {edge case} | {how to handle} |
+| Risk/Edge Case | Mitigation      |
+| -------------- | --------------- |
+| {risk 1}       | {how to handle} |
+| {edge case}    | {how to handle} |
 
 ---
 
@@ -403,9 +417,11 @@ bun run lint
 ## Scope Boundaries
 
 **IN SCOPE:**
+
 - {what we're changing}
 
 **OUT OF SCOPE (do not touch):**
+
 - {what to leave alone}
 - {future improvements to defer}
 
@@ -416,7 +432,8 @@ bun run lint
 - **Investigated by**: Claude
 - **Timestamp**: {ISO timestamp}
 - **Artifact**: `$ARTIFACTS_DIR/investigation.md`
-```
+
+````
 
 **PHASE_4_CHECKPOINT:**
 - [ ] Artifact file created
@@ -480,7 +497,7 @@ gh issue comment {number} --body "$(cat <<'EOF'
 
 ```bash
 bun run type-check && bun test {pattern} && bun run lint
-```
+````
 
 ---
 
@@ -489,10 +506,12 @@ bun run type-check && bun test {pattern} && bun run lint
 To implement: `/implement-issue {number}`
 
 ---
-*Investigated by Claude • {timestamp}*
+
+_Investigated by Claude • {timestamp}_
 EOF
 )"
-```
+
+````
 
 **PHASE_5_CHECKPOINT:**
 - [ ] Comment posted to GitHub (if GH issue)
@@ -540,27 +559,31 @@ EOF
 ### Next Step
 
 Run `/implement-issue {number}` to execute the plan.
-```
+````
 
 ---
 
 ## Handling Edge Cases
 
 ### Issue is already closed
+
 - Report: "Issue #{number} is already closed"
 - Still create artifact if user wants analysis
 
 ### Issue already has linked PR
+
 - Warn: "PR #{pr} already addresses this issue"
 - Ask if user wants to continue anyway
 
 ### Can't determine root cause
+
 - Document what you found
 - Set confidence to LOW
 - Note uncertainty in artifact
 - Proceed with best hypothesis
 
 ### Very large scope
+
 - Suggest breaking into smaller issues
 - Focus on core problem first
 - Note deferred items in "Out of Scope"

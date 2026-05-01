@@ -46,6 +46,7 @@ cat {artifact-path}
 ```
 
 **Extract from artifact:**
+
 - Issue number and title
 - Type (BUG/ENHANCEMENT/etc)
 - Files to modify (with line numbers)
@@ -56,6 +57,7 @@ cat {artifact-path}
 ### 1.3 Validate Artifact Exists
 
 **If artifact not found:**
+
 ```
 ❌ Investigation artifact not found at $ARTIFACTS_DIR/investigation.md
 
@@ -63,6 +65,7 @@ Run `/investigate-issue {number}` first to create the implementation plan.
 ```
 
 **PHASE_1_CHECKPOINT:**
+
 - [ ] Artifact found and loaded
 - [ ] Key sections parsed (files, steps, validation)
 - [ ] Issue number extracted (if applicable)
@@ -74,11 +77,13 @@ Run `/investigate-issue {number}` first to create the implementation plan.
 ### 2.1 Verify Plan Accuracy
 
 For each file mentioned in the artifact:
+
 - Read the actual current code
 - Compare to what artifact expects
 - Check if the "current code" snippets match reality
 
 **If significant drift detected:**
+
 ```
 ⚠️ Code has changed since investigation:
 
@@ -94,16 +99,19 @@ Options:
 ### 2.2 Confirm Approach Makes Sense
 
 Ask yourself:
+
 - Does the proposed fix actually address the root cause?
 - Are there obvious problems with the approach?
 - Has something changed that invalidates the plan?
 
 **If plan seems wrong:**
+
 - STOP
 - Explain what's wrong
 - Suggest re-investigation
 
 **PHASE_2_CHECKPOINT:**
+
 - [ ] Artifact matches current codebase state
 - [ ] Approach still makes sense
 - [ ] No blocking issues identified
@@ -166,6 +174,7 @@ git pull --rebase origin $BASE_BRANCH 2>/dev/null || git pull origin $BASE_BRANC
 ```
 
 **PHASE_3_CHECKPOINT:**
+
 - [ ] Git state is clean and correct
 - [ ] On appropriate branch (created or existing)
 - [ ] Up to date with base branch
@@ -196,6 +205,7 @@ Run the chosen install command from the worktree root before any validation or t
 If install fails, STOP and report the error. Do not proceed to validation with missing dependencies.
 
 **PHASE_4_CHECKPOINT:**
+
 - [ ] Install command discovered
 - [ ] Dependencies installed successfully
 
@@ -214,12 +224,14 @@ For each step in the artifact's Implementation Plan:
 ### 5.2 Implementation Rules
 
 **DO:**
+
 - Follow artifact steps in order
 - Match existing code style exactly
 - Copy patterns from "Patterns to Follow" section
 - Add tests as specified
 
 **DON'T:**
+
 - Refactor unrelated code
 - Add "improvements" not in the plan
 - Change formatting of untouched lines
@@ -228,17 +240,20 @@ For each step in the artifact's Implementation Plan:
 ### 5.3 Handle Each File Type
 
 **For UPDATE files:**
+
 - Read current content
 - Find the exact lines mentioned
 - Make the specified change
 - Preserve surrounding code
 
 **For CREATE files:**
+
 - Use patterns from artifact
 - Follow existing file structure conventions
 - Include all specified content
 
 **For test files:**
+
 - Add test cases as specified
 - Follow existing test patterns
 - Ensure tests actually test the fix
@@ -246,10 +261,12 @@ For each step in the artifact's Implementation Plan:
 ### 5.4 Track Deviations
 
 If you must deviate from the artifact:
+
 - Note what changed and why
 - Include in PR description
 
 **PHASE_5_CHECKPOINT:**
+
 - [ ] All steps from artifact executed
 - [ ] Types compile after each change
 - [ ] Tests added as specified
@@ -274,6 +291,7 @@ bun run lint
 **All must pass before proceeding.**
 
 If failures:
+
 1. Analyze what's wrong
 2. Fix the issue
 3. Re-run validation
@@ -284,6 +302,7 @@ If failures:
 Execute any manual verification steps from the artifact.
 
 **PHASE_6_CHECKPOINT:**
+
 - [ ] Type check passes
 - [ ] Tests pass
 - [ ] Lint passes
@@ -303,6 +322,7 @@ git status  # Review what's being committed
 ### 7.2 Write Commit Message
 
 **Format:**
+
 ```
 Fix: {brief description} (#{issue-number})
 
@@ -317,6 +337,7 @@ Fixes #{issue-number}
 ```
 
 **Commit:**
+
 ```bash
 git commit -m "$(cat <<'EOF'
 Fix: {title} (#{number})
@@ -333,6 +354,7 @@ EOF
 ```
 
 **PHASE_7_CHECKPOINT:**
+
 - [ ] All changes committed
 - [ ] Commit message references issue
 
@@ -349,6 +371,7 @@ git push -u origin HEAD
 ```
 
 If branch was rebased:
+
 ```bash
 git push -u origin HEAD --force-with-lease
 ```
@@ -378,6 +401,7 @@ PR_NUMBER=$(gh pr view --json number -q '.number')
 ```
 
 **PHASE_8_CHECKPOINT:**
+
 - [ ] Changes pushed to remote
 - [ ] PR created
 - [ ] PR linked to issue with "Fixes #{number}"
@@ -401,19 +425,19 @@ Write to `$ARTIFACTS_DIR/implementation.md`:
 
 ## Tasks Completed
 
-| # | Task | File | Status |
-|---|------|------|--------|
-| 1 | {task} | `src/x.ts` | ✅ |
-| 2 | {task} | `src/x.test.ts` | ✅ |
+| #   | Task   | File            | Status |
+| --- | ------ | --------------- | ------ |
+| 1   | {task} | `src/x.ts`      | ✅     |
+| 2   | {task} | `src/x.test.ts` | ✅     |
 
 ---
 
 ## Files Changed
 
-| File | Action | Lines |
-|------|--------|-------|
-| `src/x.ts` | UPDATE | +{N}/-{M} |
-| `src/x.test.ts` | CREATE | +{N} |
+| File            | Action | Lines     |
+| --------------- | ------ | --------- |
+| `src/x.ts`      | UPDATE | +{N}/-{M} |
+| `src/x.test.ts` | CREATE | +{N}      |
 
 ---
 
@@ -422,6 +446,7 @@ Write to `$ARTIFACTS_DIR/implementation.md`:
 {If none: "Implementation matched the investigation exactly."}
 
 {If any:}
+
 ### Deviation 1: {title}
 
 **Expected**: {from investigation}
@@ -432,11 +457,11 @@ Write to `$ARTIFACTS_DIR/implementation.md`:
 
 ## Validation Results
 
-| Check | Result |
-|-------|--------|
-| Type check | ✅ |
-| Tests | ✅ ({N} passed) |
-| Lint | ✅ |
+| Check      | Result          |
+| ---------- | --------------- |
+| Type check | ✅              |
+| Tests      | ✅ ({N} passed) |
+| Lint       | ✅              |
 
 ---
 
@@ -448,6 +473,7 @@ Write to `$ARTIFACTS_DIR/implementation.md`:
 ```
 
 **PHASE_9_CHECKPOINT:**
+
 - [ ] Implementation artifact written
 
 ---
@@ -467,18 +493,18 @@ Skip archiving - artifacts remain in place for review workflow to access.
 
 ### Changes Made
 
-| File | Change |
-|------|--------|
-| `src/x.ts` | {description} |
-| `src/x.test.ts` | Added test |
+| File            | Change        |
+| --------------- | ------------- |
+| `src/x.ts`      | {description} |
+| `src/x.test.ts` | Added test    |
 
 ### Validation
 
-| Check | Result |
-|-------|--------|
+| Check      | Result  |
+| ---------- | ------- |
 | Type check | ✅ Pass |
-| Tests | ✅ Pass |
-| Lint | ✅ Pass |
+| Tests      | ✅ Pass |
+| Lint       | ✅ Pass |
 
 ### Artifacts
 
@@ -495,32 +521,38 @@ Proceeding to comprehensive code review...
 ## Handling Edge Cases
 
 ### Artifact is outdated
+
 - Warn user about drift
 - Suggest re-running `/investigate-issue`
 - Can proceed with caution if changes are minor
 
 ### Tests fail after implementation
+
 - Debug the failure
 - Fix the code (not the test, unless test is wrong)
 - Re-run validation
 - Note the additional fix in PR
 
 ### Merge conflicts during rebase
+
 - Resolve conflicts
 - Re-run full validation
 - Note conflict resolution in PR
 
 ### PR creation fails
+
 - Check if PR already exists for branch
 - Check for permission issues
 - Provide manual gh command
 
 ### Already on a branch with changes
+
 - Use the existing branch
 - Warn if branch name doesn't match issue
 - Don't create a new branch
 
 ### In a worktree
+
 - Use it as-is
 - Assume it was created for this purpose
 - Log that worktree is being used

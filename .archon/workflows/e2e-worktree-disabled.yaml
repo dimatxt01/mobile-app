@@ -2,7 +2,7 @@
 # Verifies: when a workflow pins worktree.enabled: false, runs happen in the
 # live repo checkout (no worktree created, cwd == repo root). Zero AI calls.
 name: e2e-worktree-disabled
-description: "Pinned-isolation-off smoke. Asserts cwd is the repo root rather than a worktree path, regardless of how the workflow is invoked."
+description: 'Pinned-isolation-off smoke. Asserts cwd is the repo root rather than a worktree path, regardless of how the workflow is invoked.'
 
 worktree:
   enabled: false
@@ -10,7 +10,7 @@ worktree:
 nodes:
   # Print cwd so the operator can eyeball it, and capture for the assertion node.
   - id: print-cwd
-    bash: "pwd"
+    bash: 'pwd'
 
   # Assertion: cwd must NOT contain '/.archon/workspaces/' — if it does, the
   # policy was ignored and a worktree was created anyway. We also assert the

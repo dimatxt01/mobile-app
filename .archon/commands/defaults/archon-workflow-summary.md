@@ -12,6 +12,7 @@ argument-hint: (no arguments - reads from workflow artifacts)
 ## Your Mission
 
 Create the final summary report for the workflow run:
+
 1. Summarize what was implemented vs the plan
 2. List deviations and their rationale
 3. Surface unfixed review findings (MEDIUM/LOW)
@@ -41,6 +42,7 @@ done
 ```
 
 **Expected artifacts**:
+
 - `plan-context.md` - Plan summary, scope limits, acceptance criteria
 - `plan-confirmation.md` - Pattern verification results
 - `implementation.md` - Tasks done, deviations, issues encountered
@@ -63,6 +65,7 @@ done
 ```
 
 **Expected review artifacts** (in `runs/$WORKFLOW_ID/review/`):
+
 - `scope.md` - Files changed, scope limits, focus areas
 - `code-review-findings.md` - Code quality issues
 - `error-handling-findings.md` - Silent failures, catch blocks
@@ -76,30 +79,35 @@ done
 ### 1.3 Extract Key Data
 
 **From plan-context.md**:
+
 - Plan title and summary
 - Files expected to change
 - **NOT Building (Scope Limits)** - CRITICAL: these are follow-up candidates
 - Acceptance criteria
 
 **From implementation.md**:
+
 - Tasks completed vs planned
 - Files actually changed
 - **Deviations from plan** - document these prominently
 - Issues encountered during implementation
 
 **From all review findings**:
+
 - CRITICAL/HIGH issues (should be fixed)
 - **MEDIUM issues** - follow-up candidates
 - **LOW issues** - optional follow-ups
 - Specific recommendations by category
 
 **From fix-report.md**:
+
 - What was actually fixed
 - What was NOT fixed (and why)
 
 ### 1.4 Cross-Reference
 
 Compare across artifacts:
+
 - Plan vs Implementation: What matched? What deviated?
 - Review findings vs Fix report: What's still open?
 - NOT Building vs Review findings: Did reviewers flag excluded items? (this is expected, note it)
@@ -120,37 +128,40 @@ Compare across artifacts:
 
 **From "NOT Building" section** - Future work explicitly deferred:
 
-| Item | Rationale | Suggested Follow-Up |
-|------|-----------|---------------------|
+| Item            | Rationale      | Suggested Follow-Up                     |
+| --------------- | -------------- | --------------------------------------- |
 | {excluded item} | {why excluded} | Create issue / Separate PR / Not needed |
 
 **From Implementation Deviations** - Changes that diverged from plan:
 
-| Deviation | Reason | Impact | Follow-Up Needed? |
-|-----------|--------|--------|-------------------|
-| {what changed} | {why} | {low/medium/high} | {yes/no + action} |
+| Deviation      | Reason | Impact            | Follow-Up Needed? |
+| -------------- | ------ | ----------------- | ----------------- |
+| {what changed} | {why}  | {low/medium/high} | {yes/no + action} |
 
 **From Unfixed Review Findings** - MEDIUM/LOW severity items:
 
-| Finding | Severity | Category | Suggested Action |
-|---------|----------|----------|------------------|
-| {issue} | MEDIUM | docs | Update CLAUDE.md |
-| {issue} | LOW | test | Add edge case test |
-| {issue} | MEDIUM | error-handling | Log instead of silent |
+| Finding | Severity | Category       | Suggested Action      |
+| ------- | -------- | -------------- | --------------------- |
+| {issue} | MEDIUM   | docs           | Update CLAUDE.md      |
+| {issue} | LOW      | test           | Add edge case test    |
+| {issue} | MEDIUM   | error-handling | Log instead of silent |
 
 ### 2.2 Prioritize by Effort vs Value
 
 **Quick Wins** (< 5 min, high value):
+
 - Documentation updates
 - Simple comment additions
 - Missing log statements
 
 **Worth Doing** (medium effort, clear value):
+
 - Test coverage gaps
 - Error message improvements
 - Type refinements
 
 **Can Defer** (higher effort or lower urgency):
+
 - Refactoring suggestions
 - Performance optimizations
 - Style improvements
@@ -175,12 +186,13 @@ Structure the output for easy decision-making:
 
 ### 🚀 Quick Wins (Can do now, < 5 min each)
 
-| # | Item | Action | Command |
-|---|------|--------|---------|
-| 1 | Update CLAUDE.md with new column | Docs update | `Run docs agent` |
-| 2 | Add missing JSDoc to deactivateSession | Comment | `Auto-fix` |
+| #   | Item                                   | Action      | Command          |
+| --- | -------------------------------------- | ----------- | ---------------- |
+| 1   | Update CLAUDE.md with new column       | Docs update | `Run docs agent` |
+| 2   | Add missing JSDoc to deactivateSession | Comment     | `Auto-fix`       |
 
 **Your choice**:
+
 - [ ] Do all quick wins before merge
 - [ ] Create issues for later
 - [ ] Skip (not needed)
@@ -189,12 +201,13 @@ Structure the output for easy decision-making:
 
 ### 📋 Suggested GitHub Issues
 
-| # | Title | Labels | From |
-|---|-------|--------|------|
-| 1 | {issue title} | `enhancement`, `docs` | NOT Building |
-| 2 | {issue title} | `bug`, `low-priority` | Review finding |
+| #   | Title         | Labels                | From           |
+| --- | ------------- | --------------------- | -------------- |
+| 1   | {issue title} | `enhancement`, `docs` | NOT Building   |
+| 2   | {issue title} | `bug`, `low-priority` | Review finding |
 
 **Your choice**:
+
 - [ ] Create all issues
 - [ ] Create selected: {numbers}
 - [ ] Skip issue creation
@@ -203,12 +216,13 @@ Structure the output for easy decision-making:
 
 ### 📝 Documentation Gaps
 
-| File | Section | Update Needed |
-|------|---------|---------------|
-| CLAUDE.md | Database Schema | Add ended_reason column |
-| $DOCS_DIR/architecture.md | Sessions | Update deactivateSession signature |
+| File                      | Section         | Update Needed                      |
+| ------------------------- | --------------- | ---------------------------------- |
+| CLAUDE.md                 | Database Schema | Add ended_reason column            |
+| $DOCS_DIR/architecture.md | Sessions        | Update deactivateSession signature |
 
 **Your choice**:
+
 - [ ] Send docs agent to fix all
 - [ ] Fix manually after merge
 - [ ] Skip (acceptable as-is)
@@ -217,9 +231,9 @@ Structure the output for easy decision-making:
 
 ### ⚠️ Deferred Items (from NOT Building)
 
-| Item | Why Deferred | When to Address |
-|------|--------------|-----------------|
-| {item} | {rationale} | {next sprint / never / if needed} |
+| Item   | Why Deferred | When to Address                   |
+| ------ | ------------ | --------------------------------- |
+| {item} | {rationale}  | {next sprint / never / if needed} |
 
 **These were intentionally excluded** - no action needed unless priorities change.
 ```
@@ -249,14 +263,15 @@ Create a PR comment with the summary:
 
 ### Implementation vs Plan
 
-| Metric | Planned | Actual |
-|--------|---------|--------|
-| Files created | {N} | {N} |
-| Files updated | {M} | {M} |
-| Tests added | {K} | {K} |
-| Deviations | - | {count} |
+| Metric        | Planned | Actual  |
+| ------------- | ------- | ------- |
+| Files created | {N}     | {N}     |
+| Files updated | {M}     | {M}     |
+| Tests added   | {K}     | {K}     |
+| Deviations    | -       | {count} |
 
 {If deviations:}
+
 <details>
 <summary>📋 Deviations from Plan ({count})</summary>
 
@@ -268,12 +283,12 @@ Create a PR comment with the summary:
 
 ### Review Summary
 
-| Severity | Found | Fixed | Remaining |
-|----------|-------|-------|-----------|
-| CRITICAL | {N} | {N} | 0 |
-| HIGH | {N} | {N} | 0 |
-| MEDIUM | {N} | {fixed} | {remaining} |
-| LOW | {N} | {fixed} | {remaining} |
+| Severity | Found | Fixed   | Remaining   |
+| -------- | ----- | ------- | ----------- |
+| CRITICAL | {N}   | {N}     | 0           |
+| HIGH     | {N}   | {N}     | 0           |
+| MEDIUM   | {N}   | {fixed} | {remaining} |
+| LOW      | {N}   | {fixed} | {remaining} |
 
 ---
 
@@ -281,8 +296,8 @@ Create a PR comment with the summary:
 
 {If any quick wins identified:}
 
-| Item | Effort | Action |
-|------|--------|--------|
+| Item   | Effort | Action   |
+| ------ | ------ | -------- |
 | {item} | ~2 min | {action} |
 
 **Reply with**: `@archon do quick wins` to auto-fix these.
@@ -293,8 +308,8 @@ Create a PR comment with the summary:
 
 {If issues suggested:}
 
-| Title | Labels |
-|-------|--------|
+| Title   | Labels   |
+| ------- | -------- |
 | {title} | {labels} |
 
 **Reply with**: `@archon create follow-up issues` to create these.
@@ -305,8 +320,8 @@ Create a PR comment with the summary:
 
 {If doc gaps found:}
 
-| File | Update |
-|------|--------|
+| File   | Update |
+| ------ | ------ |
 | {file} | {what} |
 
 **Reply with**: `@archon update docs` to send a docs agent.
@@ -357,15 +372,15 @@ Write to `$ARTIFACTS_DIR/workflow-summary.md`:
 
 ## Execution Summary
 
-| Phase | Status | Notes |
-|-------|--------|-------|
-| Setup | ✅ | Branch ready |
-| Confirm | ✅ | Plan validated |
-| Implement | ✅ | {N} tasks completed |
-| Validate | ✅ | All checks pass |
-| PR | ✅ | #{number} created |
-| Review | ✅ | {N} agents ran |
-| Fixes | ✅ | {N} issues fixed |
+| Phase     | Status | Notes               |
+| --------- | ------ | ------------------- |
+| Setup     | ✅     | Branch ready        |
+| Confirm   | ✅     | Plan validated      |
+| Implement | ✅     | {N} tasks completed |
+| Validate  | ✅     | All checks pass     |
+| PR        | ✅     | #{number} created   |
+| Review    | ✅     | {N} agents ran      |
+| Fixes     | ✅     | {N} issues fixed    |
 
 ---
 
@@ -459,16 +474,17 @@ This allows legacy tools to find review artifacts at `$ARTIFACTS_DIR/../reviews/
 
 ### Summary
 
-| Metric | Value |
-|--------|-------|
-| Tasks completed | {N}/{N} |
-| Review findings fixed | {N} |
-| Quick wins available | {N} |
-| Follow-up issues suggested | {N} |
+| Metric                     | Value   |
+| -------------------------- | ------- |
+| Tasks completed            | {N}/{N} |
+| Review findings fixed      | {N}     |
+| Quick wins available       | {N}     |
+| Follow-up issues suggested | {N}     |
 
 ### Posted to GitHub
 
 Summary comment added to PR with:
+
 - Implementation vs plan comparison
 - Deviations documented
 - Decision matrix for follow-ups

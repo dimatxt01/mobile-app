@@ -38,11 +38,13 @@ gh pr diff {number}
 ```
 
 Focus on:
+
 - New comments added
 - Comments near modified code
 - JSDoc/docstrings added or changed
 
 **PHASE_1_CHECKPOINT:**
+
 - [ ] PR number identified
 - [ ] Changed files with comments identified
 - [ ] Diff available
@@ -54,6 +56,7 @@ Focus on:
 ### 2.1 Check Comment Accuracy
 
 For each comment in changed code:
+
 - Does the comment accurately describe what the code does?
 - Is the comment up-to-date with the implementation?
 - Are parameter descriptions correct?
@@ -63,6 +66,7 @@ For each comment in changed code:
 ### 2.2 Identify Comment Rot
 
 Look for:
+
 - Comments that describe old behavior
 - TODO/FIXME that should have been addressed
 - Outdated references (old file names, removed functions)
@@ -71,6 +75,7 @@ Look for:
 ### 2.3 Check Documentation Completeness
 
 Evaluate:
+
 - Are complex functions properly documented?
 - Are public APIs documented?
 - Are non-obvious algorithms explained?
@@ -80,12 +85,14 @@ Evaluate:
 ### 2.4 Assess Maintainability
 
 Consider:
+
 - Will future developers understand the "why"?
 - Are there redundant comments (just restating code)?
 - Is the signal-to-noise ratio good?
 - Are comments in the right places?
 
 **PHASE_2_CHECKPOINT:**
+
 - [ ] Comment accuracy verified
 - [ ] Comment rot identified
 - [ ] Completeness gaps found
@@ -97,7 +104,7 @@ Consider:
 
 Write to `$ARTIFACTS_DIR/review/comment-quality-findings.md`:
 
-```markdown
+````markdown
 # Comment Quality Findings: PR #{number}
 
 **Reviewer**: comment-quality-agent
@@ -126,10 +133,12 @@ Write to `$ARTIFACTS_DIR/review/comment-quality-findings.md`:
 {Clear description of the comment problem}
 
 **Current Comment**:
+
 ```typescript
 // {the problematic comment}
 {code the comment describes}
 ```
+````
 
 **Actual Code Behavior**:
 {What the code actually does vs what comment says}
@@ -141,21 +150,23 @@ Write to `$ARTIFACTS_DIR/review/comment-quality-findings.md`:
 
 #### Fix Suggestions
 
-| Option | Approach | Pros | Cons |
-|--------|----------|------|------|
-| A | {update comment} | {benefits} | {drawbacks} |
-| B | {remove comment} | {benefits} | {drawbacks} |
-| C | {expand comment} | {benefits} | {drawbacks} |
+| Option | Approach         | Pros       | Cons        |
+| ------ | ---------------- | ---------- | ----------- |
+| A      | {update comment} | {benefits} | {drawbacks} |
+| B      | {remove comment} | {benefits} | {drawbacks} |
+| C      | {expand comment} | {benefits} | {drawbacks} |
 
 **Recommended**: Option {X}
 
 **Reasoning**:
 {Why this option:
+
 - Matches documentation standards
 - Provides value without being redundant
 - Will remain accurate over time}
 
 **Recommended Fix**:
+
 ```typescript
 /**
  * {corrected/improved comment}
@@ -163,10 +174,13 @@ Write to `$ARTIFACTS_DIR/review/comment-quality-findings.md`:
  * @param {type} param - {accurate description}
  * @returns {type} - {accurate description}
  */
-{code}
+{
+  code;
+}
 ```
 
 **Good Comment Pattern**:
+
 ```typescript
 // SOURCE: {file}:{lines}
 // Example of good documentation in this codebase
@@ -183,40 +197,40 @@ Write to `$ARTIFACTS_DIR/review/comment-quality-findings.md`:
 
 ## Comment Audit
 
-| Location | Type | Accurate | Up-to-date | Useful | Verdict |
-|----------|------|----------|------------|--------|---------|
-| `file:line` | JSDoc | YES/NO | YES/NO | YES/NO | GOOD/UPDATE/REMOVE |
-| ... | ... | ... | ... | ... | ... |
+| Location    | Type  | Accurate | Up-to-date | Useful | Verdict            |
+| ----------- | ----- | -------- | ---------- | ------ | ------------------ |
+| `file:line` | JSDoc | YES/NO   | YES/NO     | YES/NO | GOOD/UPDATE/REMOVE |
+| ...         | ...   | ...      | ...        | ...    | ...                |
 
 ---
 
 ## Statistics
 
 | Severity | Count | Auto-fixable |
-|----------|-------|--------------|
-| CRITICAL | {n} | {n} |
-| HIGH | {n} | {n} |
-| MEDIUM | {n} | {n} |
-| LOW | {n} | {n} |
+| -------- | ----- | ------------ |
+| CRITICAL | {n}   | {n}          |
+| HIGH     | {n}   | {n}          |
+| MEDIUM   | {n}   | {n}          |
+| LOW      | {n}   | {n}          |
 
 ---
 
 ## Documentation Gaps
 
-| Code Area | What's Missing | Priority |
-|-----------|----------------|----------|
-| `function xyz()` | Parameter docs, return type | HIGH |
-| `class Abc` | Class purpose, usage example | MEDIUM |
-| ... | ... | ... |
+| Code Area        | What's Missing               | Priority |
+| ---------------- | ---------------------------- | -------- |
+| `function xyz()` | Parameter docs, return type  | HIGH     |
+| `class Abc`      | Class purpose, usage example | MEDIUM   |
+| ...              | ...                          | ...      |
 
 ---
 
 ## Comment Rot Found
 
-| Location | Comment Says | Code Does | Age |
-|----------|--------------|-----------|-----|
+| Location    | Comment Says        | Code Does         | Age               |
+| ----------- | ------------------- | ----------------- | ----------------- |
 | `file:line` | "{old description}" | {actual behavior} | {when introduced} |
-| ... | ... | ... | ... |
+| ...         | ...                 | ...               | ...               |
 
 ---
 
@@ -231,6 +245,7 @@ Write to `$ARTIFACTS_DIR/review/comment-quality-findings.md`:
 - **Agent**: comment-quality-agent
 - **Timestamp**: {ISO timestamp}
 - **Artifact**: `$ARTIFACTS_DIR/review/comment-quality-findings.md`
+
 ```
 
 **PHASE_3_CHECKPOINT:**
@@ -247,3 +262,4 @@ Write to `$ARTIFACTS_DIR/review/comment-quality-findings.md`:
 - **ACCURACY_CHECKED**: Comments verified against actual code
 - **ROT_IDENTIFIED**: Outdated comments found
 - **GAPS_DOCUMENTED**: Missing documentation noted
+```

@@ -12,6 +12,7 @@ argument-hint: (no arguments - reads from workflow artifacts)
 ## Your Mission
 
 Finalize the implementation and create the PR:
+
 1. Commit all changes
 2. Push to remote
 3. Create PR using project's template (if exists)
@@ -30,6 +31,7 @@ cat $ARTIFACTS_DIR/validation.md
 ```
 
 Extract:
+
 - Plan title and summary
 - Branch name
 - Files changed
@@ -118,6 +120,7 @@ git push origin HEAD
 ### 3.1 Prepare PR Body
 
 **If project has PR template**, fill in each section with implementation details:
+
 - Replace placeholder text with actual content
 - Fill in checkboxes based on what was done
 - Keep the template's structure intact
@@ -133,8 +136,8 @@ git push origin HEAD
 
 {From implementation.md "Files Changed" section}
 
-| File | Action | Description |
-|------|--------|-------------|
+| File       | Action | Description    |
+| ---------- | ------ | -------------- |
 | `src/x.ts` | CREATE | {what it does} |
 | `src/y.ts` | UPDATE | {what changed} |
 
@@ -158,11 +161,13 @@ git push origin HEAD
 ## Implementation Notes
 
 {If deviations from plan:}
+
 ### Deviations from Plan
 
 {List deviations and reasons}
 
 {If issues encountered:}
+
 ### Issues Resolved
 
 {List issues and resolutions}
@@ -246,12 +251,12 @@ Write to `$ARTIFACTS_DIR/pr-ready.md`:
 
 ## Pull Request
 
-| Field | Value |
-|-------|-------|
-| **Number** | #{number} |
-| **URL** | {url} |
+| Field      | Value               |
+| ---------- | ------------------- |
+| **Number** | #{number}           |
+| **URL**    | {url}               |
 | **Branch** | `{head}` → `{base}` |
-| **Status** | Ready for Review |
+| **Status** | Ready for Review    |
 
 ---
 
@@ -266,9 +271,9 @@ Write to `$ARTIFACTS_DIR/pr-ready.md`:
 
 {From git diff --name-only origin/$BASE_BRANCH}
 
-| File | Status |
-|------|--------|
-| `src/x.ts` | Added |
+| File       | Status   |
+| ---------- | -------- |
+| `src/x.ts` | Added    |
 | `src/y.ts` | Modified |
 
 ---
@@ -285,6 +290,7 @@ Write to `$ARTIFACTS_DIR/pr-ready.md`:
 ## Next Step
 
 Continue to PR review workflow:
+
 1. `archon-pr-review-scope`
 2. `archon-sync-pr-with-main`
 3. Review agents (parallel)
@@ -307,17 +313,18 @@ Continue to PR review workflow:
 
 ### Pull Request
 
-| Field | Value |
-|-------|-------|
-| PR | #{number} |
-| URL | {url} |
+| Field  | Value                 |
+| ------ | --------------------- |
+| PR     | #{number}             |
+| URL    | {url}                 |
 | Branch | `{branch}` → `{base}` |
-| Status | 🟢 Ready for Review |
+| Status | 🟢 Ready for Review   |
 
 ### Commit
-
 ```
+
 {commit-sha-short} {commit-message-first-line}
+
 ```
 
 ### Files Changed
@@ -366,6 +373,7 @@ git push --force-with-lease origin HEAD
 ```
 
 If still fails:
+
 ```
 ❌ Push failed
 
@@ -387,6 +395,7 @@ The draft PR may have been closed or deleted. Create a new one:
 ### Template Parsing
 
 If template has complex structure that's hard to fill:
+
 - Use as much of the template as possible
 - Add implementation details in relevant sections
 - Note at bottom: "Some template sections may need manual completion"

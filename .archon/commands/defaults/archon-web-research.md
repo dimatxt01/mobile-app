@@ -44,12 +44,12 @@ From the issue context, identify:
 
 Create 3-5 targeted search queries:
 
-| Query | Why | Expected Source |
-|-------|-----|-----------------|
-| "{library} {feature} documentation" | Official docs | Library website |
-| "{error message}" | Known issues | Stack Overflow, GitHub issues |
-| "{pattern} best practices {year}" | Current approaches | Blog posts, docs |
-| "{library} built-in {primitive/feature}" | Avoid reinventing | Official docs, changelog, migration guides |
+| Query                                    | Why                | Expected Source                            |
+| ---------------------------------------- | ------------------ | ------------------------------------------ |
+| "{library} {feature} documentation"      | Official docs      | Library website                            |
+| "{error message}"                        | Known issues       | Stack Overflow, GitHub issues              |
+| "{pattern} best practices {year}"        | Current approaches | Blog posts, docs                           |
+| "{library} built-in {primitive/feature}" | Avoid reinventing  | Official docs, changelog, migration guides |
 
 **PHASE_1_CHECKPOINT:**
 
@@ -132,7 +132,7 @@ For each finding:
 
 Write to `$ARTIFACTS_DIR/web-research.md`:
 
-```markdown
+````markdown
 # Web Research: $ARGUMENTS
 
 **Researched**: {ISO timestamp}
@@ -176,6 +176,7 @@ Write to `$ARTIFACTS_DIR/web-research.md`:
 // From [{source}]({url})
 {code example}
 ```
+````
 
 ---
 
@@ -198,11 +199,12 @@ Based on research:
 
 ## Sources
 
-| # | Source | URL | Relevance |
-|---|--------|-----|-----------|
-| 1 | {name} | {url} | {brief relevance} |
-| 2 | {name} | {url} | {brief relevance} |
-```
+| #   | Source | URL   | Relevance         |
+| --- | ------ | ----- | ----------------- |
+| 1   | {name} | {url} | {brief relevance} |
+| 2   | {name} | {url} | {brief relevance} |
+
+````
 
 **PHASE_4_CHECKPOINT:**
 
@@ -230,19 +232,19 @@ Based on research:
 ### Gaps
 
 - {What couldn't be found, if any}
-```
+````
 
 ---
 
 ## Quality Standards
 
-| Standard | Requirement |
-|----------|-------------|
-| **Accuracy** | Quote sources exactly, provide direct links |
-| **Relevance** | Focus on what directly addresses the issue |
-| **Currency** | Note publication dates and versions |
-| **Authority** | Prioritize official docs, recognized experts |
-| **Completeness** | Search multiple angles, note gaps |
+| Standard         | Requirement                                   |
+| ---------------- | --------------------------------------------- |
+| **Accuracy**     | Quote sources exactly, provide direct links   |
+| **Relevance**    | Focus on what directly addresses the issue    |
+| **Currency**     | Note publication dates and versions           |
+| **Authority**    | Prioritize official docs, recognized experts  |
+| **Completeness** | Search multiple angles, note gaps             |
 | **Transparency** | Flag outdated, conflicting, or uncertain info |
 
 ---

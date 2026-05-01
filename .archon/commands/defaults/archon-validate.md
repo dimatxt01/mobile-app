@@ -63,6 +63,7 @@ Run each check in order. Fix any failures before proceeding.
 ```
 
 **If fails:**
+
 1. Read error output
 2. Fix the type issues
 3. Re-run until passing
@@ -78,6 +79,7 @@ Run each check in order. Fix any failures before proceeding.
 **If fails:**
 
 1. Try auto-fix first:
+
    ```bash
    {runner} run lint:fix
    ```
@@ -97,6 +99,7 @@ Run each check in order. Fix any failures before proceeding.
 **If fails:**
 
 1. Auto-fix:
+
    ```bash
    {runner} run format
    ```
@@ -163,13 +166,13 @@ Write to `$ARTIFACTS_DIR/validation.md`:
 
 ## Summary
 
-| Check | Result | Details |
-|-------|--------|---------|
-| Type check | ✅ | No errors |
-| Lint | ✅ | 0 errors, {N} warnings |
-| Format | ✅ | All files formatted |
-| Tests | ✅ | {N} passed, 0 failed |
-| Build | ✅ | Compiled successfully |
+| Check      | Result | Details                |
+| ---------- | ------ | ---------------------- |
+| Type check | ✅     | No errors              |
+| Lint       | ✅     | 0 errors, {N} warnings |
+| Format     | ✅     | All files formatted    |
+| Tests      | ✅     | {N} passed, 0 failed   |
+| Build      | ✅     | Compiled successfully  |
 
 ---
 
@@ -179,6 +182,7 @@ Write to `$ARTIFACTS_DIR/validation.md`:
 **Result**: ✅ Pass
 
 {If issues were fixed:}
+
 ### Issues Fixed
 
 - `src/file.ts:42` - Added missing return type
@@ -192,6 +196,7 @@ Write to `$ARTIFACTS_DIR/validation.md`:
 **Result**: ✅ Pass
 
 {If issues were fixed:}
+
 ### Issues Fixed
 
 - {N} auto-fixed by `lint:fix`
@@ -209,6 +214,7 @@ Write to `$ARTIFACTS_DIR/validation.md`:
 **Result**: ✅ Pass
 
 {If files were formatted:}
+
 ### Files Formatted
 
 - `src/file.ts`
@@ -221,14 +227,15 @@ Write to `$ARTIFACTS_DIR/validation.md`:
 **Command**: `{runner} test`
 **Result**: ✅ Pass
 
-| Metric | Count |
-|--------|-------|
-| Total tests | {N} |
-| Passed | {N} |
-| Failed | 0 |
-| Skipped | {M} |
+| Metric      | Count |
+| ----------- | ----- |
+| Total tests | {N}   |
+| Passed      | {N}   |
+| Failed      | 0     |
+| Skipped     | {M}   |
 
 {If tests were fixed:}
+
 ### Tests Fixed
 
 - `src/x.test.ts` - Fixed assertion to match new behavior
@@ -248,10 +255,10 @@ Build output: `dist/` (or as configured)
 
 {If any files were changed to fix issues:}
 
-| File | Changes |
-|------|---------|
-| `src/file.ts` | Fixed type error |
-| `src/other.ts` | Lint auto-fix |
+| File           | Changes          |
+| -------------- | ---------------- |
+| `src/file.ts`  | Fixed type error |
+| `src/other.ts` | Lint auto-fix    |
 
 ---
 
@@ -278,15 +285,16 @@ Continue to `archon-finalize-pr` to update PR and mark ready for review.
 
 ### Results
 
-| Check | Status |
-|-------|--------|
-| Type check | ✅ |
-| Lint | ✅ |
-| Format | ✅ |
-| Tests | ✅ ({N} passed) |
-| Build | ✅ |
+| Check      | Status          |
+| ---------- | --------------- |
+| Type check | ✅              |
+| Lint       | ✅              |
+| Format     | ✅              |
+| Tests      | ✅ ({N} passed) |
+| Build      | ✅              |
 
 {If issues were fixed:}
+
 ### Issues Fixed
 
 - {N} type errors fixed

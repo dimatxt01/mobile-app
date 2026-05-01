@@ -30,6 +30,7 @@ cat $ARTIFACTS_DIR/review/scope.md
 ```
 
 Note:
+
 - Changed files list
 - CLAUDE.md rules to check
 - Focus areas
@@ -51,6 +52,7 @@ cat CLAUDE.md
 Note all coding standards, patterns, and rules.
 
 **PHASE_1_CHECKPOINT:**
+
 - [ ] PR number identified
 - [ ] Scope loaded
 - [ ] Diff available
@@ -63,6 +65,7 @@ Note all coding standards, patterns, and rules.
 ### 2.1 Check CLAUDE.md Compliance
 
 For each changed file, verify:
+
 - Import patterns match project style
 - Naming conventions followed
 - Error handling patterns correct
@@ -72,6 +75,7 @@ For each changed file, verify:
 ### 2.2 Detect Bugs
 
 Look for:
+
 - Logic errors
 - Null/undefined handling issues
 - Race conditions
@@ -83,6 +87,7 @@ Look for:
 ### 2.3 Check Code Quality
 
 Evaluate:
+
 - Code duplication
 - Function complexity
 - Proper abstractions
@@ -114,6 +119,7 @@ grep -r "interface {Name}\|class {Name}\|type {Name}" packages/ --include="*.ts"
 4. Note findings in the CLAUDE.md Compliance section with verdict: **EXTENDS** (extends existing primitive) or **DUPLICATE** (redundant with existing) or **NEW** (genuinely new, no existing primitive).
 
 **PHASE_2_CHECKPOINT:**
+
 - [ ] CLAUDE.md compliance checked
 - [ ] Bugs identified
 - [ ] Quality issues noted
@@ -126,7 +132,7 @@ grep -r "interface {Name}\|class {Name}\|type {Name}" packages/ --include="*.ts"
 
 Write to `$ARTIFACTS_DIR/review/code-review-findings.md`:
 
-```markdown
+````markdown
 # Code Review Findings: PR #{number}
 
 **Reviewer**: code-review-agent
@@ -155,10 +161,12 @@ Write to `$ARTIFACTS_DIR/review/code-review-findings.md`:
 {Clear description of what's wrong}
 
 **Evidence**:
+
 ```typescript
 // Current code at {file}:{line}
 {problematic code snippet}
 ```
+````
 
 **Why This Matters**:
 {Explain the impact - what could go wrong, why it violates standards}
@@ -167,27 +175,30 @@ Write to `$ARTIFACTS_DIR/review/code-review-findings.md`:
 
 #### Fix Suggestions
 
-| Option | Approach | Pros | Cons |
-|--------|----------|------|------|
-| A | {approach description} | {benefits} | {drawbacks} |
-| B | {alternative approach} | {benefits} | {drawbacks} |
+| Option | Approach               | Pros       | Cons        |
+| ------ | ---------------------- | ---------- | ----------- |
+| A      | {approach description} | {benefits} | {drawbacks} |
+| B      | {alternative approach} | {benefits} | {drawbacks} |
 
 **Recommended**: Option {A/B}
 
 **Reasoning**:
 {Explain why this option is preferred, referencing:
+
 - Codebase patterns
 - CLAUDE.md rules
 - Best practices
 - Specific project context}
 
 **Recommended Fix**:
+
 ```typescript
 // Suggested fix
 {corrected code}
 ```
 
 **Codebase Pattern Reference**:
+
 ```typescript
 // SOURCE: {file}:{lines}
 // This pattern shows how similar code is handled elsewhere
@@ -205,29 +216,29 @@ Write to `$ARTIFACTS_DIR/review/code-review-findings.md`:
 ## Statistics
 
 | Severity | Count | Auto-fixable |
-|----------|-------|--------------|
-| CRITICAL | {n} | {n} |
-| HIGH | {n} | {n} |
-| MEDIUM | {n} | {n} |
-| LOW | {n} | {n} |
+| -------- | ----- | ------------ |
+| CRITICAL | {n}   | {n}          |
+| HIGH     | {n}   | {n}          |
+| MEDIUM   | {n}   | {n}          |
+| LOW      | {n}   | {n}          |
 
 ---
 
 ## CLAUDE.md Compliance
 
-| Rule | Status | Notes |
-|------|--------|-------|
+| Rule                  | Status    | Notes     |
+| --------------------- | --------- | --------- |
 | {rule from CLAUDE.md} | PASS/FAIL | {details} |
-| ... | ... | ... |
+| ...                   | ...       | ...       |
 
 ---
 
 ## Patterns Referenced
 
-| File | Lines | Pattern |
-|------|-------|---------|
+| File             | Lines | Pattern                          |
+| ---------------- | ----- | -------------------------------- |
 | `src/example.ts` | 42-50 | {what this pattern demonstrates} |
-| ... | ... | ... |
+| ...              | ...   | ...                              |
 
 ---
 
@@ -242,7 +253,8 @@ Write to `$ARTIFACTS_DIR/review/code-review-findings.md`:
 - **Agent**: code-review-agent
 - **Timestamp**: {ISO timestamp}
 - **Artifact**: `$ARTIFACTS_DIR/review/code-review-findings.md`
-```
+
+````
 
 **PHASE_3_CHECKPOINT:**
 - [ ] Artifact file created
@@ -258,17 +270,19 @@ Write to `$ARTIFACTS_DIR/review/code-review-findings.md`:
 
 ```bash
 cat $ARTIFACTS_DIR/review/code-review-findings.md | head -20
-```
+````
 
 ### 4.2 Check Structure
 
 Verify artifact contains:
+
 - Summary with verdict
 - At least findings section (even if empty)
 - Statistics table
 - CLAUDE.md compliance table
 
 **PHASE_4_CHECKPOINT:**
+
 - [ ] Artifact file exists
 - [ ] Structure is complete
 - [ ] No placeholder text remaining

@@ -52,22 +52,22 @@ nodes:
       properties:
         run_code_review:
           type: string
-          enum: ["true", "false"]
+          enum: ['true', 'false']
         run_error_handling:
           type: string
-          enum: ["true", "false"]
+          enum: ['true', 'false']
         run_test_coverage:
           type: string
-          enum: ["true", "false"]
+          enum: ['true', 'false']
         run_comment_quality:
           type: string
-          enum: ["true", "false"]
+          enum: ['true', 'false']
         run_docs_impact:
           type: string
-          enum: ["true", "false"]
+          enum: ['true', 'false']
         complexity:
           type: string
-          enum: ["trivial", "small", "medium", "large"]
+          enum: ['trivial', 'small', 'medium', 'large']
         reasoning:
           type: string
       required:

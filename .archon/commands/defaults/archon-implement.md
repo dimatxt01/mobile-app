@@ -25,21 +25,22 @@ Execute the plan end-to-end with rigorous self-validation. You are autonomous.
 
 Check for these files to determine the project's toolchain:
 
-| File Found | Package Manager | Runner |
-|------------|-----------------|--------|
-| `bun.lockb` | bun | `bun` / `bun run` |
-| `pnpm-lock.yaml` | pnpm | `pnpm` / `pnpm run` |
-| `yarn.lock` | yarn | `yarn` / `yarn run` |
-| `package-lock.json` | npm | `npm run` |
-| `pyproject.toml` | uv/pip | `uv run` / `python` |
-| `Cargo.toml` | cargo | `cargo` |
-| `go.mod` | go | `go` |
+| File Found          | Package Manager | Runner              |
+| ------------------- | --------------- | ------------------- |
+| `bun.lockb`         | bun             | `bun` / `bun run`   |
+| `pnpm-lock.yaml`    | pnpm            | `pnpm` / `pnpm run` |
+| `yarn.lock`         | yarn            | `yarn` / `yarn run` |
+| `package-lock.json` | npm             | `npm run`           |
+| `pyproject.toml`    | uv/pip          | `uv run` / `python` |
+| `Cargo.toml`        | cargo           | `cargo`             |
+| `go.mod`            | go              | `go`                |
 
 **Store the detected runner** - use it for all subsequent commands.
 
 ### 0.2 Identify Validation Scripts
 
 Check `package.json` (or equivalent) for available scripts:
+
 - Type checking: `type-check`, `typecheck`, `tsc`
 - Linting: `lint`, `lint:fix`
 - Testing: `test`, `test:unit`, `test:integration`
@@ -164,6 +165,7 @@ git pull --rebase origin $BASE_BRANCH 2>/dev/null || true
 **After EVERY file change, run the type-check command from the plan's Validation Commands section.**
 
 Common patterns:
+
 - `{runner} run type-check` (JS/TS projects)
 - `mypy .` (Python)
 - `cargo check` (Rust)
@@ -208,6 +210,7 @@ If you must deviate from the plan:
 **Run the type-check and lint commands from the plan's Validation Commands section.**
 
 Common patterns:
+
 - JS/TS: `{runner} run type-check && {runner} run lint`
 - Python: `ruff check . && mypy .`
 - Rust: `cargo check && cargo clippy`
@@ -234,6 +237,7 @@ If lint errors:
 **Write tests**, then run the test command from the plan.
 
 Common patterns:
+
 - JS/TS: `{runner} test` or `{runner} run test`
 - Python: `pytest` or `uv run pytest`
 - Rust: `cargo test`
@@ -252,6 +256,7 @@ Common patterns:
 **Run the build command from the plan's Validation Commands section.**
 
 Common patterns:
+
 - JS/TS: `{runner} run build`
 - Python: N/A (interpreted) or `uv build`
 - Rust: `cargo build --release`
@@ -264,6 +269,7 @@ Common patterns:
 **If the plan involves API/server changes, use the integration test commands from the plan.**
 
 Example pattern:
+
 ```bash
 # Start server in background (command varies by project)
 {runner} run dev &

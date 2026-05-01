@@ -248,7 +248,7 @@ nodes:
     context: fresh
     hooks:
       PreToolUse:
-        - matcher: "Write|Edit"
+        - matcher: 'Write|Edit'
           response:
             hookSpecificOutput:
               hookEventName: PreToolUse
@@ -258,7 +258,7 @@ nodes:
                 AND not a file that imports from the target, explain why you're touching it.
                 Unplanned changes increase risk.
       PostToolUse:
-        - matcher: "Write|Edit"
+        - matcher: 'Write|Edit'
           response:
             systemMessage: >
               You just modified a file. STOP and do these things NOW before making any
@@ -267,7 +267,7 @@ nodes:
               2. If type-check fails, fix the error immediately
               3. Verify you preserved the exact same behavior — no logic changes, only structural moves
               Only proceed to the next change after type-check passes.
-        - matcher: "Bash"
+        - matcher: 'Bash'
           response:
             hookSpecificOutput:
               hookEventName: PostToolUse
@@ -354,13 +354,13 @@ nodes:
     context: fresh
     hooks:
       PostToolUse:
-        - matcher: "Write|Edit"
+        - matcher: 'Write|Edit'
           response:
             systemMessage: >
               You just made a fix. Run the specific failing validation check NOW
               to verify your fix works. Do not batch fixes — verify each one.
       PreToolUse:
-        - matcher: "Write|Edit"
+        - matcher: 'Write|Edit'
           response:
             hookSpecificOutput:
               hookEventName: PreToolUse
@@ -495,14 +495,14 @@ nodes:
     context: fresh
     hooks:
       PreToolUse:
-        - matcher: "Write|Edit"
+        - matcher: 'Write|Edit'
           response:
             hookSpecificOutput:
               hookEventName: PreToolUse
               permissionDecision: deny
-              permissionDecisionReason: "PR creation node — do not modify source files. Use only git and gh commands."
+              permissionDecisionReason: 'PR creation node — do not modify source files. Use only git and gh commands.'
       PostToolUse:
-        - matcher: "Bash"
+        - matcher: 'Bash'
           response:
             hookSpecificOutput:
               hookEventName: PostToolUse

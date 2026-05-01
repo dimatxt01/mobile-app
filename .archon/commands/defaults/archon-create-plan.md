@@ -28,13 +28,13 @@ Transform "$ARGUMENTS" into a battle-tested implementation plan through systemat
 
 ### 0.1 Determine Input Type
 
-| Input Pattern | Type | Action |
-|---------------|------|--------|
-| Ends with `.prd.md` | PRD file | Parse PRD, select next phase |
-| Ends with `.md` and contains "Implementation Phases" | PRD file | Parse PRD, select next phase |
-| File path that exists | Document | Read and extract feature description |
-| Free-form text | Description | Use directly as feature input |
-| Empty/blank | Error | STOP - require input |
+| Input Pattern                                        | Type        | Action                               |
+| ---------------------------------------------------- | ----------- | ------------------------------------ |
+| Ends with `.prd.md`                                  | PRD file    | Parse PRD, select next phase         |
+| Ends with `.md` and contains "Implementation Phases" | PRD file    | Parse PRD, select next phase         |
+| File path that exists                                | Document    | Read and extract feature description |
+| Free-form text                                       | Description | Use directly as feature input        |
+| Empty/blank                                          | Error       | STOP - require input                 |
 
 ### 0.2 If PRD File Detected
 
@@ -46,6 +46,7 @@ Transform "$ARGUMENTS" into a battle-tested implementation plan through systemat
    - If multiple candidates with same dependencies, note parallelism opportunity
 
 5. **Extract phase context:**
+
    ```
    PHASE: {phase number and name}
    GOAL: {from phase details}
@@ -55,6 +56,7 @@ Transform "$ARGUMENTS" into a battle-tested implementation plan through systemat
    ```
 
 6. **Report selection to user:**
+
    ```
    PRD: {prd file path}
    Selected Phase: #{number} - {name}
@@ -98,6 +100,7 @@ cat go.mod 2>/dev/null | head -20
 ```
 
 Common alternatives to `src/`:
+
 - `app/` (Next.js, Rails, Laravel)
 - `lib/` (Ruby gems, Elixir)
 - `packages/` (monorepos)
@@ -168,13 +171,13 @@ Return ACTUAL code snippets from codebase, not generic examples.
 
 **Format in table:**
 
-| Category | File:Lines | Pattern Description | Code Snippet |
-|----------|------------|---------------------|--------------|
-| NAMING | `src/features/X/service.ts:10-15` | camelCase functions | `export function createThing()` |
-| ERRORS | `src/features/X/errors.ts:5-20` | Custom error classes | `class ThingNotFoundError` |
-| LOGGING | `src/core/logging/index.ts:1-10` | getLogger pattern | `const logger = getLogger("domain")` |
-| TESTS | `src/features/X/tests/service.test.ts:1-30` | describe/it blocks | `describe("service", () => {` |
-| TYPES | `src/features/X/models.ts:1-20` | Type inference | `type Thing = typeof things.$inferSelect` |
+| Category | File:Lines                                  | Pattern Description  | Code Snippet                              |
+| -------- | ------------------------------------------- | -------------------- | ----------------------------------------- |
+| NAMING   | `src/features/X/service.ts:10-15`           | camelCase functions  | `export function createThing()`           |
+| ERRORS   | `src/features/X/errors.ts:5-20`             | Custom error classes | `class ThingNotFoundError`                |
+| LOGGING  | `src/core/logging/index.ts:1-10`            | getLogger pattern    | `const logger = getLogger("domain")`      |
+| TESTS    | `src/features/X/tests/service.test.ts:1-30` | describe/it blocks   | `describe("service", () => {`             |
+| TYPES    | `src/features/X/models.ts:1-20`             | Type inference       | `type Thing = typeof things.$inferSelect` |
 
 **PHASE_2_CHECKPOINT:**
 
@@ -193,6 +196,7 @@ Return ACTUAL code snippets from codebase, not generic examples.
 ### 3.1 Search for Documentation
 
 Use WebSearch tool for:
+
 - Official documentation for involved libraries (match versions from package.json)
 - Known gotchas, breaking changes, deprecations
 - Security considerations and best practices
@@ -265,10 +269,10 @@ Use WebSearch tool for:
 
 ### 4.2 Document Interaction Changes
 
-| Location | Before | After | User_Action | Impact |
-|----------|--------|-------|-------------|--------|
-| `/route` | State A | State B | Click X | Can now Y |
-| `Component.tsx` | Missing feature | Has feature | Input Z | Gets result W |
+| Location        | Before          | After       | User_Action | Impact        |
+| --------------- | --------------- | ----------- | ----------- | ------------- |
+| `/route`        | State A         | State B     | Click X     | Can now Y     |
+| `Component.tsx` | Missing feature | Has feature | Input Z     | Gets result W |
 
 **PHASE_4_CHECKPOINT:**
 
@@ -295,9 +299,9 @@ Before designing the solution, audit existing building blocks:
    addition that enables this feature and remains useful to future callers?
 5. **Dependency chain** — what must exist first? What does this feature unlock downstream?
 
-| Primitive | File:Lines | Complete? | Role in Feature |
-|-----------|-----------|-----------|----------------|
-| {name} | `path/to/file.ts:10-30` | Yes/Partial/No | {how it's used or extended} |
+| Primitive | File:Lines              | Complete?      | Role in Feature             |
+| --------- | ----------------------- | -------------- | --------------------------- |
+| {name}    | `path/to/file.ts:10-30` | Yes/Partial/No | {how it's used or extended} |
 
 ### 5.1 Deep Analysis
 
@@ -317,10 +321,12 @@ APPROACH_CHOSEN: [description]
 RATIONALE: [why this over alternatives - reference codebase patterns]
 
 ALTERNATIVES_REJECTED:
+
 - [Alternative 1]: Rejected because [specific reason]
 - [Alternative 2]: Rejected because [specific reason]
 
 NOT_BUILDING (explicit scope limits):
+
 - [Item 1 - explicitly out of scope and why]
 - [Item 2 - explicitly out of scope and why]
 ```
@@ -339,13 +345,14 @@ NOT_BUILDING (explicit scope limits):
 ### 6.1 Create Artifact Directory
 
 ```bash
+
 ```
 
 ### 6.2 Write Plan
 
 Write to `$ARTIFACTS_DIR/plan.md`:
 
-```markdown
+````markdown
 # Feature: {Feature Name}
 
 ## Summary
@@ -368,13 +375,13 @@ So that {benefit}
 
 ## Metadata
 
-| Field | Value |
-|-------|-------|
-| Type | NEW_CAPABILITY / ENHANCEMENT / REFACTOR / BUG_FIX |
-| Complexity | LOW / MEDIUM / HIGH |
-| Systems Affected | {comma-separated list} |
-| Dependencies | {external libs/services with versions} |
-| Estimated Tasks | {count} |
+| Field            | Value                                             |
+| ---------------- | ------------------------------------------------- |
+| Type             | NEW_CAPABILITY / ENHANCEMENT / REFACTOR / BUG_FIX |
+| Complexity       | LOW / MEDIUM / HIGH                               |
+| Systems Affected | {comma-separated list}                            |
+| Dependencies     | {external libs/services with versions}            |
+| Estimated Tasks  | {count}                                           |
 
 ---
 
@@ -390,8 +397,8 @@ So that {benefit}
 
 ### Interaction Changes
 
-| Location | Before | After | User Impact |
-|----------|--------|-------|-------------|
+| Location         | Before         | After          | User Impact             |
+| ---------------- | -------------- | -------------- | ----------------------- |
 | {path/component} | {old behavior} | {new behavior} | {what changes for user} |
 
 ---
@@ -400,16 +407,16 @@ So that {benefit}
 
 **CRITICAL: Implementation agent MUST read these files before starting any task:**
 
-| Priority | File | Lines | Why Read This |
-|----------|------|-------|---------------|
-| P0 | `path/to/critical.ts` | 10-50 | Pattern to MIRROR exactly |
-| P1 | `path/to/types.ts` | 1-30 | Types to IMPORT |
-| P2 | `path/to/test.ts` | all | Test pattern to FOLLOW |
+| Priority | File                  | Lines | Why Read This             |
+| -------- | --------------------- | ----- | ------------------------- |
+| P0       | `path/to/critical.ts` | 10-50 | Pattern to MIRROR exactly |
+| P1       | `path/to/types.ts`    | 1-30  | Types to IMPORT           |
+| P2       | `path/to/test.ts`     | all   | Test pattern to FOLLOW    |
 
 **External Documentation:**
 
-| Source | Section | Why Needed |
-|--------|---------|------------|
+| Source                            | Section        | Why Needed        |
+| --------------------------------- | -------------- | ----------------- |
 | [Lib Docs v{version}](url#anchor) | {section name} | {specific reason} |
 
 ---
@@ -417,13 +424,16 @@ So that {benefit}
 ## Patterns to Mirror
 
 **NAMING_CONVENTION:**
+
 ```typescript
 // SOURCE: {file:lines}
 // COPY THIS PATTERN:
 {actual code snippet from codebase}
 ```
+````
 
 **ERROR_HANDLING:**
+
 ```typescript
 // SOURCE: {file:lines}
 // COPY THIS PATTERN:
@@ -431,6 +441,7 @@ So that {benefit}
 ```
 
 **LOGGING_PATTERN:**
+
 ```typescript
 // SOURCE: {file:lines}
 // COPY THIS PATTERN:
@@ -438,6 +449,7 @@ So that {benefit}
 ```
 
 **TEST_STRUCTURE:**
+
 ```typescript
 // SOURCE: {file:lines}
 // COPY THIS PATTERN:
@@ -448,11 +460,11 @@ So that {benefit}
 
 ## Files to Change
 
-| File | Action | Justification |
-|------|--------|---------------|
-| `src/features/new/models.ts` | CREATE | Type definitions |
-| `src/features/new/service.ts` | CREATE | Business logic |
-| `src/existing/index.ts` | UPDATE | Add integration |
+| File                          | Action | Justification    |
+| ----------------------------- | ------ | ---------------- |
+| `src/features/new/models.ts`  | CREATE | Type definitions |
+| `src/features/new/service.ts` | CREATE | Business logic   |
+| `src/existing/index.ts`       | UPDATE | Add integration  |
 
 ---
 
@@ -488,8 +500,8 @@ Execute in order. Each task is atomic and independently verifiable.
 
 ### Unit Tests to Write
 
-| Test File | Test Cases | Validates |
-|-----------|------------|-----------|
+| Test File                                | Test Cases           | Validates      |
+| ---------------------------------------- | -------------------- | -------------- |
 | `src/features/new/tests/service.test.ts` | CRUD ops, edge cases | Business logic |
 
 ### Edge Cases Checklist
@@ -550,8 +562,8 @@ Execute in order. Each task is atomic and independently verifiable.
 
 ## Risks and Mitigations
 
-| Risk | Likelihood | Impact | Mitigation |
-|------|------------|--------|------------|
+| Risk               | Likelihood   | Impact       | Mitigation                              |
+| ------------------ | ------------ | ------------ | --------------------------------------- |
 | {Risk description} | LOW/MED/HIGH | LOW/MED/HIGH | {Specific prevention/handling strategy} |
 
 ---
@@ -559,7 +571,8 @@ Execute in order. Each task is atomic and independently verifiable.
 ## Notes
 
 {Additional context, design decisions, trade-offs, future considerations}
-```
+
+````
 
 ### 6.3 If Input Was PRD
 
@@ -675,7 +688,7 @@ If NO → add missing context to plan.
 ### Next Step
 
 Plan ready. Proceeding to implementation setup.
-```
+````
 
 ---
 

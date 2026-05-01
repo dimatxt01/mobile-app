@@ -20,6 +20,7 @@ Analyze merge conflicts in the PR, automatically resolve simple conflicts where 
 ### 1.1 Parse Input
 
 **Check input format:**
+
 - Number (`123`, `#123`) → GitHub PR number
 - URL (`https://github.com/...`) → Extract PR number
 - Empty → Check current branch for open PR
@@ -34,18 +35,20 @@ gh pr view {number} --json number,title,headRefName,baseRefName,mergeable,mergeS
 gh pr view {number} --json mergeable,mergeStateStatus --jq '.mergeable, .mergeStateStatus'
 ```
 
-| Status | Action |
-|--------|--------|
-| `CONFLICTING` | Continue with resolution |
-| `MERGEABLE` | Report "No conflicts to resolve" and exit |
-| `UNKNOWN` | Wait and retry, or proceed with caution |
+| Status        | Action                                    |
+| ------------- | ----------------------------------------- |
+| `CONFLICTING` | Continue with resolution                  |
+| `MERGEABLE`   | Report "No conflicts to resolve" and exit |
+| `UNKNOWN`     | Wait and retry, or proceed with caution   |
 
 **If no conflicts:**
+
 ```markdown
 ## ✅ No Conflicts
 
 PR #{number} has no merge conflicts. It's ready for review/merge.
 ```
+
 **Exit if no conflicts.**
 
 ### 1.3 Setup Local Branch
@@ -65,6 +68,7 @@ git pull origin $PR_HEAD
 ```
 
 **PHASE_1_CHECKPOINT:**
+
 - [ ] PR identified with conflicts
 - [ ] Branches fetched
 - [ ] On PR branch locally
@@ -101,13 +105,13 @@ cat {file} | grep -A 10 -B 2 "<<<<<<<"
 
 **Categorize each conflict:**
 
-| Type | Description | Auto-resolvable? |
-|------|-------------|------------------|
-| **SIMPLE_ADDITION** | One side added, other didn't change that area | ✅ Yes |
-| **SIMPLE_DELETION** | One side deleted, other didn't change | ⚠️ Maybe (check intent) |
-| **DIFFERENT_AREAS** | Both changed but different lines | ✅ Yes |
-| **SAME_LINES** | Both changed the exact same lines | ❌ No - needs decision |
-| **STRUCTURAL** | File moved/renamed + modified | ❌ No - needs decision |
+| Type                | Description                                   | Auto-resolvable?        |
+| ------------------- | --------------------------------------------- | ----------------------- |
+| **SIMPLE_ADDITION** | One side added, other didn't change that area | ✅ Yes                  |
+| **SIMPLE_DELETION** | One side deleted, other didn't change         | ⚠️ Maybe (check intent) |
+| **DIFFERENT_AREAS** | Both changed but different lines              | ✅ Yes                  |
+| **SAME_LINES**      | Both changed the exact same lines             | ❌ No - needs decision  |
+| **STRUCTURAL**      | File moved/renamed + modified                 | ❌ No - needs decision  |
 
 ### 2.4 Read Both Versions
 
@@ -125,6 +129,7 @@ git show :3:{file}
 ```
 
 **PHASE_2_CHECKPOINT:**
+
 - [ ] All conflicting files identified
 - [ ] Each conflict categorized
 - [ ] Both sides' intent understood
@@ -144,6 +149,7 @@ For conflicts where intent is clear:
 ```
 
 **Auto-resolution rules:**
+
 1. **Both added different things**: Keep both additions
 2. **One updated, one didn't touch**: Keep the update
 3. **Import additions**: Merge both import lists
@@ -153,19 +159,22 @@ For conflicts where intent is clear:
 
 For conflicts that need human decision:
 
-```markdown
+````markdown
 ## Conflict in `{file}`
 
 **Lines {start}-{end}**
 
 ### Option A: Keep PR Changes (HEAD)
+
 ```{language}
 {code from PR branch}
 ```
+````
 
 **What this does**: {explanation of PR's intent}
 
 ### Option B: Keep Base Branch Changes
+
 ```{language}
 {code from base branch}
 ```
@@ -173,6 +182,7 @@ For conflicts that need human decision:
 **What this does**: {explanation of base branch's intent}
 
 ### Option C: Merge Both (Recommended if compatible)
+
 ```{language}
 {merged version if possible}
 ```
@@ -180,6 +190,7 @@ For conflicts that need human decision:
 **Why**: {explanation of why this merge makes sense}
 
 ### Option D: Custom Resolution Needed
+
 The changes are incompatible. Manual review required.
 
 ---
@@ -187,11 +198,13 @@ The changes are incompatible. Manual review required.
 **Recommendation**: Option {X}
 
 **Reasoning**: {why this option based on:
+
 - Code functionality
 - PR intent from title/description
 - Which change is more recent/complete
 - Impact on other code}
-```
+
+````
 
 ### 3.3 Apply Resolutions
 
@@ -203,7 +216,7 @@ For each conflict:
 ```bash
 # After editing each file
 git add {file}
-```
+````
 
 ### 3.4 Continue Rebase
 
@@ -215,6 +228,7 @@ git rebase --continue
 Repeat for any additional conflicting commits.
 
 **PHASE_3_CHECKPOINT:**
+
 - [ ] All simple conflicts auto-resolved
 - [ ] Complex conflicts resolved with documented reasoning
 - [ ] All files staged
@@ -257,6 +271,7 @@ bun run lint
 Fix any lint issues.
 
 **PHASE_4_CHECKPOINT:**
+
 - [ ] No conflict markers remaining
 - [ ] Type check passes
 - [ ] Tests pass
@@ -283,6 +298,7 @@ gh pr view {number} --json mergeable,mergeStateStatus
 Should show `MERGEABLE`.
 
 **PHASE_5_CHECKPOINT:**
+
 - [ ] Branch pushed successfully
 - [ ] PR shows as mergeable
 
@@ -294,7 +310,7 @@ Should show `MERGEABLE`.
 
 Write to `$ARTIFACTS_DIR/../reviews/pr-{number}/conflict-resolution.md` (create dir if needed):
 
-```markdown
+````markdown
 # Conflict Resolution: PR #{number}
 
 **Date**: {ISO timestamp}
@@ -316,6 +332,7 @@ Resolved {N} conflicts in {M} files.
 **Resolution**: {Auto-resolved | Option A/B/C chosen}
 
 **Before (conflict)**:
+
 ```{language}
 <<<<<<< HEAD
 {head version}
@@ -323,8 +340,10 @@ Resolved {N} conflicts in {M} files.
 {base version}
 >>>>>>> {base}
 ```
+````
 
 **After (resolved)**:
+
 ```{language}
 {final code}
 ```
@@ -341,12 +360,12 @@ Resolved {N} conflicts in {M} files.
 
 ## Validation
 
-| Check | Status |
-|-------|--------|
-| No conflict markers | ✅ |
-| Type check | ✅ |
-| Tests | ✅ |
-| Lint | ✅ |
+| Check               | Status |
+| ------------------- | ------ |
+| No conflict markers | ✅     |
+| Type check          | ✅     |
+| Tests               | ✅     |
+| Lint                | ✅     |
 
 ---
 
@@ -362,7 +381,8 @@ Resolved {N} conflicts in {M} files.
 
 - **Resolved by**: Archon
 - **Timestamp**: {ISO timestamp}
-```
+
+````
 
 ### 6.2 Post GitHub Comment
 
@@ -390,9 +410,10 @@ See `$ARTIFACTS_DIR/../reviews/pr-{number}/conflict-resolution.md` for full reso
 *Resolved by Archon resolve-conflicts workflow*
 EOF
 )"
-```
+````
 
 **PHASE_6_CHECKPOINT:**
+
 - [ ] Artifact created
 - [ ] GitHub comment posted
 
@@ -407,6 +428,7 @@ EOF
 **Branch**: `{head}` rebased onto `{base}`
 
 ### Summary
+
 - **Files with conflicts**: {M}
 - **Conflicts resolved**: {N}
 - **Auto-resolved**: {X}
@@ -414,21 +436,24 @@ EOF
 
 ### Resolution Details
 
-| File | Type | Resolution |
-|------|------|------------|
+| File     | Type   | Resolution |
+| -------- | ------ | ---------- |
 | `{file}` | {type} | {approach} |
 
 ### Validation
-| Check | Status |
-|-------|--------|
-| Type check | ✅ |
-| Tests | ✅ |
-| Lint | ✅ |
+
+| Check      | Status |
+| ---------- | ------ |
+| Type check | ✅     |
+| Tests      | ✅     |
+| Lint       | ✅     |
 
 ### Artifacts
+
 - Resolution details: `$ARTIFACTS_DIR/../reviews/pr-{number}/conflict-resolution.md`
 
 ### Next Steps
+
 1. Review the resolution if needed: `git log -p -1`
 2. PR is now ready for review
 3. Request review: `@archon review this PR`

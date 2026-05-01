@@ -52,6 +52,7 @@ If screenshots exist, read a few key ones to include visual context in the repor
 ### 2.1 Cross-Reference Code Review with E2E Results
 
 For each bug/gap identified:
+
 - **Code review (main)**: Did the code analysis find the bug?
 - **E2E test (main)**: Was the bug visible in the UI?
 - **Code review (feature)**: Does the code fix look correct?
@@ -60,6 +61,7 @@ For each bug/gap identified:
 ### 2.2 Identify Discrepancies
 
 Look for cases where:
+
 - Code review says it's fixed but E2E shows it's not
 - E2E shows it's fixed but the code fix is fragile/incomplete
 - New issues were found during E2E that code review missed
@@ -67,14 +69,14 @@ Look for cases where:
 
 ### 2.3 Determine Final Verdict
 
-| Criteria | Required for APPROVE |
-|----------|---------------------|
-| Bug confirmed on main | Yes (or justified why not) |
-| Fix addresses root cause | Yes |
-| E2E confirms fix works | Yes (if E2E testable) |
-| No regressions | Yes |
-| Code quality acceptable | Yes |
-| CLAUDE.md compliant | Yes |
+| Criteria                 | Required for APPROVE       |
+| ------------------------ | -------------------------- |
+| Bug confirmed on main    | Yes (or justified why not) |
+| Fix addresses root cause | Yes                        |
+| E2E confirms fix works   | Yes (if E2E testable)      |
+| No regressions           | Yes                        |
+| Code quality acceptable  | Yes                        |
+| CLAUDE.md compliant      | Yes                        |
 
 ---
 
@@ -101,19 +103,21 @@ Write to `$ARTIFACTS_DIR/validation-report.md`:
 
 ## Bug Confirmation
 
-| Claim | Confirmed on Main? | Fixed on Feature? | Evidence |
-|-------|--------------------|--------------------|----------|
-| {claim 1} | YES/NO | YES/NO | {screenshot refs or code refs} |
-| {claim 2} | YES/NO | YES/NO | {screenshot refs or code refs} |
+| Claim     | Confirmed on Main? | Fixed on Feature? | Evidence                       |
+| --------- | ------------------ | ----------------- | ------------------------------ |
+| {claim 1} | YES/NO             | YES/NO            | {screenshot refs or code refs} |
+| {claim 2} | YES/NO             | YES/NO            | {screenshot refs or code refs} |
 
 ---
 
 ## Code Review Summary
 
 ### Main Branch (Pre-Fix)
+
 {Brief summary from code-review-main.md — was the bug evident in code?}
 
 ### Feature Branch (Post-Fix)
+
 {Brief summary from code-review-feature.md — is the fix correct and optimal?}
 
 **Fix Quality Score**: {n}/5
@@ -125,9 +129,11 @@ Write to `$ARTIFACTS_DIR/validation-report.md`:
 {If E2E testing was performed:}
 
 ### Main Branch (Bug Reproduction)
+
 {Brief summary from e2e-main.md — was the bug visible in the UI?}
 
 ### Feature Branch (Fix Verification)
+
 {Brief summary from e2e-feature.md — is the fix verified in the UI?}
 
 **Fix Confidence**: HIGH / MEDIUM / LOW
@@ -142,9 +148,9 @@ _E2E testing was skipped — this PR's changes are not UI-visible. Validation ba
 
 {List key screenshots with descriptions:}
 
-| Screenshot | Description |
-|------------|-------------|
-| `e2e-main-01-initial.png` | {what it shows} |
+| Screenshot                   | Description                         |
+| ---------------------------- | ----------------------------------- |
+| `e2e-main-01-initial.png`    | {what it shows}                     |
 | `e2e-feature-01-initial.png` | {what it shows — compare with main} |
 
 ---
@@ -152,22 +158,27 @@ _E2E testing was skipped — this PR's changes are not UI-visible. Validation ba
 ## Issues Found
 
 ### Must Fix Before Merge
+
 {CRITICAL or HIGH issues from any review stage. If none, say "None."}
 
 ### Should Fix (Non-Blocking)
+
 {MEDIUM issues — recommended but not blocking. If none, say "None."}
 
 ### Minor / Suggestions
+
 {LOW issues — nice to have. If none, say "None."}
 
 ---
 
 ## Regressions
+
 {Any new issues introduced by the fix, or "None found."}
 
 ---
 
 ## What's Done Well
+
 {Positive observations — good patterns, clean code, thorough fix}
 
 ---

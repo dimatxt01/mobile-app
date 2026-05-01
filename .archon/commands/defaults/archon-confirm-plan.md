@@ -14,6 +14,7 @@ argument-hint: (no arguments - reads from workflow artifacts)
 Verify that the plan's research is still valid before implementation begins.
 
 Plans can become stale:
+
 - Files may have been renamed or moved
 - Code patterns may have changed
 - APIs may have been updated
@@ -31,6 +32,7 @@ cat $ARTIFACTS_DIR/plan-context.md
 ```
 
 If not found, STOP with error:
+
 ```
 ❌ Plan context not found at $ARTIFACTS_DIR/plan-context.md
 
@@ -60,11 +62,13 @@ From the context, identify:
 For each file in "Patterns to Mirror":
 
 1. Check if file exists:
+
    ```bash
    test -f {file-path} && echo "EXISTS" || echo "MISSING"
    ```
 
 2. If exists, read the referenced lines:
+
    ```bash
    sed -n '{start},{end}p' {file-path}
    ```
@@ -75,21 +79,21 @@ For each file in "Patterns to Mirror":
 
 For each pattern file:
 
-| File | Status | Notes |
-|------|--------|-------|
-| `src/adapters/telegram.ts` | ✅ EXISTS | Lines 11-23 match expected pattern |
-| `src/types/index.ts` | ✅ EXISTS | Interface still present |
-| `src/old-file.ts` | ❌ MISSING | File was renamed/deleted |
-| `src/changed.ts` | ⚠️ DRIFTED | Code structure changed significantly |
+| File                       | Status     | Notes                                |
+| -------------------------- | ---------- | ------------------------------------ |
+| `src/adapters/telegram.ts` | ✅ EXISTS  | Lines 11-23 match expected pattern   |
+| `src/types/index.ts`       | ✅ EXISTS  | Interface still present              |
+| `src/old-file.ts`          | ❌ MISSING | File was renamed/deleted             |
+| `src/changed.ts`           | ⚠️ DRIFTED | Code structure changed significantly |
 
 ### 2.3 Severity Assessment
 
-| Finding | Severity | Action |
-|---------|----------|--------|
-| File exists, code matches | ✅ OK | Proceed |
+| Finding                        | Severity   | Action                                 |
+| ------------------------------ | ---------- | -------------------------------------- |
+| File exists, code matches      | ✅ OK      | Proceed                                |
 | File exists, minor differences | ⚠️ WARNING | Note in artifact, proceed with caution |
-| File exists, major drift | 🟠 CONCERN | Flag for review, may need plan update |
-| File missing | ❌ BLOCKER | Stop, plan needs revision |
+| File exists, major drift       | 🟠 CONCERN | Flag for review, may need plan update  |
+| File missing                   | ❌ BLOCKER | Stop, plan needs revision              |
 
 **PHASE_2_CHECKPOINT:**
 
@@ -106,6 +110,7 @@ For each pattern file:
 For each file marked CREATE:
 
 1. Verify it doesn't already exist (would be unexpected):
+
    ```bash
    test -f {file-path} && echo "ALREADY EXISTS" || echo "OK - will create"
    ```
@@ -120,6 +125,7 @@ For each file marked CREATE:
 For each file marked UPDATE:
 
 1. Verify it exists:
+
    ```bash
    test -f {file-path} && echo "EXISTS" || echo "MISSING"
    ```
@@ -152,12 +158,12 @@ bun test --help 2>/dev/null || echo "test not available"
 
 ### 4.2 Document Command Availability
 
-| Command | Status |
-|---------|--------|
+| Command              | Status       |
+| -------------------- | ------------ |
 | `bun run type-check` | ✅ Available |
-| `bun run lint` | ✅ Available |
-| `bun test` | ✅ Available |
-| `bun run build` | ✅ Available |
+| `bun run lint`       | ✅ Available |
+| `bun test`           | ✅ Available |
+| `bun run build`      | ✅ Available |
 
 **PHASE_4_CHECKPOINT:**
 
@@ -183,11 +189,11 @@ Write to `$ARTIFACTS_DIR/plan-confirmation.md`:
 
 ## Pattern Verification
 
-| Pattern | File | Status | Notes |
-|---------|------|--------|-------|
-| Constructor pattern | `src/adapters/telegram.ts:11-23` | ✅ | Matches expected |
-| Interface definition | `src/types/index.ts:49-74` | ✅ | Present |
-| ... | ... | ... | ... |
+| Pattern              | File                             | Status | Notes            |
+| -------------------- | -------------------------------- | ------ | ---------------- |
+| Constructor pattern  | `src/adapters/telegram.ts:11-23` | ✅     | Matches expected |
+| Interface definition | `src/types/index.ts:49-74`       | ✅     | Present          |
+| ...                  | ...                              | ...    | ...              |
 
 **Pattern Summary**: {X} of {Y} patterns verified
 
@@ -197,26 +203,26 @@ Write to `$ARTIFACTS_DIR/plan-confirmation.md`:
 
 ### Files to Create
 
-| File | Status |
-|------|--------|
+| File              | Status                              |
+| ----------------- | ----------------------------------- |
 | `src/new-file.ts` | ✅ Does not exist (ready to create) |
 
 ### Files to Update
 
-| File | Status |
-|------|--------|
+| File              | Status    |
+| ----------------- | --------- |
 | `src/existing.ts` | ✅ Exists |
 
 ---
 
 ## Validation Commands
 
-| Command | Available |
-|---------|-----------|
-| `bun run type-check` | ✅ |
-| `bun run lint` | ✅ |
-| `bun test` | ✅ |
-| `bun run build` | ✅ |
+| Command              | Available |
+| -------------------- | --------- |
+| `bun run type-check` | ✅        |
+| `bun run lint`       | ✅        |
+| `bun test`           | ✅        |
+| `bun run build`      | ✅        |
 
 ---
 
@@ -226,6 +232,7 @@ Write to `$ARTIFACTS_DIR/plan-confirmation.md`:
 No issues found. Plan research is valid.
 
 {If issues:}
+
 ### Warnings
 
 - **{file}**: {description of drift or concern}
@@ -239,6 +246,7 @@ No issues found. Plan research is valid.
 ## Recommendation
 
 {One of:}
+
 - ✅ **PROCEED**: Plan research is valid, continue to implementation
 - ⚠️ **PROCEED WITH CAUTION**: Minor drift detected, implementation may need adjustments
 - ❌ **STOP**: Critical issues found, plan needs revision
@@ -274,13 +282,14 @@ Revise the plan to address blockers, then re-run `archon-plan-setup`.
 
 ### Verification Summary
 
-| Check | Result |
-|-------|--------|
-| Pattern files | ✅ {X}/{Y} verified |
-| Target files | ✅ Ready |
-| Validation commands | ✅ Available |
+| Check               | Result              |
+| ------------------- | ------------------- |
+| Pattern files       | ✅ {X}/{Y} verified |
+| Target files        | ✅ Ready            |
+| Validation commands | ✅ Available        |
 
 {If warnings:}
+
 ### Warnings
 
 - {warning 1}
