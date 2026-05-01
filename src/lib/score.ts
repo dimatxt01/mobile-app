@@ -1,3 +1,6 @@
+// penalty applied when check-in submitted after next-day midnight
+const LATE_CHECKIN_PENALTY = 10;
+
 type Habit = { id: string; points: number; enabled: boolean };
 type Metric = { id: string };
 type PenaltyItem = { id: string };
@@ -42,7 +45,7 @@ export function computeScore(
 
   const penalty = penalties.reduce((sum, p) => sum + (state.penaltyScores[p.id] ?? 0), 0);
 
-  const lateAdj = state.isLate ? -10 : 0;
+  const lateAdj = state.isLate ? -LATE_CHECKIN_PENALTY : 0;
   const raw = identity + execution + outcome - penalty + state.whoopScoreAdj + lateAdj;
   const total = Math.max(0, raw);
 

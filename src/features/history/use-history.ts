@@ -2,6 +2,7 @@ import { useQuery } from '@tanstack/react-query';
 import { supabase } from '@/lib/supabase';
 import { useAuth } from '@/features/auth/hooks/use-auth';
 
+// Manual type: supabase.rpc() returns `any` and generated types don't cover this RPC's return shape
 export type HistoryRow = {
   id: string;
   date: string;

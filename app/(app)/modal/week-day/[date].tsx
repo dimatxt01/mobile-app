@@ -30,7 +30,7 @@ export default function WeekDayScreen() {
         .eq('user_id', user!.id)
         .eq('date', date!)
         .maybeSingle();
-      if (error) return null;
+      if (error) throw error;
       return data as DailyCheckin | null;
     },
     enabled: !!user && !!date,

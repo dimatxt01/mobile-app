@@ -1,6 +1,11 @@
 import * as Notifications from 'expo-notifications';
 
 export async function scheduleReminder(time: string): Promise<void> {
+  const { status } = await Notifications.getPermissionsAsync();
+  if (status !== 'granted') {
+    const { status: requested } = await Notifications.requestPermissionsAsync();
+    if (requested !== 'granted') return;
+  }
   const parts = time.split(':').map(Number);
   const hour = parts[0] ?? 21;
   const minute = parts[1] ?? 0;

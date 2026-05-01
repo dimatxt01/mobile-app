@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { View, Text, TouchableOpacity, StyleSheet } from 'react-native';
+import { Alert, View, Text, TouchableOpacity, StyleSheet } from 'react-native';
 import { router } from 'expo-router';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { useAuth } from '@/features/auth/hooks/use-auth';
@@ -23,7 +23,11 @@ export default function NotificationSettingsScreen() {
     setSaving(true);
     const newTime = `${String(hour).padStart(2, '0')}:${String(minute).padStart(2, '0')}`;
     await supabase.from('profiles').update({ reminder_time: newTime }).eq('id', user.id);
-    await scheduleReminder(newTime);
+    try {
+      await scheduleReminder(newTime);
+    } catch (err) {
+      Alert.alert('Error', err instanceof Error ? err.message : 'Failed to schedule reminder');
+    }
     setProfile(profile ? { ...profile, reminder_time: newTime } : null);
     setSaving(false);
     router.back();
