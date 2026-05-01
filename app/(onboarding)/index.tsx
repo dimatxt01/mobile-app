@@ -21,6 +21,7 @@ import { POBar } from '@/components/hmc/POBar';
 import { POCta } from '@/components/hmc/POCta';
 import { Eyebrow } from '@/components/hmc/Eyebrow';
 import { Rule } from '@/components/hmc/Rule';
+import { Input } from '@/components/ui/Input';
 
 const DEFAULT_IDENTITY_HABITS = [
   { label: 'Wake On Time', points: 5 },
@@ -119,12 +120,11 @@ export default function OnboardingScreen() {
         return (
           <View style={styles.stepContent}>
             <Eyebrow label="YOUR NAME" />
-            <TextInput
-              style={styles.input}
+            <Input
               value={name}
               onChangeText={setName}
               placeholder="Full name"
-              placeholderTextColor={colors.textTertiary}
+              autoComplete="name"
               autoFocus
             />
           </View>
@@ -133,13 +133,12 @@ export default function OnboardingScreen() {
         return (
           <View style={styles.stepContent}>
             <Eyebrow label="YOUR VISION" />
-            <TextInput
-              style={[styles.input, styles.multiline]}
+            <Input
               value={vision}
               onChangeText={setVision}
               placeholder="What are you building toward?"
-              placeholderTextColor={colors.textTertiary}
               multiline
+              style={styles.multiline}
               autoFocus
             />
           </View>
@@ -150,14 +149,14 @@ export default function OnboardingScreen() {
             <Eyebrow label="I AM" />
             <View style={styles.prefixRow}>
               <Text style={styles.prefix}>I am </Text>
-              <TextInput
-                style={[styles.input, { flex: 1 }]}
-                value={identitySentence}
-                onChangeText={setIdentitySentence}
-                placeholder="a disciplined builder..."
-                placeholderTextColor={colors.textTertiary}
-                autoFocus
-              />
+              <View style={styles.prefixInput}>
+                <Input
+                  value={identitySentence}
+                  onChangeText={setIdentitySentence}
+                  placeholder="a disciplined builder..."
+                  autoFocus
+                />
+              </View>
             </View>
           </View>
         );
@@ -234,7 +233,7 @@ export default function OnboardingScreen() {
             <Text style={styles.explainer}>
               Each night you rate your work day 0–10. This score gets added to your Execution
               bracket.
-              {'\n\n'}0 = didn&apos;t show up{'\n'}5 = average day{'\n'}10 = absolute peak
+              {'\n\n'}0 = didn{"'"}t show up{'\n'}5 = average day{'\n'}10 = absolute peak
               performance
             </Text>
           </View>
@@ -451,7 +450,7 @@ const styles = StyleSheet.create({
     marginTop: 16,
     lineHeight: 32,
   },
-  stepContent: { flex: 1, paddingTop: 24 },
+  stepContent: { flex: 1, paddingTop: spacing.sectionGap },
   input: {
     fontFamily: fonts.display,
     fontSize: 16,
@@ -467,6 +466,7 @@ const styles = StyleSheet.create({
   multiline: { minHeight: 120, textAlignVertical: 'top' },
   prefixRow: { flexDirection: 'row', alignItems: 'center', marginTop: 12 },
   prefix: { fontFamily: fonts.display, fontSize: 16, color: colors.textSecondary, marginRight: 4 },
+  prefixInput: { flex: 1 },
   explainer: {
     fontFamily: fonts.display,
     fontSize: 15,
@@ -475,7 +475,7 @@ const styles = StyleSheet.create({
     marginTop: 16,
   },
   habitEditRow: { flexDirection: 'row', alignItems: 'center', gap: 8, marginTop: 8 },
-  pts: { fontFamily: fonts.mono, fontSize: 13, color: colors.amber },
+  pts: { fontFamily: fonts.mono, fontSize: 13, color: colors.amber, fontVariant: ['tabular-nums'] },
   removeBtn: {
     fontFamily: fonts.monoBold,
     fontSize: 20,

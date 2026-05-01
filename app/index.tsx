@@ -1,10 +1,10 @@
 import { Redirect } from 'expo-router';
-import { ActivityIndicator, View, StyleSheet } from 'react-native';
+import { ActivityIndicator, Text, View, StyleSheet } from 'react-native';
 import { useEffect } from 'react';
 import { useAuth } from '@/features/auth/hooks/use-auth';
 import { useProfileStore } from '@/store/profile-store';
 import { supabase } from '@/lib/supabase';
-import { colors } from '@/lib/hmc-colors';
+import { colors, fonts } from '@/lib/hmc-colors';
 
 export default function Index() {
   const { session, isInitialized } = useAuth();
@@ -29,12 +29,15 @@ export default function Index() {
         }
         setProfile(data);
       });
-    return () => { cancelled = true; };
+    return () => {
+      cancelled = true;
+    };
   }, [session?.user?.id]);
 
   if (!isInitialized || (session && isLoading)) {
     return (
       <View style={styles.center}>
+        <Text style={styles.wordmark}>HMC.</Text>
         <ActivityIndicator color={colors.amber} />
       </View>
     );
@@ -51,5 +54,12 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     backgroundColor: colors.base,
+  },
+  wordmark: {
+    fontFamily: fonts.monoBold,
+    fontSize: 36,
+    color: colors.textPrimary,
+    letterSpacing: 4,
+    marginBottom: 24,
   },
 });
