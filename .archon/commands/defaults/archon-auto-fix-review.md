@@ -10,6 +10,7 @@ argument-hint: (none - reads all review artifacts from $ARTIFACTS_DIR/review/)
 ## IMPORTANT: Output Behavior
 
 **Your output will be posted as a GitHub comment.** Keep working output minimal:
+
 - Do NOT narrate each step
 - Do NOT output verbose progress updates
 - Only output the final structured report at the end
@@ -75,6 +76,7 @@ done
 From all loaded artifacts, compile a unified list of all findings with their severity, location, and suggested fix.
 
 **PHASE_1_CHECKPOINT:**
+
 - [ ] PR number and branch identified
 - [ ] On correct PR branch
 - [ ] All review artifacts read
@@ -87,10 +89,12 @@ From all loaded artifacts, compile a unified list of all findings with their sev
 For each finding, decide: **FIX** or **SKIP**.
 
 ### Fix if:
+
 - It is a real bug, type error, silent failure, or clear code quality issue
 - The fix is concrete and low-risk
 
 ### Skip (YAGNI / out-of-scope) if the finding recommends:
+
 - Adding something not required to fix the original issue (new config options, new abstractions, speculative fallbacks, "what if" edge cases)
 - Refactoring or restructuring code that isn't broken
 - Adding validation for inputs that cannot actually be invalid in this context
@@ -102,6 +106,7 @@ Use judgment — don't be overly restrictive. If it's a legitimate bug the revie
 For each skipped finding, write down **the specific reason** — this goes in the report.
 
 **PHASE_2_CHECKPOINT:**
+
 - [ ] Every finding marked FIX or SKIP
 - [ ] Skip reasons documented
 
@@ -129,6 +134,7 @@ bun test {file}
 ```
 
 **PHASE_3_CHECKPOINT:**
+
 - [ ] All FIX findings attempted
 - [ ] Tests added where flagged
 - [ ] BLOCKED findings documented
@@ -144,11 +150,13 @@ bun test
 ```
 
 All must pass. If something fails after a fix:
+
 1. Review the error
 2. Adjust the fix or revert it and mark BLOCKED
 3. Re-run until clean
 
 **PHASE_4_CHECKPOINT:**
+
 - [ ] Type check passes
 - [ ] Lint passes
 - [ ] Tests pass
@@ -184,6 +192,7 @@ git push origin $HEAD_BRANCH
 ```
 
 **PHASE_5_CHECKPOINT:**
+
 - [ ] Changes committed
 - [ ] Pushed to PR branch
 
@@ -211,8 +220,8 @@ Write to `$ARTIFACTS_DIR/review/fix-report.md`:
 
 ## Fixes Applied
 
-| Severity | Finding | Location | What Was Done |
-|----------|---------|----------|---------------|
+| Severity | Finding | Location    | What Was Done |
+| -------- | ------- | ----------- | ------------- |
 | CRITICAL | {title} | `file:line` | {description} |
 | HIGH     | {title} | `file:line` | {description} |
 
@@ -220,43 +229,44 @@ Write to `$ARTIFACTS_DIR/review/fix-report.md`:
 
 ## Skipped Findings
 
-| Severity | Finding | Location | Reason Skipped |
-|----------|---------|----------|----------------|
+| Severity | Finding | Location    | Reason Skipped           |
+| -------- | ------- | ----------- | ------------------------ |
 | HIGH     | {title} | `file:line` | YAGNI: {specific reason} |
-| MEDIUM   | {title} | `file:line` | Out of scope: {reason} |
+| MEDIUM   | {title} | `file:line` | Out of scope: {reason}   |
 
 ---
 
 ## Tests Added
 
-| File | Test Cases |
-|------|------------|
+| File             | Test Cases           |
+| ---------------- | -------------------- |
 | `{file}.test.ts` | `{test description}` |
 
-*(none)* if no tests were added
+_(none)_ if no tests were added
 
 ---
 
 ## Blocked (Could Not Fix)
 
-| Severity | Finding | Reason |
-|----------|---------|--------|
+| Severity | Finding | Reason                        |
+| -------- | ------- | ----------------------------- |
 | {sev}    | {title} | {why it could not be applied} |
 
-*(none)* if nothing was blocked
+_(none)_ if nothing was blocked
 
 ---
 
 ## Validation
 
-| Check | Status |
-|-------|--------|
-| Type check | ✅ / ❌ |
-| Lint | ✅ / ❌ |
-| Tests | ✅ {n} passed / ❌ |
+| Check      | Status             |
+| ---------- | ------------------ |
+| Type check | ✅ / ❌            |
+| Lint       | ✅ / ❌            |
+| Tests      | ✅ {n} passed / ❌ |
 ```
 
 **PHASE_6_CHECKPOINT:**
+
 - [ ] Fix report written
 
 ---
@@ -313,6 +323,7 @@ EOF
 ```
 
 **PHASE_7_CHECKPOINT:**
+
 - [ ] GitHub comment posted
 
 ---
@@ -343,21 +354,25 @@ Fix report: $ARTIFACTS_DIR/review/fix-report.md
 ## Error Handling
 
 ### Type check fails after a fix
+
 1. Review the error
 2. Adjust or revert the fix
 3. If still failing after a reasonable attempt, mark BLOCKED
 
 ### Tests fail
+
 1. Check whether the fix caused it or it was pre-existing
 2. Fix the test if the fix is correct
 3. If unclear, mark BLOCKED — do not ship broken tests
 
 ### Push fails
+
 1. `git pull --rebase origin $HEAD_BRANCH`
 2. Resolve conflicts if any
 3. Push again
 
 ### No review artifacts found
+
 ```
 ❌ No review artifacts found in $ARTIFACTS_DIR/review/
 Cannot proceed without findings.

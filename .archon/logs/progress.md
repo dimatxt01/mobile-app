@@ -8,6 +8,7 @@ See `CLAUDE.md` for full architecture reference.
 
 ## Phase Status Overview
 
+<<<<<<< HEAD
 | Phase | Name | Status | Completed |
 |-------|------|--------|-----------|
 | 1 | Foundation (tokens, fonts, primitives, score.ts, tab scaffold) | ⬜ NOT STARTED | — |
@@ -19,6 +20,19 @@ See `CLAUDE.md` for full architecture reference.
 | 7 | YOU tab + edit modals | ⬜ NOT STARTED | — |
 | 8 | Post-lock triggers + local notifications | ⬜ NOT STARTED | — |
 | 9 | Stub modals (paywall, subscription, privacy, whoop) | ⬜ NOT STARTED | — |
+=======
+| Phase | Name                                                               | Status         | Completed |
+| ----- | ------------------------------------------------------------------ | -------------- | --------- |
+| 1     | Foundation (tokens, fonts, primitives, score.ts, tab scaffold)     | ⬜ NOT STARTED | —         |
+| 2     | Data layer (DB types, profile store, checkin/habits/history hooks) | ⬜ NOT STARTED | —         |
+| 3     | Routing & Onboarding (guards, 13-step wizard)                      | ⬜ NOT STARTED | —         |
+| 4     | TODAY tab (full scoring UI + lock + score-breakdown modal)         | ⬜ NOT STARTED | —         |
+| 5     | WEEK + TRENDS tabs (View-based charts)                             | ⬜ NOT STARTED | —         |
+| 6     | MIRROR tab (camera, upload, gallery)                               | ⬜ NOT STARTED | —         |
+| 7     | YOU tab + edit modals                                              | ⬜ NOT STARTED | —         |
+| 8     | Post-lock triggers + local notifications                           | ⬜ NOT STARTED | —         |
+| 9     | Stub modals (paywall, subscription, privacy, whoop)                | ⬜ NOT STARTED | —         |
+>>>>>>> 35ae86c4ddb1472145ca485587f2c87162186555
 
 ---
 
@@ -53,6 +67,10 @@ See `CLAUDE.md` for full architecture reference.
 - [ ] Verify: Expo Go loads, 5 tabs visible with correct fonts + colors
 
 ### Notes
+<<<<<<< HEAD
+=======
+
+>>>>>>> 35ae86c4ddb1472145ca485587f2c87162186555
 _Add notes during implementation here_
 
 ---
@@ -72,6 +90,10 @@ _Add notes during implementation here_
 - [ ] Create `src/features/history/use-history.ts` — calls `get_history(days)` RPC
 
 ### Notes
+<<<<<<< HEAD
+=======
+
+>>>>>>> 35ae86c4ddb1472145ca485587f2c87162186555
 _Add notes during implementation here_
 
 ---
@@ -103,6 +125,10 @@ _Add notes during implementation here_
   13. (completion) — writes profile (name, vision, identity_sentence, reminder_time), calls `seed_default_habits()`, sets `onboarding_completed=true`, navigates to `/(app)/(tabs)`
 
 ### Notes
+<<<<<<< HEAD
+=======
+
+>>>>>>> 35ae86c4ddb1472145ca485587f2c87162186555
 _Add notes during implementation here_
 
 ---
@@ -129,6 +155,10 @@ _Add notes during implementation here_
 - [ ] Create `app/(app)/modal/score-breakdown.tsx` — bracket subtotals breakdown sheet
 
 ### Notes
+<<<<<<< HEAD
+=======
+
+>>>>>>> 35ae86c4ddb1472145ca485587f2c87162186555
 _Add notes during implementation here_
 
 ---
@@ -153,6 +183,10 @@ _Add notes during implementation here_
 - [ ] Create `app/(app)/modal/week-day/[date].tsx` — single day detail (scores by bracket + reflection)
 
 ### Notes
+<<<<<<< HEAD
+=======
+
+>>>>>>> 35ae86c4ddb1472145ca485587f2c87162186555
 _Add notes during implementation here_
 
 ---
@@ -174,6 +208,10 @@ _Add notes during implementation here_
 - [ ] Create `app/(app)/modal/mirror-day/[date].tsx` — fullscreen photo + score card overlay
 
 ### Notes
+<<<<<<< HEAD
+=======
+
+>>>>>>> 35ae86c4ddb1472145ca485587f2c87162186555
 _Add notes during implementation here_
 
 ---
@@ -198,6 +236,10 @@ _Add notes during implementation here_
 - [ ] Create `app/(app)/modal/notification-settings.tsx`
 
 ### Notes
+<<<<<<< HEAD
+=======
+
+>>>>>>> 35ae86c4ddb1472145ca485587f2c87162186555
 _Add notes during implementation here_
 
 ---
@@ -221,6 +263,10 @@ _Add notes during implementation here_
 - [ ] Create `app/(app)/modal/returning-user.tsx` — "Welcome back" prompt
 
 ### Notes
+<<<<<<< HEAD
+=======
+
+>>>>>>> 35ae86c4ddb1472145ca485587f2c87162186555
 _Add notes during implementation here_
 
 ---
@@ -237,12 +283,17 @@ _Add notes during implementation here_
 - [ ] Create `app/(app)/modal/whoop-connect.tsx` — stub ("Whoop integration coming soon")
 
 ### Notes
+<<<<<<< HEAD
+=======
+
+>>>>>>> 35ae86c4ddb1472145ca485587f2c87162186555
 _Add notes during implementation here_
 
 ---
 
 ## Decisions Log
 
+<<<<<<< HEAD
 | Date | Decision | Reason |
 |------|----------|--------|
 | 2026-05-01 | StyleSheet for HMC components, not NativeWind | Simpler to debug for first-time Expo dev |
@@ -251,12 +302,26 @@ _Add notes during implementation here_
 | 2026-05-01 | expo-font + Google Fonts for Inter + JetBrains Mono | Standard Expo approach, works in Expo Go |
 | 2026-05-01 | perf_9to5 folded into execution_score for lock_checkin RPC | RPC signature takes 4 bracket scores; perf_9to5 stored separately via upsert |
 | 2026-05-01 | Profile state in Zustand store (profile-store.ts) | Needs onboarding_completed for routing; avoids extra query on every nav guard |
+=======
+| Date       | Decision                                                   | Reason                                                                        |
+| ---------- | ---------------------------------------------------------- | ----------------------------------------------------------------------------- |
+| 2026-05-01 | StyleSheet for HMC components, not NativeWind              | Simpler to debug for first-time Expo dev                                      |
+| 2026-05-01 | Skip react-native-svg — use View-based charts              | Not bundled in Expo Go SDK 54                                                 |
+| 2026-05-01 | Skip react-native-purchases — paywall stub                 | Native module, not needed for MVP                                             |
+| 2026-05-01 | expo-font + Google Fonts for Inter + JetBrains Mono        | Standard Expo approach, works in Expo Go                                      |
+| 2026-05-01 | perf_9to5 folded into execution_score for lock_checkin RPC | RPC signature takes 4 bracket scores; perf_9to5 stored separately via upsert  |
+| 2026-05-01 | Profile state in Zustand store (profile-store.ts)          | Needs onboarding_completed for routing; avoids extra query on every nav guard |
+>>>>>>> 35ae86c4ddb1472145ca485587f2c87162186555
 
 ---
 
 ## Agent Handoff Notes
 
 When picking up this project:
+<<<<<<< HEAD
+=======
+
+>>>>>>> 35ae86c4ddb1472145ca485587f2c87162186555
 1. Read `CLAUDE.md` first — full architecture reference
 2. Check Phase Status table above for current state
 3. Check the Notes section under each in-progress phase for context

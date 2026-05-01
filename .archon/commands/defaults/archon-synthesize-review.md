@@ -42,6 +42,7 @@ cat $ARTIFACTS_DIR/review/docs-impact-findings.md
 ```
 
 **PHASE_1_CHECKPOINT:**
+
 - [ ] PR number identified
 - [ ] All 5 agent artifacts read
 - [ ] Findings extracted from each
@@ -53,6 +54,7 @@ cat $ARTIFACTS_DIR/review/docs-impact-findings.md
 ### 2.1 Aggregate by Severity
 
 Combine all findings across agents:
+
 - **CRITICAL**: Must fix before merge
 - **HIGH**: Should fix before merge
 - **MEDIUM**: Consider fixing (options provided)
@@ -61,6 +63,7 @@ Combine all findings across agents:
 ### 2.2 Deduplicate
 
 Check for overlapping findings:
+
 - Same issue reported by multiple agents
 - Related issues that should be grouped
 - Conflicting recommendations (resolve)
@@ -68,6 +71,7 @@ Check for overlapping findings:
 ### 2.3 Prioritize
 
 Rank findings by:
+
 1. Severity (CRITICAL > HIGH > MEDIUM > LOW)
 2. User impact
 3. Ease of fix
@@ -91,6 +95,7 @@ By agent:
 ```
 
 **PHASE_2_CHECKPOINT:**
+
 - [ ] Findings aggregated by severity
 - [ ] Duplicates removed
 - [ ] Priority order established
@@ -102,7 +107,7 @@ By agent:
 
 Write to `$ARTIFACTS_DIR/review/consolidated-review.md`:
 
-```markdown
+````markdown
 # Consolidated Review: PR #{number}
 
 **Date**: {ISO timestamp}
@@ -124,14 +129,14 @@ Write to `$ARTIFACTS_DIR/review/consolidated-review.md`:
 
 ## Statistics
 
-| Agent | CRITICAL | HIGH | MEDIUM | LOW | Total |
-|-------|----------|------|--------|-----|-------|
-| Code Review | {n} | {n} | {n} | {n} | {n} |
-| Error Handling | {n} | {n} | {n} | {n} | {n} |
-| Test Coverage | {n} | {n} | {n} | {n} | {n} |
-| Comment Quality | {n} | {n} | {n} | {n} | {n} |
-| Docs Impact | {n} | {n} | {n} | {n} | {n} |
-| **Total** | **{n}** | **{n}** | **{n}** | **{n}** | **{n}** |
+| Agent           | CRITICAL | HIGH    | MEDIUM  | LOW     | Total   |
+| --------------- | -------- | ------- | ------- | ------- | ------- |
+| Code Review     | {n}      | {n}     | {n}     | {n}     | {n}     |
+| Error Handling  | {n}      | {n}     | {n}     | {n}     | {n}     |
+| Test Coverage   | {n}      | {n}     | {n}     | {n}     | {n}     |
+| Comment Quality | {n}      | {n}     | {n}     | {n}     | {n}     |
+| Docs Impact     | {n}      | {n}     | {n}     | {n}     | {n}     |
+| **Total**       | **{n}**  | **{n}** | **{n}** | **{n}** | **{n}** |
 
 ---
 
@@ -147,9 +152,11 @@ Write to `$ARTIFACTS_DIR/review/consolidated-review.md`:
 {description}
 
 **Recommended Fix**:
+
 ```typescript
 {fix code}
 ```
+````
 
 **Why Critical**:
 {impact explanation}
@@ -182,11 +189,11 @@ Write to `$ARTIFACTS_DIR/review/consolidated-review.md`:
 
 **Options**:
 
-| Option | Approach | Effort | Risk if Skipped |
-|--------|----------|--------|-----------------|
-| Fix Now | {approach} | {LOW/MED/HIGH} | {risk} |
-| Create Issue | Defer to separate PR | LOW | {risk} |
-| Skip | Accept as-is | NONE | {risk} |
+| Option       | Approach             | Effort         | Risk if Skipped |
+| ------------ | -------------------- | -------------- | --------------- |
+| Fix Now      | {approach}           | {LOW/MED/HIGH} | {risk}          |
+| Create Issue | Defer to separate PR | LOW            | {risk}          |
+| Skip         | Accept as-is         | NONE           | {risk}          |
 
 **Recommendation**: {which option and why}
 
@@ -194,16 +201,17 @@ Write to `$ARTIFACTS_DIR/review/consolidated-review.md`:
 
 ## LOW Issues (For Consideration)
 
-| Issue | Location | Agent | Suggestion |
-|-------|----------|-------|------------|
+| Issue   | Location    | Agent   | Suggestion             |
+| ------- | ----------- | ------- | ---------------------- |
 | {title} | `file:line` | {agent} | {brief recommendation} |
-| ... | ... | ... | ... |
+| ...     | ...         | ...     | ...                    |
 
 ---
 
 ## Positive Observations
 
 {Aggregated good things from all agents:
+
 - Well-structured code
 - Good error handling in X
 - Comprehensive tests for Y
@@ -215,10 +223,10 @@ Write to `$ARTIFACTS_DIR/review/consolidated-review.md`:
 
 If not addressing in this PR, create issues for:
 
-| Issue Title | Priority | Related Finding |
-|-------------|----------|-----------------|
+| Issue Title               | Priority   | Related Finding   |
+| ------------------------- | ---------- | ----------------- |
 | "{suggested issue title}" | {P1/P2/P3} | MEDIUM issue #{n} |
-| ... | ... | ... |
+| ...                       | ...        | ...               |
 
 ---
 
@@ -232,13 +240,13 @@ If not addressing in this PR, create issues for:
 
 ## Agent Artifacts
 
-| Agent | Artifact | Findings |
-|-------|----------|----------|
-| Code Review | `code-review-findings.md` | {n} |
-| Error Handling | `error-handling-findings.md` | {n} |
-| Test Coverage | `test-coverage-findings.md` | {n} |
-| Comment Quality | `comment-quality-findings.md` | {n} |
-| Docs Impact | `docs-impact-findings.md` | {n} |
+| Agent           | Artifact                      | Findings |
+| --------------- | ----------------------------- | -------- |
+| Code Review     | `code-review-findings.md`     | {n}      |
+| Error Handling  | `error-handling-findings.md`  | {n}      |
+| Test Coverage   | `test-coverage-findings.md`   | {n}      |
+| Comment Quality | `comment-quality-findings.md` | {n}      |
+| Docs Impact     | `docs-impact-findings.md`     | {n}      |
 
 ---
 
@@ -246,7 +254,8 @@ If not addressing in this PR, create issues for:
 
 - **Synthesized**: {ISO timestamp}
 - **Artifact**: `$ARTIFACTS_DIR/review/consolidated-review.md`
-```
+
+````
 
 **PHASE_3_CHECKPOINT:**
 - [ ] Consolidated artifact created
@@ -301,7 +310,7 @@ gh pr comment {number} --body "$(cat <<'EOF'
 
 ```typescript
 {fix code}
-```
+````
 
 </details>
 
@@ -318,6 +327,7 @@ gh pr comment {number} --body "$(cat <<'EOF'
 {For each MEDIUM issue:}
 
 ### {Title}
+
 📍 `{file}:{line}`
 
 {Brief description}
@@ -338,8 +348,8 @@ gh pr comment {number} --body "$(cat <<'EOF'
 <details>
 <summary>View {n} low-priority suggestions</summary>
 
-| Issue | Location | Suggestion |
-|-------|----------|------------|
+| Issue   | Location    | Suggestion   |
+| ------- | ----------- | ------------ |
 | {title} | `file:line` | {suggestion} |
 
 </details>
@@ -366,10 +376,11 @@ gh pr comment {number} --body "$(cat <<'EOF'
 
 ---
 
-*Reviewed by Archon comprehensive-pr-review workflow*
-*Artifacts: `$ARTIFACTS_DIR/review/`*
+_Reviewed by Archon comprehensive-pr-review workflow_
+_Artifacts: `$ARTIFACTS_DIR/review/`_
 EOF
 )"
+
 ```
 
 **PHASE_4_CHECKPOINT:**
@@ -384,7 +395,9 @@ EOF
 Output only a brief confirmation (this will be posted as a comment):
 
 ```
+
 ✅ Review synthesis complete. Proceeding to auto-fix step...
+
 ```
 
 ---
@@ -395,3 +408,4 @@ Output only a brief confirmation (this will be posted as a comment):
 - **FINDINGS_SYNTHESIZED**: Combined, deduplicated, prioritized
 - **CONSOLIDATED_CREATED**: Master artifact written
 - **GITHUB_POSTED**: PR comment visible
+```

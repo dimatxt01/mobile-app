@@ -56,10 +56,21 @@ nodes:
       properties:
         type:
           type: string
-          enum: ["bug", "regression", "crash", "performance", "configuration"]
+          enum: ['bug', 'regression', 'crash', 'performance', 'configuration']
         area:
           type: string
-          enum: ["web-ui", "api-server", "cli", "isolation", "workflows", "database", "adapters", "core", "other"]
+          enum:
+            [
+              'web-ui',
+              'api-server',
+              'cli',
+              'isolation',
+              'workflows',
+              'database',
+              'adapters',
+              'core',
+              'other',
+            ]
         title:
           type: string
         keywords:
@@ -68,7 +79,7 @@ nodes:
           type: string
         needs_server:
           type: string
-          enum: ["true", "false"]
+          enum: ['true', 'false']
       required: [type, area, title, keywords, repro_hint, needs_server]
 
   # ═══════════════════════════════════════════════════════════════

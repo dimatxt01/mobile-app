@@ -53,6 +53,7 @@ gh pr view {number} --json number,title,body,url,headRefName,baseRefName,files,a
 ```
 
 **Extract:**
+
 - PR number and title
 - Branch names (head → base)
 - Changed files list
@@ -61,6 +62,7 @@ gh pr view {number} --json number,title,body,url,headRefName,baseRefName,files,a
 - Mergeable status
 
 **PHASE_1_CHECKPOINT:**
+
 - [ ] PR number identified
 - [ ] PR is open (not merged/closed)
 - [ ] Basic metadata extracted
@@ -77,40 +79,44 @@ gh pr view {number} --json number,title,body,url,headRefName,baseRefName,files,a
 gh pr view {number} --json mergeable,mergeStateStatus --jq '.mergeable, .mergeStateStatus'
 ```
 
-| Status | Action |
-|--------|--------|
-| `MERGEABLE` | Continue |
+| Status        | Action                                          |
+| ------------- | ----------------------------------------------- |
+| `MERGEABLE`   | Continue                                        |
 | `CONFLICTING` | **STOP** - Tell user to resolve conflicts first |
-| `UNKNOWN` | Warn, continue (GitHub still calculating) |
+| `UNKNOWN`     | Warn, continue (GitHub still calculating)       |
 
 **If conflicts exist:**
-```markdown
+
+````markdown
 ❌ **Cannot review: PR has merge conflicts**
 
 Please resolve conflicts before requesting a review:
+
 ```bash
 git fetch origin {base}
 git rebase origin/{base}
 # Resolve conflicts
 git push --force-with-lease
 ```
+````
 
 Then re-request the review.
-```
+
+````
 **Exit workflow if conflicts detected.**
 
 ### 2.2 Check CI Status
 
 ```bash
 gh pr checks {number} --json name,state,conclusion --jq '.[] | "\(.name): \(.state) (\(.conclusion // "pending"))"'
-```
+````
 
-| Status | Action |
-|--------|--------|
-| All passing | Continue |
-| Some failing | Warn, continue (note in scope) |
-| All failing | Warn strongly, continue (note in scope) |
-| Pending | Note, continue |
+| Status       | Action                                  |
+| ------------ | --------------------------------------- |
+| All passing  | Continue                                |
+| Some failing | Warn, continue (note in scope)          |
+| All failing  | Warn strongly, continue (note in scope) |
+| Pending      | Note, continue                          |
 
 **Flag CI status for review report.**
 
@@ -129,43 +135,48 @@ git fetch origin $PR_HEAD --quiet
 BEHIND=$(git rev-list --count origin/$PR_HEAD..origin/$PR_BASE 2>/dev/null || echo "0")
 ```
 
-| Commits Behind | Action |
-|----------------|--------|
-| 0-5 | Continue |
-| 6-15 | Warn, suggest rebase, continue |
-| 16+ | Warn strongly, recommend rebase before review |
+| Commits Behind | Action                                        |
+| -------------- | --------------------------------------------- |
+| 0-5            | Continue                                      |
+| 6-15           | Warn, suggest rebase, continue                |
+| 16+            | Warn strongly, recommend rebase before review |
 
 **If significantly behind:**
-```markdown
+
+````markdown
 ⚠️ **Branch is {N} commits behind {base}**
 
 Consider rebasing before review to ensure you're reviewing against current code:
+
 ```bash
 git fetch origin {base}
 git rebase origin/{base}
 git push --force-with-lease
 ```
-```
+````
+
+````
 
 ### 2.4 Check Draft Status
 
 ```bash
 gh pr view {number} --json isDraft --jq '.isDraft'
-```
+````
 
-| Status | Action |
-|--------|--------|
-| `false` | Continue normally |
-| `true` | Note in scope, continue (user wants early feedback) |
+| Status  | Action                                              |
+| ------- | --------------------------------------------------- |
+| `false` | Continue normally                                   |
+| `true`  | Note in scope, continue (user wants early feedback) |
 
 ### 2.5 Check PR Size
 
-| Metric | Warning Threshold | Action |
-|--------|-------------------|--------|
-| Changed files | 20+ | Warn about review thoroughness |
-| Lines changed | 1000+ | Warn about review thoroughness |
+| Metric        | Warning Threshold | Action                         |
+| ------------- | ----------------- | ------------------------------ |
+| Changed files | 20+               | Warn about review thoroughness |
+| Lines changed | 1000+             | Warn about review thoroughness |
 
 **If very large:**
+
 ```markdown
 ⚠️ **Large PR: {files} files, +{additions} -{deletions} lines**
 
@@ -177,16 +188,17 @@ Large PRs are harder to review thoroughly. Consider splitting into smaller PRs f
 ```markdown
 ## Pre-Review Status
 
-| Check | Status | Notes |
-|-------|--------|-------|
-| Merge Conflicts | ✅ None / ❌ Has conflicts | {details} |
-| CI Status | ✅ Passing / ⚠️ Failing / ⏳ Pending | {details} |
-| Behind Base | ✅ Up to date / ⚠️ {N} commits behind | {details} |
-| Draft | ✅ Ready / 📝 Draft | {details} |
-| Size | ✅ Normal / ⚠️ Large ({N} files) | {details} |
+| Check           | Status                                | Notes     |
+| --------------- | ------------------------------------- | --------- |
+| Merge Conflicts | ✅ None / ❌ Has conflicts            | {details} |
+| CI Status       | ✅ Passing / ⚠️ Failing / ⏳ Pending  | {details} |
+| Behind Base     | ✅ Up to date / ⚠️ {N} commits behind | {details} |
+| Draft           | ✅ Ready / 📝 Draft                   | {details} |
+| Size            | ✅ Normal / ⚠️ Large ({N} files)      | {details} |
 ```
 
 **PHASE_2_CHECKPOINT:**
+
 - [ ] No merge conflicts (or workflow stopped)
 - [ ] CI status noted
 - [ ] Behind-base status checked
@@ -212,6 +224,7 @@ gh pr view {number} --json files --jq '.files[].path'
 ```
 
 **Categorize files:**
+
 - Source code (`.ts`, `.js`, `.py`, etc.)
 - Test files (`*.test.ts`, `*.spec.ts`, `test_*.py`)
 - Documentation (`*.md`, `docs/`)
@@ -242,6 +255,7 @@ gh pr diff {number} | grep "^+" | sed 's/^+//' | grep -E "(^interface |^export i
 ```
 
 **PHASE_3_CHECKPOINT:**
+
 - [ ] Diff available
 - [ ] Files categorized by type
 - [ ] CLAUDE.md rules noted
@@ -298,6 +312,7 @@ sed -n '/## Deviations/,/^## /p' $ARTIFACTS_DIR/../runs/*/implementation.md | he
 ```
 
 **PHASE_3.5_CHECKPOINT:**
+
 - [ ] Workflow artifacts checked (plan-context.md OR investigation.md)
 - [ ] Scope limits extracted (NOT Building OR OUT OF SCOPE)
 - [ ] Implementation deviations noted (if available)
@@ -336,23 +351,23 @@ Write `$ARTIFACTS_DIR/review/scope.md`:
 
 ## Pre-Review Status
 
-| Check | Status | Notes |
-|-------|--------|-------|
-| Merge Conflicts | {status} | {details} |
-| CI Status | {status} | {passing}/{total} checks |
-| Behind Base | {status} | {N} commits behind |
-| Draft | {status} | {Ready/Draft} |
-| Size | {status} | {files} files, +{add}/-{del} |
+| Check           | Status   | Notes                        |
+| --------------- | -------- | ---------------------------- |
+| Merge Conflicts | {status} | {details}                    |
+| CI Status       | {status} | {passing}/{total} checks     |
+| Behind Base     | {status} | {N} commits behind           |
+| Draft           | {status} | {Ready/Draft}                |
+| Size            | {status} | {files} files, +{add}/-{del} |
 
 ---
 
 ## Changed Files
 
-| File | Type | Additions | Deletions |
-|------|------|-----------|-----------|
-| `src/file.ts` | source | +10 | -5 |
-| `src/file.test.ts` | test | +20 | -0 |
-| ... | ... | ... | ... |
+| File               | Type   | Additions | Deletions |
+| ------------------ | ------ | --------- | --------- |
+| `src/file.ts`      | source | +10       | -5        |
+| `src/file.test.ts` | test   | +20       | -0        |
+| ...                | ...    | ...       | ...       |
 
 **Total**: {changedFiles} files, +{additions} -{deletions}
 
@@ -361,16 +376,20 @@ Write `$ARTIFACTS_DIR/review/scope.md`:
 ## File Categories
 
 ### Source Files ({count})
+
 - `src/...`
 
 ### Test Files ({count})
+
 - `src/...test.ts`
 
 ### Documentation ({count})
+
 - `$DOCS_DIR/...`
 - `README.md`
 
 ### Configuration ({count})
+
 - `package.json`
 
 ---
@@ -405,9 +424,11 @@ Based on changes, reviewers should focus on:
 {From plan-context.md "NOT Building" section OR investigation.md "Scope Boundaries/OUT OF SCOPE" section}
 
 **IN SCOPE:**
+
 - {what we're changing}
 
 **OUT OF SCOPE (do not touch):**
+
 - {Explicit exclusion 1 with rationale}
 - {Explicit exclusion 2 with rationale}
 
@@ -436,6 +457,7 @@ _No workflow artifacts found - this appears to be a manual PR._
 ```
 
 **PHASE_4_CHECKPOINT:**
+
 - [ ] Directory created
 - [ ] Stale artifacts cleaned
 - [ ] Scope manifest written with pre-review status
@@ -446,7 +468,7 @@ _No workflow artifacts found - this appears to be a manual PR._
 
 ### If Blocked (Conflicts)
 
-```markdown
+````markdown
 ## ❌ Review Blocked: Merge Conflicts
 
 **PR**: #{number} - {title}
@@ -464,9 +486,11 @@ git add .
 git rebase --continue
 git push --force-with-lease
 ```
+````
 
 Then re-request the review: `@archon review this PR`
-```
+
+````
 
 ### If Proceeding
 
@@ -496,7 +520,7 @@ Then re-request the review: `@archon review this PR`
 
 ### Next Step
 Launching 5 parallel review agents...
-```
+````
 
 ---
 

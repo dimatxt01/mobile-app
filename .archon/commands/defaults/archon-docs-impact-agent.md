@@ -52,6 +52,7 @@ ls -la .archon/commands/ 2>/dev/null || true
 ```
 
 **PHASE_1_CHECKPOINT:**
+
 - [ ] PR number identified
 - [ ] Changes understood
 - [ ] Current docs read
@@ -63,6 +64,7 @@ ls -la .archon/commands/ 2>/dev/null || true
 ### 2.1 CLAUDE.md Impact
 
 Check if changes affect documented:
+
 - Commands or slash commands
 - Workflows
 - Development setup
@@ -75,6 +77,7 @@ Check if changes affect documented:
 ### 2.2 docs/ Folder Impact
 
 Check if changes affect:
+
 - Architecture documentation
 - Getting started guide
 - Configuration documentation
@@ -84,6 +87,7 @@ Check if changes affect:
 ### 2.3 Agent/Command Definitions
 
 Check if changes affect:
+
 - Agent capabilities
 - Command arguments
 - Workflow steps
@@ -92,12 +96,14 @@ Check if changes affect:
 ### 2.4 README Impact
 
 Check if changes affect:
+
 - Feature list
 - Installation instructions
 - Usage examples
 - Configuration options
 
 **PHASE_2_CHECKPOINT:**
+
 - [ ] CLAUDE.md impact assessed
 - [ ] docs/ impact assessed
 - [ ] Agent definitions checked
@@ -109,7 +115,7 @@ Check if changes affect:
 
 Write to `$ARTIFACTS_DIR/review/docs-impact-findings.md`:
 
-```markdown
+````markdown
 # Documentation Impact Findings: PR #{number}
 
 **Reviewer**: docs-impact-agent
@@ -128,14 +134,14 @@ Write to `$ARTIFACTS_DIR/review/docs-impact-findings.md`:
 
 ## Impact Assessment
 
-| Document | Impact | Required Update |
-|----------|--------|-----------------|
-| CLAUDE.md | NONE/LOW/HIGH | {description or "None"} |
-| $DOCS_DIR/architecture.md | NONE/LOW/HIGH | {description or "None"} |
+| Document                   | Impact        | Required Update         |
+| -------------------------- | ------------- | ----------------------- |
+| CLAUDE.md                  | NONE/LOW/HIGH | {description or "None"} |
+| $DOCS_DIR/architecture.md  | NONE/LOW/HIGH | {description or "None"} |
 | $DOCS_DIR/configuration.md | NONE/LOW/HIGH | {description or "None"} |
-| README.md | NONE/LOW/HIGH | {description or "None"} |
-| .claude/agents/*.md | NONE/LOW/HIGH | {description or "None"} |
-| .archon/commands/*.md | NONE/LOW/HIGH | {description or "None"} |
+| README.md                  | NONE/LOW/HIGH | {description or "None"} |
+| .claude/agents/\*.md       | NONE/LOW/HIGH | {description or "None"} |
+| .archon/commands/\*.md     | NONE/LOW/HIGH | {description or "None"} |
 
 ---
 
@@ -152,11 +158,14 @@ Write to `$ARTIFACTS_DIR/review/docs-impact-findings.md`:
 {Clear description of why docs need updating}
 
 **Current Documentation**:
+
 ```markdown
 {current text in docs}
 ```
+````
 
 **Code Change**:
+
 ```typescript
 // What changed in the PR
 {new code that docs don't reflect}
@@ -169,28 +178,33 @@ Write to `$ARTIFACTS_DIR/review/docs-impact-findings.md`:
 
 #### Update Suggestions
 
-| Option | Approach | Scope | Effort |
-|--------|----------|-------|--------|
-| A | {minimal update} | {what it covers} | LOW |
-| B | {comprehensive update} | {what it covers} | MED/HIGH |
+| Option | Approach               | Scope            | Effort   |
+| ------ | ---------------------- | ---------------- | -------- |
+| A      | {minimal update}       | {what it covers} | LOW      |
+| B      | {comprehensive update} | {what it covers} | MED/HIGH |
 
 **Recommended**: Option {X}
 
 **Reasoning**:
 {Why this update approach:
+
 - Keeps docs accurate
 - Matches existing documentation style
 - Appropriate level of detail}
 
 **Suggested Documentation Update**:
+
 ```markdown
 {what the docs should say after update}
 ```
 
 **Documentation Style Reference**:
+
 ```markdown
 # SOURCE: {doc file}
+
 # How similar features are documented
+
 {existing documentation pattern}
 ```
 
@@ -204,30 +218,30 @@ Write to `$ARTIFACTS_DIR/review/docs-impact-findings.md`:
 
 ## CLAUDE.md Sections to Update
 
-| Section | Current | Needed Update |
-|---------|---------|---------------|
+| Section        | Current                | Needed Update        |
+| -------------- | ---------------------- | -------------------- |
 | {section name} | {current text summary} | {what to add/change} |
-| ... | ... | ... |
+| ...            | ...                    | ...                  |
 
 ---
 
 ## Statistics
 
 | Severity | Count | Documents Affected |
-|----------|-------|-------------------|
-| CRITICAL | {n} | {list} |
-| HIGH | {n} | {list} |
-| MEDIUM | {n} | {list} |
-| LOW | {n} | {list} |
+| -------- | ----- | ------------------ |
+| CRITICAL | {n}   | {list}             |
+| HIGH     | {n}   | {list}             |
+| MEDIUM   | {n}   | {list}             |
+| LOW      | {n}   | {list}             |
 
 ---
 
 ## New Documentation Needed
 
-| Topic | Suggested Location | Priority |
-|-------|-------------------|----------|
+| Topic                | Suggested Location  | Priority     |
+| -------------------- | ------------------- | ------------ |
 | {new feature/change} | {where to document} | HIGH/MED/LOW |
-| ... | ... | ... |
+| ...                  | ...                 | ...          |
 
 ---
 
@@ -242,6 +256,7 @@ Write to `$ARTIFACTS_DIR/review/docs-impact-findings.md`:
 - **Agent**: docs-impact-agent
 - **Timestamp**: {ISO timestamp}
 - **Artifact**: `$ARTIFACTS_DIR/review/docs-impact-findings.md`
+
 ```
 
 **PHASE_3_CHECKPOINT:**
@@ -258,3 +273,4 @@ Write to `$ARTIFACTS_DIR/review/docs-impact-findings.md`:
 - **IMPACT_ASSESSED**: Each doc rated for impact
 - **UPDATES_SPECIFIED**: Clear update suggestions
 - **STYLE_MATCHED**: Suggestions match existing doc style
+```

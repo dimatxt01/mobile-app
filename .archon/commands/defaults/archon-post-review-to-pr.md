@@ -22,6 +22,7 @@ PR_NUMBER=$(cat $ARTIFACTS_DIR/.pr-number)
 ```
 
 **If not found:**
+
 ```
 ❌ No PR number found at $ARTIFACTS_DIR/.pr-number
 Cannot post review without a PR number.
@@ -34,12 +35,14 @@ cat $ARTIFACTS_DIR/review/code-review-findings.md
 ```
 
 **If not found:**
+
 ```
 ❌ No review findings found at $ARTIFACTS_DIR/review/code-review-findings.md
 Run code review first.
 ```
 
 **PHASE_1_CHECKPOINT:**
+
 - [ ] PR number loaded
 - [ ] Review findings loaded
 
@@ -50,6 +53,7 @@ Run code review first.
 ### 2.1 Extract Key Information
 
 From the review findings, extract:
+
 - **Verdict**: APPROVE / REQUEST_CHANGES / NEEDS_DISCUSSION
 - **Summary**: 2-3 sentence overview
 - **Findings**: All findings with severity and location
@@ -59,7 +63,7 @@ From the review findings, extract:
 
 Format the review as a GitHub-friendly comment:
 
-```markdown
+````markdown
 ## 🔍 Code Review
 
 **Verdict**: {APPROVE ✅ | REQUEST_CHANGES ❌ | NEEDS_DISCUSSION 💬}
@@ -84,6 +88,7 @@ Format the review as a GitHub-friendly comment:
 ```typescript
 {recommended fix code}
 ```
+````
 
 **Why**: {reasoning}
 
@@ -95,12 +100,12 @@ Format the review as a GitHub-friendly comment:
 
 ### Summary
 
-| Severity | Count |
-|----------|-------|
-| 🔴 Critical | {n} |
-| 🟠 High | {n} |
-| 🟡 Medium | {n} |
-| 🔵 Low | {n} |
+| Severity    | Count |
+| ----------- | ----- |
+| 🔴 Critical | {n}   |
+| 🟠 High     | {n}   |
+| 🟡 Medium   | {n}   |
+| 🔵 Low      | {n}   |
 
 {If positive observations exist:}
 
@@ -110,8 +115,9 @@ Format the review as a GitHub-friendly comment:
 
 ---
 
-*Automated code review*
-```
+_Automated code review_
+
+````
 
 **Severity emojis:**
 - CRITICAL → 🔴
@@ -135,7 +141,7 @@ gh pr comment {PR_NUMBER} --body "$(cat <<'EOF'
 {formatted comment body}
 EOF
 )"
-```
+````
 
 ### 3.2 Verify
 
@@ -145,6 +151,7 @@ gh pr view {PR_NUMBER} --comments --json comments --jq '.comments | length'
 ```
 
 **PHASE_3_CHECKPOINT:**
+
 - [ ] Comment posted to PR
 - [ ] Verified comment exists
 
@@ -167,16 +174,19 @@ Review comment has been posted to the pull request.
 ## Error Handling
 
 ### PR not found
+
 - Verify PR number is correct
 - Check if PR is still open
 - Report error to user
 
 ### Comment fails to post
+
 - Check GitHub authentication
 - Try with shorter body if too large
 - Report error with details
 
 ### No findings
+
 - Post a clean review comment: "No issues found. LGTM!"
 
 ---

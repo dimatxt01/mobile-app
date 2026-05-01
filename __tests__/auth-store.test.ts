@@ -18,7 +18,14 @@ function makeSession(email: string): Session {
     refresh_token: 'refresh',
     expires_in: 3600,
     token_type: 'bearer',
-    user: { id: '1', email, app_metadata: {}, user_metadata: {}, aud: 'authenticated', created_at: '' } as User,
+    user: {
+      id: '1',
+      email,
+      app_metadata: {},
+      user_metadata: {},
+      aud: 'authenticated',
+      created_at: '',
+    } as User,
   } as Session;
 }
 

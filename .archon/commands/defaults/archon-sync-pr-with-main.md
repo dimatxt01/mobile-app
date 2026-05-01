@@ -54,18 +54,21 @@ echo "Behind by: $BEHIND commits"
 
 **Decision:**
 
-| Behind Count | Action |
-|--------------|--------|
-| 0 | Skip - already up to date |
-| 1+ | Rebase needed |
+| Behind Count | Action                    |
+| ------------ | ------------------------- |
+| 0            | Skip - already up to date |
+| 1+           | Rebase needed             |
 
 **If already up to date:**
+
 ```markdown
 Branch is up to date with `{base}`. No sync needed.
 ```
+
 **Exit early - no artifact created.**
 
 **PHASE_1_CHECKPOINT:**
+
 - [ ] PR number identified
 - [ ] Branches fetched
 - [ ] Behind count determined
@@ -82,11 +85,11 @@ git rebase origin/$PR_BASE
 
 **Possible outcomes:**
 
-| Result | Next Step |
-|--------|-----------|
+| Result                 | Next Step                |
+| ---------------------- | ------------------------ |
 | Success (no conflicts) | Go to Phase 4 (Validate) |
-| Conflicts | Go to Phase 3 (Resolve) |
-| Other error | Report and abort |
+| Conflicts              | Go to Phase 3 (Resolve)  |
+| Other error            | Report and abort         |
 
 ### 2.2 Check for Conflicts
 
@@ -99,6 +102,7 @@ If files listed → conflicts exist, go to Phase 3.
 If empty → rebase successful, go to Phase 4.
 
 **PHASE_2_CHECKPOINT:**
+
 - [ ] Rebase attempted
 - [ ] Conflict status determined
 
@@ -122,12 +126,14 @@ cat {file} | grep -A 10 -B 2 "<<<<<<<"
 ```
 
 **Categorize:**
+
 - **SIMPLE**: One side added/changed, other didn't touch → Auto-resolve
 - **COMPLEX**: Both sides changed same lines → Need decision
 
 ### 3.3 Auto-Resolve Simple Conflicts
 
 For conflicts where intent is clear:
+
 - Both added different things → Keep both
 - One updated, other didn't → Keep update
 - Import additions → Merge both
@@ -162,6 +168,7 @@ git rebase --continue
 Repeat if more commits have conflicts.
 
 **PHASE_3_CHECKPOINT:**
+
 - [ ] All conflicts identified
 - [ ] Simple conflicts auto-resolved
 - [ ] Complex conflicts resolved with reasoning
@@ -200,6 +207,7 @@ bun run lint
 **If any fail**: Fix issues before proceeding.
 
 **PHASE_4_CHECKPOINT:**
+
 - [ ] No conflict markers
 - [ ] Type check passes
 - [ ] Tests pass
@@ -228,6 +236,7 @@ git log origin/$PR_HEAD --oneline -3
 Confirm local and remote match.
 
 **PHASE_5_CHECKPOINT:**
+
 - [ ] Branch pushed
 - [ ] Remote updated
 
@@ -239,7 +248,7 @@ Confirm local and remote match.
 
 Write to `$ARTIFACTS_DIR/review/sync-report.md`:
 
-```markdown
+````markdown
 # Sync Report: PR #{number}
 
 **Date**: {ISO timestamp}
@@ -267,6 +276,7 @@ Write to `$ARTIFACTS_DIR/review/sync-report.md`:
 ```{language}
 {resolved code}
 ```
+````
 
 ---
 
@@ -278,11 +288,11 @@ No conflicts encountered during rebase.
 
 ## Validation
 
-| Check | Status |
-|-------|--------|
-| Type check | ✅ |
-| Tests | ✅ |
-| Lint | ✅ |
+| Check      | Status |
+| ---------- | ------ |
+| Type check | ✅     |
+| Tests      | ✅     |
+| Lint       | ✅     |
 
 ---
 
@@ -298,7 +308,8 @@ No conflicts encountered during rebase.
 
 - **Synced by**: Archon
 - **Timestamp**: {ISO timestamp}
-```
+
+````
 
 ### 6.2 Update Scope Artifact
 
@@ -312,9 +323,10 @@ Append to `$ARTIFACTS_DIR/review/scope.md`:
 **Synced**: {ISO timestamp}
 **Rebased onto**: `{base}` at {commit}
 **Conflicts resolved**: {N}
-```
+````
 
 **PHASE_6_CHECKPOINT:**
+
 - [ ] Sync artifact created (if action taken)
 - [ ] Scope artifact updated
 
@@ -348,7 +360,7 @@ Proceeding to parallel review...
 
 ### If Sync Failed:
 
-```markdown
+````markdown
 ## ❌ Sync Failed
 
 **Error**: {description}
@@ -359,9 +371,11 @@ Proceeding to parallel review...
 # To abort the failed rebase
 git rebase --abort
 ```
+````
 
 **Recommendation**: Resolve conflicts manually, then re-trigger review.
-```
+
+````
 
 ---
 
@@ -371,13 +385,14 @@ git rebase --abort
 
 ```bash
 git rebase --abort
-```
+````
 
 Report failure with specific error.
 
 ### Push Rejected
 
 If `--force-with-lease` fails:
+
 1. Someone else pushed to the branch
 2. Fetch and re-attempt rebase
 3. Or report for manual handling
@@ -385,6 +400,7 @@ If `--force-with-lease` fails:
 ### Validation Fails
 
 If type-check/tests fail after rebase:
+
 1. Investigate which changes broke
 2. Attempt to fix
 3. If unfixable, abort and report

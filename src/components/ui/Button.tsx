@@ -17,7 +17,17 @@ const variantStyles: Record<ButtonVariant, { container: string; text: string }> 
   },
 };
 
+<<<<<<< HEAD
 export function Button({ title, variant = 'primary', loading = false, disabled, ...props }: ButtonProps) {
+=======
+export function Button({
+  title,
+  variant = 'primary',
+  loading = false,
+  disabled,
+  ...props
+}: ButtonProps) {
+>>>>>>> 35ae86c4ddb1472145ca485587f2c87162186555
   const styles = variantStyles[variant];
 
   return (

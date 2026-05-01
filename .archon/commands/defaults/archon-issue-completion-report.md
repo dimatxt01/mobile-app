@@ -104,9 +104,9 @@ From the fix report and consolidated review:
 
 For each unaddressed item, determine if it warrants a follow-up issue:
 
-| Item | Warrants Issue? | Why |
-|------|----------------|-----|
-| {skipped finding} | YES/NO | {reason} |
+| Item              | Warrants Issue? | Why      |
+| ----------------- | --------------- | -------- |
+| {skipped finding} | YES/NO          | {reason} |
 
 **PHASE_2_CHECKPOINT:**
 
@@ -137,11 +137,11 @@ Write to `$ARTIFACTS_DIR/completion-report.md`:
 
 ## Classification
 
-| Field | Value |
-|-------|-------|
-| Type | {bug/feature/enhancement/...} |
-| Complexity | {LOW/MEDIUM/HIGH} |
-| Confidence | {HIGH/MEDIUM/LOW} |
+| Field      | Value                         |
+| ---------- | ----------------------------- |
+| Type       | {bug/feature/enhancement/...} |
+| Complexity | {LOW/MEDIUM/HIGH}             |
+| Confidence | {HIGH/MEDIUM/LOW}             |
 
 ---
 
@@ -153,17 +153,17 @@ Write to `$ARTIFACTS_DIR/completion-report.md`:
 
 ### Implementation
 
-| File | Action | Description |
-|------|--------|-------------|
+| File     | Action          | Description    |
+| -------- | --------------- | -------------- |
 | `{file}` | {CREATE/UPDATE} | {what changed} |
 
 ### Validation
 
-| Check | Result |
-|-------|--------|
-| Type check | ✅ / ❌ |
-| Lint | ✅ / ❌ |
-| Tests | ✅ ({n} passed) / ❌ |
+| Check      | Result               |
+| ---------- | -------------------- |
+| Type check | ✅ / ❌              |
+| Lint       | ✅ / ❌              |
+| Tests      | ✅ ({n} passed) / ❌ |
 
 ### Review & Self-Fix
 
@@ -180,37 +180,37 @@ Write to `$ARTIFACTS_DIR/completion-report.md`:
 
 ### Skipped
 
-| Finding | Severity | Reason |
-|---------|----------|--------|
-| {title} | {sev} | {reason} |
+| Finding | Severity | Reason   |
+| ------- | -------- | -------- |
+| {title} | {sev}    | {reason} |
 
 ### Blocked
 
-| Finding | Severity | Reason |
-|---------|----------|--------|
-| {title} | {sev} | {reason} |
+| Finding | Severity | Reason   |
+| ------- | -------- | -------- |
+| {title} | {sev}    | {reason} |
 
 ---
 
 ## Suggested Follow-up Issues
 
-| Title | Priority | Description |
-|-------|----------|-------------|
+| Title     | Priority   | Description         |
+| --------- | ---------- | ------------------- |
 | "{title}" | {P1/P2/P3} | {brief description} |
 
-*(none)* if everything was addressed
+_(none)_ if everything was addressed
 
 ---
 
 ## Artifacts
 
-| Artifact | Path |
-|----------|------|
-| Investigation/Plan | `$ARTIFACTS_DIR/{investigation or plan}.md` |
-| Web Research | `$ARTIFACTS_DIR/web-research.md` |
-| Implementation | `$ARTIFACTS_DIR/implementation.md` |
+| Artifact            | Path                                           |
+| ------------------- | ---------------------------------------------- |
+| Investigation/Plan  | `$ARTIFACTS_DIR/{investigation or plan}.md`    |
+| Web Research        | `$ARTIFACTS_DIR/web-research.md`               |
+| Implementation      | `$ARTIFACTS_DIR/implementation.md`             |
 | Consolidated Review | `$ARTIFACTS_DIR/review/consolidated-review.md` |
-| Fix Report | `$ARTIFACTS_DIR/review/fix-report.md` |
+| Fix Report          | `$ARTIFACTS_DIR/review/fix-report.md`          |
 ```
 
 **PHASE_3_CHECKPOINT:**
@@ -313,6 +313,7 @@ EOF
 - Self-fix: ✅
 
 ### Unaddressed: {n} items
+
 ### Follow-up issues suggested: {n}
 
 ### Artifacts

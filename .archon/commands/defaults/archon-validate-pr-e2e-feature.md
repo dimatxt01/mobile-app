@@ -16,6 +16,7 @@ You MUST use `--session $WORKFLOW_ID` on EVERY `agent-browser` command to isolat
 Example: `agent-browser --session $WORKFLOW_ID open "http://..."`, `agent-browser --session $WORKFLOW_ID snapshot -i`, etc.
 
 **ABSOLUTELY FORBIDDEN — NEVER DO ANY OF THESE**:
+
 - `taskkill //F //IM chrome.exe` or ANY variant that kills chrome by image name — this kills the USER's browser
 - `taskkill //F //IM node.exe` or `taskkill //F //IM bun.exe` — this kills Claude Code, the Archon server, and all other workflows
 - `pkill chrome`, `pkill node`, `pkill bun`, or any broad process-name kill
@@ -78,6 +79,7 @@ cat $ARTIFACTS_DIR/e2e-main.md 2>/dev/null || echo "No main branch E2E results a
 ```
 
 This tells you:
+
 - Which bugs were reproduced on main (you need to verify they're FIXED here)
 - Which test cases to re-run
 - What screenshots to compare against
@@ -294,43 +296,48 @@ Write to `$ARTIFACTS_DIR/e2e-feature.md`:
 **Branch**: {feature-branch} @ {commit}
 **Backend Port**: {port}
 **Frontend Port**: {port}
-**Screenshots**: $ARTIFACTS_DIR/e2e-feature-*.png
+**Screenshots**: $ARTIFACTS_DIR/e2e-feature-\*.png
 
 ## Test Summary
 
-| Test Case | Main Result | Feature Result | Fix Verified? |
-|-----------|-------------|----------------|---------------|
-| {test 1} | BUG REPRODUCED | FIXED | YES / NO |
-| {test 2} | BUG REPRODUCED | FIXED | YES / NO |
+| Test Case | Main Result    | Feature Result | Fix Verified? |
+| --------- | -------------- | -------------- | ------------- |
+| {test 1}  | BUG REPRODUCED | FIXED          | YES / NO      |
+| {test 2}  | BUG REPRODUCED | FIXED          | YES / NO      |
 
 ## Detailed Findings
 
 ### Test 1: {description}
+
 **Main branch**: {bug behavior — reference e2e-main screenshot}
 **Feature branch**: {fixed behavior — reference e2e-feature screenshot}
 **Fix verified**: YES / NO / PARTIAL
 **Screenshot comparison**: `e2e-main-{N}.png` vs `e2e-feature-{N}.png`
 
 ### Test 2: {description}
+
 {Same structure...}
 
 ## UX Quality Assessment
 
-| Aspect | Rating (1-5) | Notes |
-|--------|-------------|-------|
-| Visual correctness | {n} | {details} |
-| Responsiveness | {n} | {details} |
-| Edge case handling | {n} | {details} |
-| Error states | {n} | {details} |
-| Performance feel | {n} | {details} |
+| Aspect             | Rating (1-5) | Notes     |
+| ------------------ | ------------ | --------- |
+| Visual correctness | {n}          | {details} |
+| Responsiveness     | {n}          | {details} |
+| Edge case handling | {n}          | {details} |
+| Error states       | {n}          | {details} |
+| Performance feel   | {n}          | {details} |
 
 ## Regressions Found
+
 {Any new issues introduced by the fix, or NONE}
 
 ## Additional Observations
+
 {Any other UX improvements or issues noticed}
 
 ## Fix Confidence
+
 **HIGH / MEDIUM / LOW**
 
 {Overall confidence that the fix works correctly and completely}

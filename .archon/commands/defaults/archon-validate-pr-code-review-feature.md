@@ -66,9 +66,11 @@ For each changed file:
    - Could it introduce new bugs?
    - Does it follow existing patterns in the codebase?
 4. **Check CLAUDE.md compliance**:
+
    ```bash
    cat CLAUDE.md
    ```
+
    - Import patterns correct?
    - Type annotations complete?
    - Error handling appropriate?
@@ -77,6 +79,7 @@ For each changed file:
 ### 2.4 Look for Issues
 
 Check for:
+
 - **Correctness**: Does the fix actually solve the problem?
 - **Completeness**: Are all aspects of the bug addressed?
 - **Side effects**: Could this break something else?
@@ -89,6 +92,7 @@ Check for:
 ### 2.5 Compare Alternative Approaches
 
 Think about whether there's a better way to fix this:
+
 - Could a simpler approach work?
 - Is there an existing utility/pattern that should be used?
 - Would the fix work differently if applied at a different layer?
@@ -99,7 +103,7 @@ Think about whether there's a better way to fix this:
 
 Write your analysis to `$ARTIFACTS_DIR/code-review-feature.md`:
 
-```markdown
+````markdown
 # Feature Branch Code Review: PR #{number}
 
 **PR Title**: {title}
@@ -110,69 +114,80 @@ Write your analysis to `$ARTIFACTS_DIR/code-review-feature.md`:
 ## Fix Assessment
 
 ### Does the Fix Address the Bug?
+
 **YES / PARTIALLY / NO**
 
 {Explanation with specific code references}
 
 ### Fix Quality
 
-| Criterion | Rating (1-5) | Notes |
-|-----------|-------------|-------|
-| Correctness | {n} | {does it fix the bug?} |
-| Completeness | {n} | {all edge cases handled?} |
-| Simplicity | {n} | {minimal changes, KISS?} |
-| Safety | {n} | {no side effects?} |
-| Patterns | {n} | {follows codebase conventions?} |
+| Criterion    | Rating (1-5) | Notes                           |
+| ------------ | ------------ | ------------------------------- |
+| Correctness  | {n}          | {does it fix the bug?}          |
+| Completeness | {n}          | {all edge cases handled?}       |
+| Simplicity   | {n}          | {minimal changes, KISS?}        |
+| Safety       | {n}          | {no side effects?}              |
+| Patterns     | {n}          | {follows codebase conventions?} |
 
 **Overall Score**: {average}/5
 
 ### File-by-File Analysis
 
 #### `{file1}`
+
 **Change Summary**: {what changed}
 **Assessment**: {good/needs-work/concern}
+
 ```{language}
 // Key change
 {relevant code snippet}
 ```
+````
+
 **Notes**: {specific feedback}
 
 #### `{file2}`
+
 {Same structure...}
 
 ### Issues Found
 
 #### Issue 1: {title}
+
 **Severity**: CRITICAL / HIGH / MEDIUM / LOW
 **File**: `{file}:{line}`
 **Description**: {what's wrong}
 **Suggested Fix**:
+
 ```{language}
 {how to fix it}
 ```
 
 ### Alternative Approaches Considered
+
 {Were there better ways to implement this? If so, describe them and why they might be preferable.
 If the current approach is optimal, say so and explain why.}
 
 ### Missing Changes
+
 {Files or areas that should have been changed but weren't. If everything is covered, say so.}
 
 ## CLAUDE.md Compliance
 
-| Rule | Status | Notes |
-|------|--------|-------|
+| Rule             | Status    | Notes     |
+| ---------------- | --------- | --------- |
 | Type annotations | PASS/FAIL | {details} |
-| Import patterns | PASS/FAIL | {details} |
-| Error handling | PASS/FAIL | {details} |
-| No any types | PASS/FAIL | {details} |
-| KISS principle | PASS/FAIL | {details} |
+| Import patterns  | PASS/FAIL | {details} |
+| Error handling   | PASS/FAIL | {details} |
+| No any types     | PASS/FAIL | {details} |
+| KISS principle   | PASS/FAIL | {details} |
 
 ## Verdict
 
 **APPROVE / REQUEST_CHANGES / NEEDS_DISCUSSION**
 
 {2-3 sentence final assessment: Is this fix ready to merge as-is?}
+
 ```
 
 ---
@@ -184,3 +199,4 @@ If the current approach is optimal, say so and explain why.}
 - **MAIN_COMPARED**: Feature code compared against main branch code
 - **CLAUDE_MD_CHECKED**: CLAUDE.md compliance verified
 - **ARTIFACT_WRITTEN**: `$ARTIFACTS_DIR/code-review-feature.md` created
+```

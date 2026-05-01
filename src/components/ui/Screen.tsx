@@ -20,9 +20,13 @@ export function Screen({ children, scroll = false, className = '' }: ScreenProps
     <View className={`flex-1 px-6 py-8 ${className}`}>{children}</View>
   );
 
+<<<<<<< HEAD
   return (
     <SafeAreaView className="flex-1 bg-white">
       {inner}
     </SafeAreaView>
   );
+=======
+  return <SafeAreaView className="flex-1 bg-white">{inner}</SafeAreaView>;
+>>>>>>> 35ae86c4ddb1472145ca485587f2c87162186555
 }

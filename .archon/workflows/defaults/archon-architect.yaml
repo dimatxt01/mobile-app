@@ -101,7 +101,7 @@ nodes:
     denied_tools: [Write, Edit, Bash]
     hooks:
       PostToolUse:
-        - matcher: "Read"
+        - matcher: 'Read'
           response:
             hookSpecificOutput:
               hookEventName: PostToolUse
@@ -180,7 +180,7 @@ nodes:
     context: fresh
     hooks:
       PreToolUse:
-        - matcher: "Write|Edit"
+        - matcher: 'Write|Edit'
           response:
             hookSpecificOutput:
               hookEventName: PreToolUse
@@ -189,21 +189,21 @@ nodes:
                 touching it. Check how many files import from this module — changes to
                 widely-imported modules need extra scrutiny.
       PostToolUse:
-        - matcher: "Write|Edit"
+        - matcher: 'Write|Edit'
           response:
             systemMessage: >
               You just modified a file. Do these things NOW before moving on:
               1. Run the type checker to verify your change compiles
               2. Re-read the file you changed — is it ACTUALLY simpler, or did you just move complexity around?
               3. State in ONE sentence why this change reduces complexity. If you cannot justify it, revert it.
-        - matcher: "Read"
+        - matcher: 'Read'
           response:
             hookSpecificOutput:
               hookEventName: PostToolUse
               additionalContext: >
                 Before modifying this file, consider: will your change reduce or increase
                 the number of concepts a reader needs to hold in their head?
-        - matcher: "Bash"
+        - matcher: 'Bash'
           response:
             hookSpecificOutput:
               hookEventName: PostToolUse
@@ -277,13 +277,13 @@ nodes:
     context: fresh
     hooks:
       PostToolUse:
-        - matcher: "Write|Edit"
+        - matcher: 'Write|Edit'
           response:
             systemMessage: >
               You just made a fix. Run the specific failing validation check NOW
               to verify your fix works. Do not batch fixes — verify each one.
       PreToolUse:
-        - matcher: "Write|Edit"
+        - matcher: 'Write|Edit'
           response:
             hookSpecificOutput:
               hookEventName: PreToolUse
@@ -343,14 +343,14 @@ nodes:
     context: fresh
     hooks:
       PreToolUse:
-        - matcher: "Write|Edit"
+        - matcher: 'Write|Edit'
           response:
             hookSpecificOutput:
               hookEventName: PreToolUse
               permissionDecision: deny
-              permissionDecisionReason: "PR creation node — do not modify source files. Use only git and gh commands."
+              permissionDecisionReason: 'PR creation node — do not modify source files. Use only git and gh commands.'
       PostToolUse:
-        - matcher: "Bash"
+        - matcher: 'Bash'
           response:
             hookSpecificOutput:
               hookEventName: PostToolUse
