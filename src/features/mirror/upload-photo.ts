@@ -16,7 +16,7 @@ export async function uploadMirrorPhoto(
     const response = await fetch(localUri);
     blob = await response.blob();
   } catch (e) {
-    return { data: null, error: new Error('Failed to read image file') };
+    return { data: null, error: e instanceof Error ? e : new Error('Failed to read image file') };
   }
 
   const { error: uploadError } = await supabase.storage

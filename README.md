@@ -58,6 +58,7 @@ After creating your project and running the migration, configure these manually:
 ### Authentication → URL Configuration → Redirect URLs
 
 Add both:
+
 ```
 coolify-ai://reset-password
 coolify-ai://auth/callback
@@ -78,13 +79,14 @@ coolify-ai://auth/callback
 
 You need three OAuth client IDs:
 
-| Platform | Type | Notes |
-|---|---|---|
-| iOS | iOS client | Bundle ID: your final bundle identifier |
-| Android | Android client | Package name + SHA-1 fingerprint |
+| Platform           | Type            | Notes                                            |
+| ------------------ | --------------- | ------------------------------------------------ |
+| iOS                | iOS client      | Bundle ID: your final bundle identifier          |
+| Android            | Android client  | Package name + SHA-1 fingerprint                 |
 | Web (for Supabase) | Web application | Add Supabase callback URL as authorized redirect |
 
 Steps:
+
 1. Go to [Google Cloud Console](https://console.cloud.google.com) → APIs & Services → Credentials
 2. Create OAuth 2.0 Client IDs for each platform above
 3. Paste the Web client ID + secret into Supabase (see above)
@@ -128,17 +130,17 @@ __tests__/              # Unit and integration tests
 
 ## What Is NOT Done
 
-| Item | Notes |
-|---|---|
-| **Sentry initialization** | Package installed. Add `Sentry.init({ dsn })` in `app/_layout.tsx` where `// TODO(sentry)` comment is. Also add Sentry plugin to `app.json` and run `npx expo install @sentry/react-native`. |
-| **EAS Build** | No `eas.json`. Set up when ready for TestFlight/Play testing. |
-| **App Store / Play Console** | No submission config. Set final bundle ID / package name first. |
-| **Push notifications** | Not implemented. |
-| **RevenueCat / IAP** | Not implemented. |
-| **Email OTP verification screen** | Sign-up shows "check email" state. Add `verify-email.tsx` with OTP input if needed. |
-| **Supabase TypeScript types** | `src/types/database.ts` is hand-written. Generate the full file: `npx supabase gen types typescript --project-id <id> > src/types/database.ts` |
-| **`clients` table migration** | The `clients` business table is not in the migration. Add in a future migration when implementing the dashboard features. |
-
+| Item                              | Notes                                                                                                                                                                                        |
+| --------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| **Sentry initialization**         | Package installed. Add `Sentry.init({ dsn })` in `app/_layout.tsx` where `// TODO(sentry)` comment is. Also add Sentry plugin to `app.json` and run `npx expo install @sentry/react-native`. |
+| **EAS Build**                     | No `eas.json`. Set up when ready for TestFlight/Play testing.                                                                                                                                |
+| **App Store / Play Console**      | No submission config. Set final bundle ID / package name first.                                                                                                                              |
+| **Push notifications**            | Not implemented.                                                                                                                                                                             |
+| **RevenueCat / IAP**              | Not implemented.                                                                                                                                                                             |
+| **Email OTP verification screen** | Sign-up shows "check email" state. Add `verify-email.tsx` with OTP input if needed.                                                                                                          |
+| **Supabase TypeScript types**     | `src/types/database.ts` is hand-written. Generate the full file: `npx supabase gen types typescript --project-id <id> > src/types/database.ts`                                               |
+| **`clients` table migration**     | The `clients` business table is not in the migration. Add in a future migration when implementing the dashboard features.                                                                    |
 
 ## Future ideas
+
 - Teams

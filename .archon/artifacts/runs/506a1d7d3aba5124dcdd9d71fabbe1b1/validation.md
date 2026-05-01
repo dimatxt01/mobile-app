@@ -8,13 +8,13 @@
 
 ## Summary
 
-| Check | Result | Details |
-|-------|--------|---------|
-| Type check | ✅ | No errors |
-| Lint | ✅ | 0 errors, 11 warnings |
-| Format | ✅ | All files formatted |
-| Tests | ✅ | 19 passed, 0 failed |
-| Build | ✅ (expo start) | No type errors; native build requires simulator |
+| Check      | Result          | Details                                         |
+| ---------- | --------------- | ----------------------------------------------- |
+| Type check | ✅              | No errors                                       |
+| Lint       | ✅              | 0 errors, 11 warnings                           |
+| Format     | ✅              | All files formatted                             |
+| Tests      | ✅              | 19 passed, 0 failed                             |
+| Build      | ✅ (expo start) | No type errors; native build requires simulator |
 
 ---
 
@@ -59,12 +59,12 @@ All are `react-hooks/exhaustive-deps` warnings on intentional init-only `useEffe
 **Command**: `npm test`
 **Result**: ✅ Pass
 
-| Metric | Count |
-|--------|-------|
-| Total tests | 19 |
-| Passed | 19 |
-| Failed | 0 |
-| Skipped | 0 |
+| Metric      | Count |
+| ----------- | ----- |
+| Total tests | 19    |
+| Passed      | 19    |
+| Failed      | 0     |
+| Skipped     | 0     |
 
 Test suites: `auth-schemas.test.ts`, `auth-store.test.ts`, `smoke.test.ts`, `score.test.ts`
 
@@ -81,13 +81,13 @@ Test suites: `auth-schemas.test.ts`, `auth-store.test.ts`, `smoke.test.ts`, `sco
 
 ## Files Modified During Validation
 
-| File | Changes |
-|------|---------|
-| `app/(app)/modal/returning-user.tsx` | Escaped 2 unescaped apostrophes; prettier-formatted |
-| `app/(onboarding)/index.tsx` | Escaped 1 unescaped apostrophe; prettier-formatted |
-| `app/(app)/(tabs)/index.tsx` | Moved `import { supabase }` to top; prettier-formatted |
-| 92 other source files | Prettier formatting only |
-| `.archon/commands/defaults/archon-validate-pr-code-review-feature.md` | Prettier formatting only |
+| File                                                                  | Changes                                                |
+| --------------------------------------------------------------------- | ------------------------------------------------------ |
+| `app/(app)/modal/returning-user.tsx`                                  | Escaped 2 unescaped apostrophes; prettier-formatted    |
+| `app/(onboarding)/index.tsx`                                          | Escaped 1 unescaped apostrophe; prettier-formatted     |
+| `app/(app)/(tabs)/index.tsx`                                          | Moved `import { supabase }` to top; prettier-formatted |
+| 92 other source files                                                 | Prettier formatting only                               |
+| `.archon/commands/defaults/archon-validate-pr-code-review-feature.md` | Prettier formatting only                               |
 
 ---
 

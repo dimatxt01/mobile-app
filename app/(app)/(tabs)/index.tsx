@@ -19,6 +19,7 @@ import { BigNum } from '@/components/hmc/BigNum';
 import { Eyebrow } from '@/components/hmc/Eyebrow';
 import { Rule } from '@/components/hmc/Rule';
 import { BottomBar } from '@/components/hmc/BottomBar';
+import { useScoreDensity } from '@/lib/score-density';
 
 export default function TodayScreen() {
   const { user } = useAuth();
@@ -28,6 +29,8 @@ export default function TodayScreen() {
   const { save, cancel } = useSaveCheckin();
   const lockCheckin = useLockCheckin();
   const { data: history } = useHistory(14);
+  const [scoreDensity] = useScoreDensity();
+  void scoreDensity; // rendering deferred to Sprint 2; keeps hook alive in render cycle
 
   const [identityChecks, setIdentityChecks] = useState<Record<string, boolean>>({});
   const [executionChecks, setExecutionChecks] = useState<Record<string, boolean>>({});
@@ -72,6 +75,15 @@ export default function TodayScreen() {
         },
       )
     : null;
+
+  const prevDayRow = useMemo(() => {
+    if (!history) return null;
+    const todayStr = new Date().toISOString().slice(0, 10);
+    // relies on get_history() returning rows ORDER BY date DESC
+    return history.find((r) => r.date < todayStr) ?? null;
+  }, [history]);
+
+  const delta = prevDayRow != null && score != null ? score.total - prevDayRow.total_score : null;
 
   useEffect(() => {
     if (!config.data) return;
@@ -125,6 +137,7 @@ export default function TodayScreen() {
         <PrintBar dayNumber={(profile?.day_count ?? 0) + 1} />
         {profile?.identity_sentence && (
           <View style={styles.sentence}>
+            <Eyebrow label="TODAY, I AM" />
             <Text style={styles.sentenceText}>{profile.identity_sentence}</Text>
           </View>
         )}
@@ -196,6 +209,11 @@ export default function TodayScreen() {
         >
           <Eyebrow label="TOTAL" />
           <BigNum value={score?.total ?? 0} highlight={checkin?.is_locked} />
+          {delta !== null && (
+            <Text style={[styles.delta, delta > 0 ? styles.deltaPositive : styles.deltaNegative]}>
+              {delta > 0 ? `+${delta}` : `${delta}`} VS YESTERDAY
+            </Text>
+          )}
           <Text style={styles.hint}>TAP FOR BREAKDOWN</Text>
         </TouchableOpacity>
       </ScrollView>
@@ -249,6 +267,14 @@ const styles = StyleSheet.create({
     color: colors.textTertiary,
     marginTop: 4,
   },
+  delta: {
+    fontFamily: fonts.mono,
+    fontSize: 12,
+    letterSpacing: 1.5,
+    marginTop: 4,
+  },
+  deltaPositive: { color: colors.amber },
+  deltaNegative: { color: colors.danger },
   lockedBar: {
     paddingVertical: 16,
     alignItems: 'center',

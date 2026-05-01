@@ -12,11 +12,11 @@ Source path (read-only): `/Users/dzmitrypiskun/Documents/1prompt-os/frontend`
 ```typescript
 createClient(url, anonKey, {
   auth: {
-    storage: localStorage,   // ← replaced with SecureStore in mobile
+    storage: localStorage, // ← replaced with SecureStore in mobile
     persistSession: true,
     autoRefreshToken: true,
   },
-})
+});
 ```
 
 **Auth providers enabled:** Email/password only. Google OAuth is referenced in comments/email-inbox UI but **not implemented** — no `signInWithOAuth` call exists.
@@ -28,6 +28,7 @@ createClient(url, anonKey, {
 ## 2. Database Schema
 
 ### `public.profiles`
+
 ```sql
 CREATE TABLE public.profiles (
   id                   UUID PRIMARY KEY REFERENCES auth.users(id) ON DELETE CASCADE,
@@ -44,6 +45,7 @@ ALTER TABLE public.profiles ENABLE ROW LEVEL SECURITY;
 ```
 
 ### `public.user_roles`
+
 ```sql
 CREATE TYPE public.app_role AS ENUM ('agency', 'client');
 
@@ -57,6 +59,7 @@ ALTER TABLE public.user_roles ENABLE ROW LEVEL SECURITY;
 ```
 
 ### `public.agencies`
+
 ```sql
 CREATE TABLE public.agencies (
   id         UUID NOT NULL DEFAULT gen_random_uuid() PRIMARY KEY,
@@ -69,6 +72,7 @@ ALTER TABLE public.agencies ENABLE ROW LEVEL SECURITY;
 ```
 
 ### `public.clients` (abridged — large table, business entity)
+
 Key auth-related columns: `id uuid pk`, `agency_id uuid`, `subscription_status text`.  
 Full DDL not replicated in the mobile migration since clients are a business concern beyond Phase 1 auth.
 
@@ -94,6 +98,7 @@ CREATE POLICY "Agencies can manage all roles"  ON public.user_roles FOR ALL TO a
 ## 4. Triggers
 
 ### `on_auth_user_created` (on `auth.users` INSERT)
+
 Creates a `profiles` row and assigns `user_roles.role = 'agency'` for every new signup.
 
 ```sql
@@ -113,6 +118,7 @@ $$;
 ```
 
 ### `update_updated_at_column` (generic, applied to all mutable tables)
+
 ```sql
 CREATE OR REPLACE FUNCTION public.update_updated_at_column()
 RETURNS TRIGGER LANGUAGE plpgsql SECURITY DEFINER SET search_path = public
@@ -125,53 +131,64 @@ $$;
 
 ## 5. RPC Functions
 
-| Function | Returns | Purpose |
-|---|---|---|
+| Function                        | Returns            | Purpose                                                                                                    |
+| ------------------------------- | ------------------ | ---------------------------------------------------------------------------------------------------------- |
 | `ensure_user_dashboard_setup()` | `uuid` (agency_id) | Idempotent: creates profile + role + default client if missing. Called after sign-in as a repair function. |
-| `has_role(uuid, app_role)` | `boolean` | Used in RLS policies |
-| `get_user_role(uuid)` | `text` | Returns role string for a given user |
+| `has_role(uuid, app_role)`      | `boolean`          | Used in RLS policies                                                                                       |
+| `get_user_role(uuid)`           | `text`             | Returns role string for a given user                                                                       |
 
 ---
 
 ## 6. Auth Flow Inventory
 
 ### Sign-up
+
 File: `src/pages/Register.tsx`
+
 1. Collect: firstName, lastName, email, password, confirmPassword
 2. `supabase.auth.signUp({ email, password, options: { emailRedirectTo: origin + '/', data: { full_name } } })`
 3. Trigger fires → creates profile + role
 4. Redirect to `/verify` page (OTP entry)
 
 ### Sign-in (email/password)
+
 File: `src/pages/Auth.tsx` + `src/providers/AuthProvider.tsx`
+
 1. `supabase.auth.signInWithPassword({ email, password })`
 2. `onAuthStateChange` fires `SIGNED_IN` → fetch role + profile
 3. Call `ensure_user_dashboard_setup()` to ensure profile exists
 4. Redirect based on role (client → `/client/:id/...`, agency → `/`)
 
 ### Google OAuth
+
 **NOT IMPLEMENTED** in the web app. Only stub references exist. Mobile app builds it fresh.
 
 ### Sign-out
+
 ```typescript
-localStorage.removeItem('sb-<projectRef>-auth-token');  // browser-specific, NOT portable
+localStorage.removeItem('sb-<projectRef>-auth-token'); // browser-specific, NOT portable
 await supabase.auth.signOut({ scope: 'global' });
 ```
+
 Mobile: omit localStorage call — SecureStore cleanup is handled by the Supabase client.
 
 ### Password reset
+
 1. ForgotPassword: calls `check-reset-eligibility` Edge Function (rate-limiting), then `supabase.auth.resetPasswordForEmail(email, { redirectTo: origin + '/reset-password' })`
 2. ResetPassword: listens for `PASSWORD_RECOVERY` auth event, then `supabase.auth.updateUser({ password })`
 3. Link valid for 1 hour
 4. After reset: sign out globally, redirect to `/auth` after 3s
 
 ### Email confirmation
+
 OTP-based (6-digit code). `supabase.auth.verifyOtp({ email, token, type: 'signup' })`. Resend: `supabase.auth.resend({ type: 'signup', email })`.
 
 ### Session refresh
+
 Automatic via `autoRefreshToken: true`. `TOKEN_REFRESHED` event triggers role re-fetch in `AuthProvider`.
 
 ### Profile creation/update
+
 Auto-created by trigger. Update: `supabase.from('profiles').update({...}).eq('id', userId)`.
 
 ---
@@ -179,30 +196,32 @@ Auto-created by trigger. Update: `supabase.from('profiles').update({...}).eq('id
 ## 7. Portable vs. Non-Portable Code
 
 ### Portable (usable in RN with minor changes)
+
 - Auth logic in `AuthProvider.tsx` (remove `window.*` refs)
 - `useAuth` hook
 - Supabase types in `src/integrations/supabase/types.ts`
 - All RPC/database-facing calls
 
 ### NOT portable (browser/Next.js-specific)
-| Pattern | Location | Mobile alternative |
-|---|---|---|
-| `localStorage` for token | `signOut`, `client.ts` | SecureStore (via Supabase client config) |
-| `window.location.origin` | `signUp`, `ForgotPassword` | Hardcoded deep-link scheme |
-| `window.location.hash` | `ResetPassword` | `expo-linking` / URL params |
-| `sessionStorage` | `App.tsx` chunk reload | N/A |
-| `react-router-dom` | All pages | `expo-router` |
-| `useToast()` / shadcn | UI feedback | Inline text errors |
-| HTML5 form validation | All pages | Zod + inline errors |
-| Next.js server actions / middleware | None (this is Vite) | N/A |
+
+| Pattern                             | Location                   | Mobile alternative                       |
+| ----------------------------------- | -------------------------- | ---------------------------------------- |
+| `localStorage` for token            | `signOut`, `client.ts`     | SecureStore (via Supabase client config) |
+| `window.location.origin`            | `signUp`, `ForgotPassword` | Hardcoded deep-link scheme               |
+| `window.location.hash`              | `ResetPassword`            | `expo-linking` / URL params              |
+| `sessionStorage`                    | `App.tsx` chunk reload     | N/A                                      |
+| `react-router-dom`                  | All pages                  | `expo-router`                            |
+| `useToast()` / shadcn               | UI feedback                | Inline text errors                       |
+| HTML5 form validation               | All pages                  | Zod + inline errors                      |
+| Next.js server actions / middleware | None (this is Vite)        | N/A                                      |
 
 ---
 
 ## 8. Environment Variables
 
-| Var | Scope | Description |
-|---|---|---|
-| `VITE_SUPABASE_URL` | Public | Supabase project URL |
+| Var                      | Scope  | Description              |
+| ------------------------ | ------ | ------------------------ |
+| `VITE_SUPABASE_URL`      | Public | Supabase project URL     |
 | `VITE_SUPABASE_ANON_KEY` | Public | Supabase anon/public key |
 
 No server-only vars. All auth is client-side.

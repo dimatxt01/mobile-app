@@ -3,10 +3,7 @@
     "expo": {
       "type": "stdio",
       "command": "npx",
-      "args": [
-        "-y",
-        "expo-mcp"
-      ],
+      "args": ["-y", "expo-mcp"],
       "env": {}
     }
   }

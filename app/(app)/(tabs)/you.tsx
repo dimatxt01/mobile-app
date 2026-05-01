@@ -15,28 +15,31 @@ import { supabase } from '@/lib/supabase';
 import { colors, fonts, spacing } from '@/lib/hmc-colors';
 import { Eyebrow } from '@/components/hmc/Eyebrow';
 import { Rule } from '@/components/hmc/Rule';
+import { useScoreDensity } from '@/lib/score-density';
+
+function fmtDate(d: string): string {
+  const date = new Date(d);
+  return date.toLocaleDateString('en-US', { month: 'short', day: 'numeric' }).toUpperCase();
+}
 
 export default function YouScreen() {
   const insets = useSafeAreaInsets();
   const { user } = useAuth();
   const { profile } = useProfileStore();
+  const [scoreDensity, setScoreDensity] = useScoreDensity();
 
   const { data: stats } = useQuery({
     queryKey: ['stats', user?.id],
     queryFn: async () => {
       const { data, error } = await supabase.rpc('get_user_stats');
-      if (error) return null;
-      return (
-        (
-          data as Array<{
-            streak: number;
-            day_count: number;
-            lifetime_avg: number;
-            best_score: number | null;
-            best_date: string | null;
-          }>
-        )?.[0] ?? null
-      );
+      if (error) throw error;
+      return (data as {
+        streak: number;
+        day_count: number;
+        lifetime_avg: number;
+        best_score: number | null;
+        best_date: string | null;
+      }[])?.[0] ?? null;
     },
     enabled: !!user,
   });
@@ -66,8 +69,9 @@ export default function YouScreen() {
           <Text style={styles.statValue}>{stats?.streak ?? 0}</Text>
         </View>
         <View style={styles.statItem}>
-          <Eyebrow label="DAYS" />
-          <Text style={styles.statValue}>{stats?.day_count ?? 0}</Text>
+          <Eyebrow label="BEST" />
+          <Text style={styles.statValue}>{stats?.best_score ?? 0}</Text>
+          {stats?.best_date && <Text style={styles.statDate}>{fmtDate(stats.best_date)}</Text>}
         </View>
         <View style={styles.statItem}>
           <Eyebrow label="AVG" />
@@ -79,7 +83,36 @@ export default function YouScreen() {
 
       <View style={styles.section}>
         <Eyebrow label="YOUR IDENTITY" />
-        {navRow('Edit Identity Sentence', () => router.push('/(app)/modal/edit-identity-sentence'))}
+        {profile?.identity_sentence && (
+          <Text style={styles.identitySentenceSection}>{profile.identity_sentence}</Text>
+        )}
+        <TouchableOpacity
+          onPress={() => router.push('/(app)/modal/edit-identity-sentence')}
+          activeOpacity={0.7}
+          style={styles.editIdentityBtn}
+        >
+          <Text style={styles.editIdentityText}>EDIT IDENTITY →</Text>
+        </TouchableOpacity>
+      </View>
+
+      <Rule />
+
+      <View style={styles.section}>
+        <Eyebrow label="DISPLAY" />
+        <View style={styles.pillRow}>
+          {(['number', 'ring', 'breakdown'] as const).map((v) => (
+            <TouchableOpacity
+              key={v}
+              style={[styles.pill, scoreDensity === v && styles.pillActive]}
+              onPress={() => setScoreDensity(v)}
+              activeOpacity={0.7}
+            >
+              <Text style={[styles.pillText, scoreDensity === v && styles.pillTextActive]}>
+                {v.toUpperCase()}
+              </Text>
+            </TouchableOpacity>
+          ))}
+        </View>
       </View>
 
       <Rule />
@@ -112,6 +145,8 @@ export default function YouScreen() {
         {navRow('Privacy & Data', () => router.push('/(app)/modal/privacy-data'))}
         {navRow('Sign Out', () => router.push('/(app)/modal/signout-confirm'))}
       </View>
+
+      <Text style={styles.footer}>HMC · HALF MILLY CLUB · v1.0</Text>
     </ScrollView>
   );
 }
@@ -144,4 +179,60 @@ const styles = StyleSheet.create({
   },
   navText: { fontFamily: fonts.display, fontSize: 15, color: colors.textPrimary },
   navArrow: { fontFamily: fonts.display, fontSize: 20, color: colors.textTertiary },
+  statDate: {
+    fontFamily: fonts.mono,
+    fontSize: 10,
+    letterSpacing: 1,
+    color: colors.textTertiary,
+    marginTop: 2,
+  },
+  identitySentenceSection: {
+    fontFamily: fonts.display,
+    fontSize: 14,
+    color: colors.textSecondary,
+    fontStyle: 'italic',
+    marginTop: 8,
+    marginBottom: 4,
+  },
+  editIdentityBtn: {
+    paddingVertical: 8,
+  },
+  editIdentityText: {
+    fontFamily: fonts.mono,
+    fontSize: 11,
+    letterSpacing: 1.5,
+    color: colors.amber,
+  },
+  pillRow: {
+    flexDirection: 'row',
+    gap: 8,
+    paddingVertical: 12,
+  },
+  pill: {
+    flex: 1,
+    paddingVertical: 8,
+    borderRadius: 6,
+    borderWidth: 1,
+    borderColor: colors.lineRegular,
+    alignItems: 'center',
+  },
+  pillActive: {
+    backgroundColor: colors.accentMuted,
+    borderColor: colors.accentDim,
+  },
+  pillText: {
+    fontFamily: fonts.mono,
+    fontSize: 10,
+    letterSpacing: 1.5,
+    color: colors.textTertiary,
+  },
+  pillTextActive: { color: colors.amber },
+  footer: {
+    fontFamily: fonts.mono,
+    fontSize: 10,
+    letterSpacing: 2,
+    color: colors.textQuiet,
+    textAlign: 'center',
+    paddingVertical: 24,
+  },
 });

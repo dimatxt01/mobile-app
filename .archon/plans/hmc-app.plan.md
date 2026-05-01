@@ -33,6 +33,7 @@ Deliver a dark-only, print/receipt-aesthetic self-scoring app where users rate t
 - Camera + Supabase Storage upload (expo-camera + expo-image-picker)
 
 ### Out of Scope
+
 - RevenueCat / react-native-purchases (paywall is a "coming soon" stub)
 - react-native-svg (View-based charts only — not bundled in Expo Go SDK 54)
 - Whoop OAuth integration (stub only)
@@ -44,6 +45,7 @@ Deliver a dark-only, print/receipt-aesthetic self-scoring app where users rate t
 ## Codebase Context
 
 ### Source of Truth
+
 **IMPORTANT**: The worktree starts from the `init` git commit which contains only the minimal scaffold. The full existing codebase lives in the main project working directory at `/Users/dzmitrypiskun/Documents/mobile-app/test-app`. The implementation agent must READ files from that path to understand patterns and port existing files to the worktree (which is at `/Users/dzmitrypiskun/.archon/workspaces/mobile-app/test-app/worktrees/archon/thread-be271229`).
 
 ### Key Files (main project path → worktree action)
@@ -75,6 +77,7 @@ Deliver a dark-only, print/receipt-aesthetic self-scoring app where users rate t
 ### Patterns to Follow
 
 **Zustand store pattern** (from `src/features/auth/store/auth-store.ts`):
+
 ```ts
 import { create } from 'zustand';
 type State = { field: Type; setField: (v: Type) => void };
@@ -85,6 +88,7 @@ export const useXStore = create<State>((set) => ({
 ```
 
 **API function pattern** (from `src/features/auth/api/sign-in.ts`):
+
 ```ts
 type Result = { data: X; error: null } | { data: null; error: Error };
 export async function doThing(...): Promise<Result> {
@@ -95,11 +99,13 @@ export async function doThing(...): Promise<Result> {
 ```
 
 **Supabase RPC call pattern**:
+
 ```ts
 const { data, error } = await supabase.rpc('function_name', { p_arg: value });
 ```
 
 **StyleSheet component pattern** (for HMC components):
+
 ```ts
 import { StyleSheet, View, Text } from 'react-native';
 import { colors, fonts } from '@/lib/hmc-colors';
@@ -113,6 +119,7 @@ const styles = StyleSheet.create({
 ```
 
 **TanStack Query hook pattern**:
+
 ```ts
 import { useQuery } from '@tanstack/react-query';
 export function useXxx() {
@@ -121,6 +128,7 @@ export function useXxx() {
 ```
 
 **TanStack mutation pattern**:
+
 ```ts
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 export function useXxxMutation() {
@@ -201,6 +209,7 @@ Files to port as-is (read source path, write to same relative path in worktree):
 - `supabase/migrations/0007_hmc_functions.sql`
 
 Also port the existing app route files that will be updated (not as-is):
+
 - `app/_layout.tsx` — will be updated in Phase 1
 - `app/index.tsx` — will be updated in Phase 3
 - `app/(app)/_layout.tsx` — will be updated in Phase 3
@@ -209,6 +218,7 @@ Also port the existing app route files that will be updated (not as-is):
 - `src/types/database.ts` — will be extended in Phase 2
 
 Also port the test files:
+
 - `__tests__/auth-schemas.test.ts`
 - `__tests__/auth-store.test.ts`
 - `__tests__/smoke.test.ts`
@@ -222,6 +232,7 @@ Also port the test files:
 **Goal**: App runs in Expo Go with 5 placeholder tabs, correct fonts, correct colors, all primitives renderable.
 
 #### Task 1.1: Install font packages
+
 **Action**: In worktree, run: `npx expo install expo-font @expo-google-fonts/inter @expo-google-fonts/jetbrains-mono`
 **Validate**: `package.json` contains `@expo-google-fonts/inter` and `@expo-google-fonts/jetbrains-mono`.
 
@@ -978,17 +989,20 @@ export default function ModalLayout() {
 **Goal**: All data hooks wired up and TypeScript-correct.
 
 #### Task 2.1: UPDATE `src/types/database.ts` — full HMC schema
+
 **Action**: Replace the placeholder with the complete HMC type definitions, modeled on migrations 0001–0006.
 
 The file must export `Database` with `public.Tables` containing: `profiles` (all columns including HMC extensions), `habits`, `outcome_metrics`, `penalty_items`, `daily_checkins`, `mirror_photos`, `weekly_reviews`, `monthly_reviews`.
 
 `public.Functions` must contain:
+
 - `seed_default_habits`: Args `{ p_user_id: string }`, Returns `undefined`
 - `lock_checkin`: Args `{ p_checkin_id: string; p_identity_score: number; p_execution_score: number; p_outcome_score: number; p_penalty_score: number }`, Returns `number`
 - `get_user_stats`: Args `Record<string, never>`, Returns `Array<{ streak: number; day_count: number; lifetime_avg: number; best_score: number | null; best_date: string | null }>`
 - `get_history`: Args `{ p_days?: number }`, Returns `Array<{ id: string; date: string; total_score: number; identity_score: number; execution_score: number; outcome_score: number; penalty_score: number; whoop_score_adj: number; reflection_win: string | null; reflection_broke: string | null; is_late_checkin: boolean }>`
 
 Add convenience type aliases at the bottom:
+
 ```ts
 export type Profile = Database['public']['Tables']['profiles']['Row'];
 export type Habit = Database['public']['Tables']['habits']['Row'];
@@ -1073,6 +1087,7 @@ export function useConfig() {
 ```
 
 #### Task 2.4: CREATE `src/features/checkin/use-checkin.ts`
+
 ```ts
 import { useQuery } from '@tanstack/react-query';
 import { supabase } from '@/lib/supabase';
@@ -1153,6 +1168,7 @@ export function useSaveCheckin() {
 ```
 
 #### Task 2.6: CREATE `src/features/checkin/lock-checkin.ts`
+
 ```ts
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { supabase } from '@/lib/supabase';
@@ -1191,6 +1207,7 @@ export function useLockCheckin() {
 ```
 
 #### Task 2.7: CREATE `src/features/history/use-history.ts`
+
 ```ts
 import { useQuery } from '@tanstack/react-query';
 import { supabase } from '@/lib/supabase';
@@ -1273,6 +1290,7 @@ const styles = StyleSheet.create({
 ```
 
 #### Task 3.2: UPDATE `app/(app)/_layout.tsx` — add onboarding guard
+
 ```ts
 import { Redirect, Stack } from 'expo-router';
 import { ActivityIndicator, View, StyleSheet } from 'react-native';
@@ -1303,6 +1321,7 @@ const styles = StyleSheet.create({
 ```
 
 #### Task 3.3: CREATE `app/(onboarding)/_layout.tsx`
+
 ```ts
 import { Stack } from 'expo-router';
 import { colors } from '@/lib/hmc-colors';
@@ -1333,6 +1352,7 @@ const [isSaving, setIsSaving] = useState(false);
 ```
 
 **Default arrays** (match DB seeds from 0007 function):
+
 ```ts
 const DEFAULT_IDENTITY_HABITS = [
   { label: 'Wake On Time', points: 5 },
@@ -1359,6 +1379,7 @@ const DEFAULT_PENALTIES = ['Alcohol', 'Nicotine', 'Wasted Time'];
 ```
 
 **renderStep switch**:
+
 - Step 1: Welcome — large "HMC." text (72px mono), tagline "Score your day.\nBuild your legend." (Inter 22px textSecondary). POCta "BEGIN"
 - Step 2: Name — Eyebrow "YOUR NAME", TextInput (dark bg, Inter, white text). POCta "NEXT"
 - Step 3: Vision — Eyebrow "YOUR VISION", multiline TextInput. POCta "NEXT"
@@ -1428,6 +1449,7 @@ useEffect(() => {
 ```
 
 **Live score** (computed on every render):
+
 ```ts
 const config = useConfig(); // { identityHabits, executionHabits, outcomes, penalties }
 const score = config.data
@@ -1465,6 +1487,7 @@ useEffect(() => {
 ```
 
 **Late checkin detection**:
+
 ```ts
 const isLate = useMemo(() => {
   if (!profile?.reminder_time) return false;
@@ -1477,6 +1500,7 @@ const isLate = useMemo(() => {
 ```
 
 **Lock flow**:
+
 ```ts
 const handleLock = async () => {
   if (!checkin || !score) return;
@@ -1493,6 +1517,7 @@ const handleLock = async () => {
 ```
 
 **Post-lock check** (in `useLockCheckin` `onSuccess` or in a `useEffect` watching `checkin.is_locked`):
+
 ```ts
 useEffect(() => {
   if (!checkin?.is_locked) return;
@@ -1505,6 +1530,7 @@ useEffect(() => {
 ```
 
 **Returning-user check**:
+
 ```ts
 useEffect(() => {
   if (!history || !history.length || checkin?.is_locked) return;
@@ -1516,6 +1542,7 @@ useEffect(() => {
 ```
 
 **JSX structure** (ScrollView + fixed BottomBar):
+
 ```tsx
 <View style={{ flex: 1, backgroundColor: colors.base }}>
   {isLate && (
@@ -1617,6 +1644,7 @@ useEffect(() => {
 ```
 
 #### Task 4.2: CREATE `app/(app)/modal/score-breakdown.tsx`
+
 **Action**: Receives `identity`, `execution`, `outcome`, `penalty`, `total` as `useLocalSearchParams`. Shows 4 rows + total row.
 
 **Phase 4 Validation**: Full scoring flow works. Score updates live. Lock CTA fires RPC. Locked state shows read-only. `npx tsc --noEmit` passes.
@@ -1652,6 +1680,7 @@ const maxScore = Math.max(...thisWeek.map((r) => r.total_score), 1);
 **Day-by-day list**: `thisWeek.map()` rows with date + score. `onPress` → `router.push({ pathname: '/(app)/modal/week-day/[date]', params: { date: row.date } })`.
 
 #### Task 5.2: REPLACE `app/(app)/(tabs)/trends.tsx`
+
 **Action**: Range picker state toggles between 30 / 90 / 365. Uses `useHistory(days)`.
 
 **Sparkline**: Row of thin Views, each `height: (score/maxScore) * 40`, amber if score >= avg else lineStrong. Wrap in `ScrollView horizontal` if many days.
@@ -1668,6 +1697,7 @@ const maxScore = Math.max(...thisWeek.map((r) => r.total_score), 1);
 const { date } = useLocalSearchParams<{ date: string }>();
 // fetch: supabase.from('daily_checkins').select('*').eq('user_id', user!.id).eq('date', date).maybeSingle()
 ```
+
 Display: PrintBar-like header with "HMC. / {date}", 4 bracket score rows using BracketBlock (read-only), reflection fields (if non-null). Bottom "CLOSE" button.
 
 **Phase 5 Validation**: Week/Trends tabs render. Day modal opens. `npx tsc --noEmit` passes.
@@ -1781,6 +1811,7 @@ Use `Image` from `react-native` for thumbnails. Width = `(SCREEN_WIDTH - 40 - 8)
 const { date } = useLocalSearchParams<{ date: string }>();
 // fetch photo + checkin for that date
 ```
+
 Show `Image` fullscreen, overlay at bottom with date, score (JetBrains Mono). Close button top-right.
 
 **Phase 6 Validation**: Camera opens, photo captured, appears in grid. `npx tsc --noEmit` passes.
@@ -1806,6 +1837,7 @@ const { data: stats } = useQuery({
 ```
 
 Layout (wrapped in `ScrollView`, `backgroundColor: colors.base`):
+
 1. Header section: name (Inter Bold 22px), identity sentence (textSecondary)
 2. Stats row: STREAK, DAYS, AVG — each in a `View` with `flex: 1`, Eyebrow above, value below (JetBrains Mono 28px)
 3. Rule
@@ -1874,6 +1906,7 @@ export async function scheduleReminder(time: string): Promise<void> {
 ```
 
 #### Task 8.3: Wire scheduleReminder into onboarding + notification-settings
+
 - In `app/(onboarding)/index.tsx` step 13 completion: `await scheduleReminder(reminderTime)` after profile update.
 - In `app/(app)/modal/notification-settings.tsx` save handler: call `scheduleReminder(newTime)`.
 
@@ -1950,6 +1983,7 @@ const styles = StyleSheet.create({
 ## Testing
 
 #### CREATE `__tests__/score.test.ts`
+
 ```ts
 import { computeScore } from '../src/lib/score';
 
