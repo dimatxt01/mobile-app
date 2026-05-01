@@ -36,14 +36,8 @@ export default function ForgotPasswordScreen() {
           <Text className="mb-4 text-4xl">✉️</Text>
           <Text className="mb-2 text-2xl font-bold text-gray-900">Check your email</Text>
           <Text className="mb-8 text-center text-gray-500">
-<<<<<<< HEAD
-            If an account exists for{' '}
-            <Text className="font-medium text-gray-900">{email}</Text>, you{"'"}ll receive a reset
-            link shortly.
-=======
             If an account exists for <Text className="font-medium text-gray-900">{email}</Text>, you
             {"'"}ll receive a reset link shortly.
->>>>>>> 35ae86c4ddb1472145ca485587f2c87162186555
           </Text>
           <Link href="/(auth)/sign-in">
             <Text className="font-semibold text-blue-600">Back to sign in</Text>

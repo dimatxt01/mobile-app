@@ -14,11 +14,8 @@
     "doctor": "npx expo-doctor"
   },
   "dependencies": {
-<<<<<<< HEAD
-=======
     "@expo-google-fonts/inter": "^0.4.2",
     "@expo-google-fonts/jetbrains-mono": "^0.4.1",
->>>>>>> 35ae86c4ddb1472145ca485587f2c87162186555
     "@sentry/react-native": "~7.2.0",
     "@supabase/supabase-js": "^2.104.1",
     "@tanstack/react-query": "^5.100.5",
@@ -62,10 +59,7 @@
     "jest": "^29.7.0",
     "jest-expo": "^54.0.17",
     "prettier": "^3.8.3",
-<<<<<<< HEAD
-=======
     "react-test-renderer": "^19.1.0",
->>>>>>> 35ae86c4ddb1472145ca485587f2c87162186555
     "tailwindcss": "^3.4.17",
     "typescript": "~5.9.2"
   },

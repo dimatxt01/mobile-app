@@ -1,16 +1,4 @@
 import { Redirect } from 'expo-router';
-<<<<<<< HEAD
-import { ActivityIndicator, View } from 'react-native';
-import { useAuth } from '@/features/auth/hooks/use-auth';
-
-export default function Index() {
-  const { session, isInitialized } = useAuth();
-
-  if (!isInitialized) {
-    return (
-      <View className="flex-1 items-center justify-center bg-white">
-        <ActivityIndicator size="large" color="#2563EB" />
-=======
 import { ActivityIndicator, View, StyleSheet } from 'react-native';
 import { useEffect } from 'react';
 import { useAuth } from '@/features/auth/hooks/use-auth';
@@ -48,19 +36,10 @@ export default function Index() {
     return (
       <View style={styles.center}>
         <ActivityIndicator color={colors.amber} />
->>>>>>> 35ae86c4ddb1472145ca485587f2c87162186555
       </View>
     );
   }
 
-<<<<<<< HEAD
-  if (session) {
-    return <Redirect href="/(app)/(tabs)" />;
-  }
-
-  return <Redirect href="/(auth)/sign-in" />;
-}
-=======
   if (!session) return <Redirect href="/(auth)/sign-in" />;
   if (!profile?.onboarding_completed) return <Redirect href="/(onboarding)" />;
   return <Redirect href="/(app)/(tabs)" />;
@@ -74,4 +53,3 @@ const styles = StyleSheet.create({
     backgroundColor: colors.base,
   },
 });
->>>>>>> 35ae86c4ddb1472145ca485587f2c87162186555

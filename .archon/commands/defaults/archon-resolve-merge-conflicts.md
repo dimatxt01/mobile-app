@@ -334,11 +334,7 @@ Resolved {N} conflicts in {M} files.
 **Before (conflict)**:
 
 ```{language}
-<<<<<<< HEAD
-{head version}
-=======
 {base version}
->>>>>>> {base}
 ```
 ````
 

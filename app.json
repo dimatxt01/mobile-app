@@ -29,14 +29,7 @@
     "web": {
       "favicon": "./assets/favicon.png"
     },
-<<<<<<< HEAD
-    "plugins": [
-      "expo-router",
-      "expo-secure-store"
-    ],
-=======
     "plugins": ["expo-router", "expo-secure-store"],
->>>>>>> 35ae86c4ddb1472145ca485587f2c87162186555
     "experiments": {
       "typedRoutes": true
     }

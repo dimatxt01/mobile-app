@@ -1,19 +1,4 @@
 import { Redirect, Stack } from 'expo-router';
-<<<<<<< HEAD
-import { useAuth } from '@/features/auth/hooks/use-auth';
-
-export default function AppLayout() {
-  const { session, isInitialized } = useAuth();
-
-  if (!isInitialized) return null;
-
-  if (!session) {
-    return <Redirect href="/(auth)/sign-in" />;
-  }
-
-  return <Stack screenOptions={{ headerShown: false }} />;
-}
-=======
 import { ActivityIndicator, View, StyleSheet } from 'react-native';
 import { useAuth } from '@/features/auth/hooks/use-auth';
 import { useProfileStore } from '@/store/profile-store';
@@ -39,4 +24,3 @@ export default function AppLayout() {
 const styles = StyleSheet.create({
   center: { flex: 1, backgroundColor: colors.base, alignItems: 'center', justifyContent: 'center' },
 });
->>>>>>> 35ae86c4ddb1472145ca485587f2c87162186555
