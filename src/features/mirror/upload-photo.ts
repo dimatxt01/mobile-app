@@ -10,9 +10,9 @@ export async function uploadMirrorPhoto(
   checkinId?: string,
 ): Promise<{ data: MirrorPhoto | null; error: Error | null }> {
   const storagePath = `${userId}/${date}.jpg`;
-  // encoding: 'base64' is required because Supabase Storage upload needs a binary buffer, not a data URI
   let base64: string;
   try {
+    // Base64 encoding is required because the Supabase Storage JS client upload() method needs a binary buffer, not a data URI string
     base64 = await readAsStringAsync(localUri, { encoding: 'base64' });
   } catch {
     return { data: null, error: new Error('Failed to read image file') };

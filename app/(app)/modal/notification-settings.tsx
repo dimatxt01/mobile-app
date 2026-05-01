@@ -26,7 +26,7 @@ export default function NotificationSettingsScreen() {
     try {
       await scheduleReminder(newTime);
     } catch (err) {
-      Alert.alert('Error', err instanceof Error ? err.message : 'Failed to schedule reminder');
+      Alert.alert('Could not schedule reminder', err instanceof Error ? err.message : String(err));
     }
     setProfile(profile ? { ...profile, reminder_time: newTime } : null);
     setSaving(false);

@@ -70,6 +70,24 @@ describe('computeScore', () => {
     expect(r.total).toBe(10);
   });
 
+  it('returns identity 0 when all habits have enabled:false', () => {
+    const allDisabled = [
+      { id: 'a', points: 10, enabled: false },
+      { id: 'b', points: 5, enabled: false },
+    ];
+    const r = computeScore(allDisabled, [], [], [], {
+      identityChecks: { a: true, b: true },
+      executionChecks: {},
+      perf9to5: 0,
+      outcomeScores: {},
+      penaltyScores: {},
+      whoopScoreAdj: 0,
+      isLate: false,
+    });
+    expect(r.identity).toBe(0);
+    expect(r.total).toBe(0);
+  });
+
   it('adds whoopScoreAdj to total', () => {
     const r = computeScore([], [], outcomes, penalties, {
       identityChecks: {},

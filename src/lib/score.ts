@@ -1,4 +1,4 @@
-// penalty applied when check-in submitted after next-day midnight
+// deducted when check-in is submitted after the following calendar day begins
 const LATE_CHECKIN_PENALTY = 10;
 
 type Habit = { id: string; points: number; enabled: boolean };
