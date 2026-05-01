@@ -46,7 +46,7 @@ export default function MirrorCaptureScreen() {
     const { error } = await uploadMirrorPhoto(user.id, capturedUri, date, dayNumber);
     setIsUploading(false);
     if (error) {
-      Alert.alert('Upload Failed', 'Could not save photo. Please try again.');
+      Alert.alert('Upload Failed', error.message || 'Could not save photo. Please try again.');
       return;
     }
     qc.invalidateQueries({ queryKey: ['mirror'] });

@@ -1,4 +1,3 @@
-import { readAsStringAsync } from 'expo-file-system';
 import { supabase } from '@/lib/supabase';
 import type { MirrorPhoto } from '@/types/database';
 
@@ -10,23 +9,19 @@ export async function uploadMirrorPhoto(
   checkinId?: string,
 ): Promise<{ data: MirrorPhoto | null; error: Error | null }> {
   const storagePath = `${userId}/${date}.jpg`;
-  let base64: string;
-  try {
-    // Base64 encoding is required because the Supabase Storage JS client upload() method needs a binary buffer, not a data URI string
-    base64 = await readAsStringAsync(localUri, { encoding: 'base64' });
-  } catch {
-    return { data: null, error: new Error('Failed to read image file') };
-  }
 
-  const binaryStr = globalThis.atob(base64);
-  const bytes = new Uint8Array(binaryStr.length);
-  for (let i = 0; i < binaryStr.length; i++) {
-    bytes[i] = binaryStr.charCodeAt(i);
+  let blob: Blob;
+  try {
+    // fetch() in React Native/Expo handles file:// URIs and returns a proper Blob
+    const response = await fetch(localUri);
+    blob = await response.blob();
+  } catch (e) {
+    return { data: null, error: new Error('Failed to read image file') };
   }
 
   const { error: uploadError } = await supabase.storage
     .from('mirror-photos')
-    .upload(storagePath, bytes, { contentType: 'image/jpeg', upsert: true });
+    .upload(storagePath, blob, { contentType: 'image/jpeg', upsert: true });
   if (uploadError) return { data: null, error: uploadError };
 
   const {
