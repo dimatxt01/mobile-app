@@ -51,7 +51,7 @@ nodes:
 
   - id: foundation-gate
     approval:
-      message: "Answer the foundation questions above. Your answers will guide the research phase."
+      message: 'Answer the foundation questions above. Your answers will guide the research phase.'
       capture_response: true
     depends_on: [initiate]
 
@@ -106,7 +106,7 @@ nodes:
 
   - id: deepdive-gate
     approval:
-      message: "Answer the deep dive questions above (vision, primary user, JTBD, constraints). Add any adjustments from the research."
+      message: 'Answer the deep dive questions above (vision, primary user, JTBD, constraints). Add any adjustments from the research.'
       capture_response: true
     depends_on: [research]
 
@@ -173,7 +173,7 @@ nodes:
 
   - id: scope-gate
     approval:
-      message: "Answer the scope questions above (MVP, must-haves, hypothesis, exclusions). This is the final input before PRD generation."
+      message: 'Answer the scope questions above (MVP, must-haves, hypothesis, exclusions). This is the final input before PRD generation.'
       capture_response: true
     depends_on: [technical]
 

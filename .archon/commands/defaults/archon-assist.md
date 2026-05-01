@@ -22,6 +22,7 @@ You are helping with a request that didn't match a specific workflow.
 ## Capabilities
 
 You have full Claude Code capabilities:
+
 - Read and write files
 - Run commands
 - Search the codebase

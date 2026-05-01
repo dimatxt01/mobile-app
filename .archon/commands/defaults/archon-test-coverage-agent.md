@@ -49,6 +49,7 @@ find src -name "*.test.ts" -o -name "*.spec.ts" | head -20
 ```
 
 **PHASE_1_CHECKPOINT:**
+
 - [ ] PR number identified
 - [ ] Source and test files identified
 - [ ] Existing test patterns noted
@@ -60,6 +61,7 @@ find src -name "*.test.ts" -o -name "*.spec.ts" | head -20
 ### 2.1 Map Source to Tests
 
 For each changed source file:
+
 - Does a corresponding test file exist?
 - Are new functions/features tested?
 - Are modified functions' tests updated?
@@ -67,6 +69,7 @@ For each changed source file:
 ### 2.2 Identify Critical Gaps
 
 Look for untested:
+
 - Error handling paths
 - Edge cases (null, empty, boundary values)
 - Critical business logic
@@ -77,6 +80,7 @@ Look for untested:
 ### 2.3 Evaluate Test Quality
 
 For existing tests, check:
+
 - Do they test behavior or implementation?
 - Would they catch meaningful regressions?
 - Are they resilient to refactoring?
@@ -91,6 +95,7 @@ grep -r "describe\|it\|test\(" src/ --include="*.test.ts" | head -20
 ```
 
 **PHASE_2_CHECKPOINT:**
+
 - [ ] Source-to-test mapping complete
 - [ ] Critical gaps identified
 - [ ] Test quality evaluated
@@ -102,7 +107,7 @@ grep -r "describe\|it\|test\(" src/ --include="*.test.ts" | head -20
 
 Write to `$ARTIFACTS_DIR/review/test-coverage-findings.md`:
 
-```markdown
+````markdown
 # Test Coverage Findings: PR #{number}
 
 **Reviewer**: test-coverage-agent
@@ -122,11 +127,11 @@ Write to `$ARTIFACTS_DIR/review/test-coverage-findings.md`:
 
 ## Coverage Map
 
-| Source File | Test File | New Code Tested | Modified Code Tested |
-|-------------|-----------|-----------------|---------------------|
-| `src/x.ts` | `src/x.test.ts` | FULL/PARTIAL/NONE | FULL/PARTIAL/NONE |
-| `src/y.ts` | (missing) | N/A | N/A |
-| ... | ... | ... | ... |
+| Source File | Test File       | New Code Tested   | Modified Code Tested |
+| ----------- | --------------- | ----------------- | -------------------- |
+| `src/x.ts`  | `src/x.test.ts` | FULL/PARTIAL/NONE | FULL/PARTIAL/NONE    |
+| `src/y.ts`  | (missing)       | N/A               | N/A                  |
+| ...         | ...             | ...               | ...                  |
 
 ---
 
@@ -143,13 +148,16 @@ Write to `$ARTIFACTS_DIR/review/test-coverage-findings.md`:
 {Clear description of the coverage gap}
 
 **Untested Code**:
+
 ```typescript
 // This code at {file}:{line} is not tested
 {untested code}
 ```
+````
 
 **Why This Matters**:
 {Specific bugs or regressions this could miss:
+
 - "If {scenario}, users would see {bad outcome}"
 - "A future change to {X} could break {Y} without detection"}
 
@@ -157,32 +165,40 @@ Write to `$ARTIFACTS_DIR/review/test-coverage-findings.md`:
 
 #### Test Suggestions
 
-| Option | Approach | Catches | Effort |
-|--------|----------|---------|--------|
-| A | {test approach} | {what it catches} | LOW/MED/HIGH |
-| B | {alternative} | {what it catches} | LOW/MED/HIGH |
+| Option | Approach        | Catches           | Effort       |
+| ------ | --------------- | ----------------- | ------------ |
+| A      | {test approach} | {what it catches} | LOW/MED/HIGH |
+| B      | {alternative}   | {what it catches} | LOW/MED/HIGH |
 
 **Recommended**: Option {X}
 
 **Reasoning**:
 {Why this test approach:
+
 - Matches codebase test patterns
 - Tests behavior not implementation
 - Good cost/benefit ratio
 - Catches the most critical failures}
 
 **Recommended Test**:
+
 ```typescript
 describe('{feature}', () => {
   it('should {expected behavior}', () => {
     // Arrange
-    {setup}
+    {
+      setup;
+    }
 
     // Act
-    {action}
+    {
+      action;
+    }
 
     // Assert
-    {assertions}
+    {
+      assertions;
+    }
   });
 
   it('should handle {edge case}', () => {
@@ -192,6 +208,7 @@ describe('{feature}', () => {
 ```
 
 **Test Pattern Reference**:
+
 ```typescript
 // SOURCE: {test-file}:{lines}
 // This is how similar functionality is tested
@@ -208,39 +225,39 @@ describe('{feature}', () => {
 
 ## Test Quality Audit
 
-| Test | Tests Behavior | Resilient | Meaningful Assertions | Verdict |
-|------|---------------|-----------|----------------------|---------|
-| `it('should...')` | YES/NO | YES/NO | YES/NO | GOOD/NEEDS_WORK |
-| ... | ... | ... | ... | ... |
+| Test              | Tests Behavior | Resilient | Meaningful Assertions | Verdict         |
+| ----------------- | -------------- | --------- | --------------------- | --------------- |
+| `it('should...')` | YES/NO         | YES/NO    | YES/NO                | GOOD/NEEDS_WORK |
+| ...               | ...            | ...       | ...                   | ...             |
 
 ---
 
 ## Statistics
 
 | Severity | Count | Criticality 8-10 | Criticality 5-7 | Criticality 1-4 |
-|----------|-------|------------------|-----------------|-----------------|
-| CRITICAL | {n} | {n} | - | - |
-| HIGH | {n} | {n} | {n} | - |
-| MEDIUM | {n} | - | {n} | {n} |
-| LOW | {n} | - | - | {n} |
+| -------- | ----- | ---------------- | --------------- | --------------- |
+| CRITICAL | {n}   | {n}              | -               | -               |
+| HIGH     | {n}   | {n}              | {n}             | -               |
+| MEDIUM   | {n}   | -                | {n}             | {n}             |
+| LOW      | {n}   | -                | -               | {n}             |
 
 ---
 
 ## Risk Assessment
 
-| Untested Area | Failure Mode | User Impact | Priority |
-|---------------|--------------|-------------|----------|
-| {code area} | {how it could fail} | {user sees} | CRITICAL/HIGH/MED |
-| ... | ... | ... | ... |
+| Untested Area | Failure Mode        | User Impact | Priority          |
+| ------------- | ------------------- | ----------- | ----------------- |
+| {code area}   | {how it could fail} | {user sees} | CRITICAL/HIGH/MED |
+| ...           | ...                 | ...         | ...               |
 
 ---
 
 ## Patterns Referenced
 
-| Test File | Lines | Pattern |
-|-----------|-------|---------|
+| Test File       | Lines | Pattern                       |
+| --------------- | ----- | ----------------------------- |
 | `src/x.test.ts` | 10-30 | {testing pattern description} |
-| ... | ... | ... |
+| ...             | ...   | ...                           |
 
 ---
 
@@ -255,6 +272,7 @@ describe('{feature}', () => {
 - **Agent**: test-coverage-agent
 - **Timestamp**: {ISO timestamp}
 - **Artifact**: `$ARTIFACTS_DIR/review/test-coverage-findings.md`
+
 ```
 
 **PHASE_3_CHECKPOINT:**
@@ -271,3 +289,4 @@ describe('{feature}', () => {
 - **GAPS_IDENTIFIED**: Missing tests found with criticality scores
 - **QUALITY_EVALUATED**: Existing tests assessed
 - **TESTS_SUGGESTED**: Example test code provided for gaps
+```

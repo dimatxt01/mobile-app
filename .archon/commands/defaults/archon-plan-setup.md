@@ -13,6 +13,7 @@ argument-hint: <path/to/plan.md>
 ## Your Mission
 
 Prepare everything needed for plan implementation:
+
 1. Read and parse the plan (including scope limits)
 2. Ensure we're on the correct branch
 3. Write a comprehensive context artifact for subsequent steps
@@ -59,14 +60,14 @@ If `$ARGUMENTS` is a GitHub issue URL or number (e.g., `#123`), fetch the issue 
 
 From the plan, identify and extract:
 
-| Field | Where to Find | Example |
-|-------|---------------|---------|
-| **Title** | First `#` heading or "Summary" section | "Discord Platform Adapter" |
-| **Summary** | "Summary" or "Feature Description" section | 1-2 sentence overview |
-| **Files to Change** | "Files to Change" or "Tasks" section | List of CREATE/UPDATE files |
-| **Validation Commands** | "Validation Commands" or "Validation Strategy" | `bun run type-check`, etc. |
-| **Acceptance Criteria** | "Acceptance Criteria" section | Checklist items |
-| **NOT Building (Scope Limits)** | "NOT Building", "Scope Limits", or "Out of Scope" section | Explicit exclusions |
+| Field                           | Where to Find                                             | Example                     |
+| ------------------------------- | --------------------------------------------------------- | --------------------------- |
+| **Title**                       | First `#` heading or "Summary" section                    | "Discord Platform Adapter"  |
+| **Summary**                     | "Summary" or "Feature Description" section                | 1-2 sentence overview       |
+| **Files to Change**             | "Files to Change" or "Tasks" section                      | List of CREATE/UPDATE files |
+| **Validation Commands**         | "Validation Commands" or "Validation Strategy"            | `bun run type-check`, etc.  |
+| **Acceptance Criteria**         | "Acceptance Criteria" section                             | Checklist items             |
+| **NOT Building (Scope Limits)** | "NOT Building", "Scope Limits", or "Out of Scope" section | Explicit exclusions         |
 
 **CRITICAL**: The "NOT Building" section defines what is **intentionally excluded** from scope. This MUST be captured and passed to review agents so they don't flag intentional exclusions as bugs.
 
@@ -81,6 +82,7 @@ feature/{slug}
 Where `{slug}` is the title lowercased, spaces replaced with hyphens, max 50 chars.
 
 Examples:
+
 - "Discord Platform Adapter" → `feature/discord-platform-adapter`
 - "ESLint/Prettier Integration" → `feature/eslint-prettier-integration`
 
@@ -145,6 +147,7 @@ If conflicts occur, STOP with error: "Merge conflicts with $BASE_BRANCH. Resolve
 ### 2.5 Push Branch (if commits exist)
 
 If there are commits on the branch:
+
 ```bash
 git push -u origin HEAD
 ```
@@ -164,13 +167,14 @@ If no commits yet (fresh branch), skip push - it will happen after implementatio
 ### 3.1 Create Artifact Directory
 
 ```bash
+
 ```
 
 ### 3.2 Write Context Artifact
 
 Write to `$ARTIFACTS_DIR/plan-context.md`:
 
-```markdown
+````markdown
 # Plan Context
 
 **Generated**: {YYYY-MM-DD HH:MM}
@@ -181,10 +185,10 @@ Write to `$ARTIFACTS_DIR/plan-context.md`:
 
 ## Branch
 
-| Field | Value |
-|-------|-------|
+| Field      | Value         |
+| ---------- | ------------- |
 | **Branch** | {branch-name} |
-| **Base** | {base-branch} |
+| **Base**   | {base-branch} |
 
 ---
 
@@ -200,10 +204,10 @@ Write to `$ARTIFACTS_DIR/plan-context.md`:
 
 {Copy the "Files to Change" table from the plan, or list extracted files}
 
-| File | Action |
-|------|--------|
+| File             | Action |
+| ---------------- | ------ |
 | `src/example.ts` | CREATE |
-| `src/other.ts` | UPDATE |
+| `src/other.ts`   | UPDATE |
 
 ---
 
@@ -230,6 +234,7 @@ bun run lint
 bun test
 bun run build
 ```
+````
 
 ---
 
@@ -247,8 +252,8 @@ bun run build
 
 {Copy key file references from plan's "Patterns to Mirror" section}
 
-| Pattern | Source File | Lines |
-|---------|-------------|-------|
+| Pattern        | Source File      | Lines |
+| -------------- | ---------------- | ----- |
 | {pattern-name} | `src/example.ts` | 10-50 |
 
 ---
@@ -259,7 +264,8 @@ bun run build
 2. `archon-implement-tasks` - Execute the plan
 3. `archon-validate` - Run full validation
 4. `archon-finalize-pr` - Create PR and mark ready
-```
+
+````
 
 **PHASE_3_CHECKPOINT:**
 
@@ -303,7 +309,7 @@ Context written to: `$ARTIFACTS_DIR/plan-context.md`
 ### Next Step
 
 Proceed to `archon-confirm-plan` to verify the plan's research is still valid.
-```
+````
 
 ---
 

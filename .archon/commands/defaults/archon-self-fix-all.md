@@ -10,6 +10,7 @@ argument-hint: (none - reads all review artifacts from $ARTIFACTS_DIR/review/)
 ## IMPORTANT: Output Behavior
 
 **Your output will be posted as a GitHub comment.** Keep working output minimal:
+
 - Do NOT narrate each step
 - Do NOT output verbose progress updates
 - Only output the final structured report at the end
@@ -239,8 +240,8 @@ Write to `$ARTIFACTS_DIR/review/fix-report.md`:
 
 ## Fixes Applied
 
-| Severity | Finding | Location | What Was Done |
-|----------|---------|----------|---------------|
+| Severity | Finding | Location    | What Was Done |
+| -------- | ------- | ----------- | ------------- |
 | CRITICAL | {title} | `file:line` | {description} |
 | HIGH     | {title} | `file:line` | {description} |
 | MEDIUM   | {title} | `file:line` | {description} |
@@ -250,41 +251,41 @@ Write to `$ARTIFACTS_DIR/review/fix-report.md`:
 
 ## Tests Added
 
-| File | Test Cases |
-|------|------------|
+| File             | Test Cases           |
+| ---------------- | -------------------- |
 | `{file}.test.ts` | `{test description}` |
 
-*(none)* if no tests were added
+_(none)_ if no tests were added
 
 ---
 
 ## Docs Updated
 
-| File | Changes |
-|------|---------|
+| File     | Changes            |
+| -------- | ------------------ |
 | `{file}` | {what was updated} |
 
-*(none)* if no docs were updated
+_(none)_ if no docs were updated
 
 ---
 
 ## Skipped Findings
 
-| Severity | Finding | Location | Reason Skipped |
-|----------|---------|----------|----------------|
+| Severity | Finding | Location    | Reason Skipped                 |
+| -------- | ------- | ----------- | ------------------------------ |
 | {sev}    | {title} | `file:line` | New concern: {specific reason} |
 
-*(none)* if nothing was skipped — ideal outcome
+_(none)_ if nothing was skipped — ideal outcome
 
 ---
 
 ## Blocked (Could Not Fix)
 
-| Severity | Finding | Reason |
-|----------|---------|--------|
+| Severity | Finding | Reason                        |
+| -------- | ------- | ----------------------------- |
 | {sev}    | {title} | {why it could not be applied} |
 
-*(none)* if nothing was blocked
+_(none)_ if nothing was blocked
 
 ---
 
@@ -292,21 +293,21 @@ Write to `$ARTIFACTS_DIR/review/fix-report.md`:
 
 {For any skipped or blocked findings that warrant their own issue:}
 
-| Issue Title | Priority | Reason |
-|-------------|----------|--------|
-| "{title}" | {P1/P2/P3} | {why this deserves a separate issue} |
+| Issue Title | Priority   | Reason                               |
+| ----------- | ---------- | ------------------------------------ |
+| "{title}"   | {P1/P2/P3} | {why this deserves a separate issue} |
 
-*(none)* if everything was addressed
+_(none)_ if everything was addressed
 
 ---
 
 ## Validation
 
-| Check | Status |
-|-------|--------|
-| Type check | ✅ / ❌ |
-| Lint | ✅ / ❌ |
-| Tests | ✅ {n} passed / ❌ |
+| Check      | Status             |
+| ---------- | ------------------ |
+| Type check | ✅ / ❌            |
+| Lint       | ✅ / ❌            |
+| Tests      | ✅ {n} passed / ❌ |
 ```
 
 **PHASE_6_CHECKPOINT:**

@@ -60,6 +60,7 @@ ls -t $ARTIFACTS_DIR/../reports/*-report.md 2>/dev/null | head -1
 ```
 
 If found, read it to extract:
+
 - Summary of what was implemented
 - Files changed
 - Validation results
@@ -84,6 +85,7 @@ git status --porcelain
 ```
 
 **If dirty**:
+
 1. Stage changes: `git add -A`
 2. Commit: `git commit -m "Final changes before PR"`
 
@@ -113,12 +115,14 @@ Look for the project's PR template at `.github/pull_request_template.md`, `.gith
 ## Changes
 
 [List from implementation report "Files Changed" section, or from commits]
+
 - file1.ts - description
 - file2.ts - description
 
 ## Validation
 
 [From implementation report "Validation Results" section]
+
 - [x] Type check passes
 - [x] Lint passes
 - [x] Tests pass
@@ -136,6 +140,7 @@ Look for the project's PR template at `.github/pull_request_template.md`, `.gith
 ### 3.2 Determine PR Title
 
 **Title**: Concise, imperative mood
+
 - From implementation report summary, OR
 - From commit messages
 
@@ -188,9 +193,11 @@ Report the result:
 **Title**: [PR title]
 
 ### Summary
+
 [Brief summary of what the PR contains]
 
 ### Next Steps
+
 1. Request review if needed
 2. Address any CI failures
 3. Merge when approved

@@ -14,6 +14,7 @@ argument-hint: (no arguments - reads from workflow artifacts)
 Execute each task from the plan, validating after every change.
 
 **Core Philosophy**:
+
 - Type-check after EVERY file change
 - Fix issues immediately before moving on
 - Document any deviations from the plan
@@ -31,6 +32,7 @@ cat $ARTIFACTS_DIR/plan-context.md
 ```
 
 Extract:
+
 - Files to change (CREATE/UPDATE list)
 - Validation commands (especially type-check)
 - Patterns to mirror
@@ -42,6 +44,7 @@ cat $ARTIFACTS_DIR/plan-confirmation.md
 ```
 
 Check:
+
 - Status is CONFIRMED or PROCEED WITH CAUTION
 - Note any warnings to handle during implementation
 
@@ -131,6 +134,7 @@ If you must deviate from the plan:
 3. **Continue** with the deviation noted
 
 Common reasons for deviation:
+
 - Pattern file has changed since plan was created
 - Missing import discovered
 - Type incompatibility requires different approach
@@ -210,11 +214,11 @@ Write to `$ARTIFACTS_DIR/implementation.md`:
 
 ## Tasks Completed
 
-| # | Task | File | Status | Notes |
-|---|------|------|--------|-------|
-| 1 | {description} | `src/x.ts` | ✅ | |
-| 2 | {description} | `src/y.ts` | ✅ | |
-| 3 | {description} | `src/z.ts` | ✅ | Minor deviation - see below |
+| #   | Task          | File       | Status | Notes                       |
+| --- | ------------- | ---------- | ------ | --------------------------- |
+| 1   | {description} | `src/x.ts` | ✅     |                             |
+| 2   | {description} | `src/y.ts` | ✅     |                             |
+| 3   | {description} | `src/z.ts` | ✅     | Minor deviation - see below |
 
 **Progress**: {X} of {Y} tasks completed
 
@@ -222,18 +226,18 @@ Write to `$ARTIFACTS_DIR/implementation.md`:
 
 ## Files Changed
 
-| File | Action | Lines |
-|------|--------|-------|
-| `src/new-file.ts` | CREATE | +{N} |
+| File              | Action | Lines     |
+| ----------------- | ------ | --------- |
+| `src/new-file.ts` | CREATE | +{N}      |
 | `src/existing.ts` | UPDATE | +{N}/-{M} |
 
 ---
 
 ## Tests Written
 
-| Test File | Test Cases |
-|-----------|------------|
-| `src/x.test.ts` | `should do X`, `should handle Y` |
+| Test File       | Test Cases                             |
+| --------------- | -------------------------------------- |
+| `src/x.test.ts` | `should do X`, `should handle Y`       |
 | `src/y.test.ts` | `creates correctly`, `validates input` |
 
 ---
@@ -244,6 +248,7 @@ Write to `$ARTIFACTS_DIR/implementation.md`:
 No deviations. Implementation matched the plan exactly.
 
 {If any:}
+
 ### Deviation 1: {brief title}
 
 **Task**: {which task}
@@ -273,6 +278,7 @@ No deviations. Implementation matched the plan exactly.
 No issues encountered.
 
 {If any:}
+
 ### Issue 1: {title}
 
 **Problem**: {description}
@@ -304,12 +310,12 @@ Continue to `archon-validate` for full validation suite.
 
 ### Progress Summary
 
-| Metric | Count |
-|--------|-------|
+| Metric          | Count   |
+| --------------- | ------- |
 | Tasks completed | {X}/{Y} |
-| Files created | {N} |
-| Files updated | {M} |
-| Tests written | {K} |
+| Files created   | {N}     |
+| Files updated   | {M}     |
+| Tests written   | {K}     |
 
 ### Type-Check
 
@@ -320,6 +326,7 @@ Continue to `archon-validate` for full validation suite.
 ✅ All pass ({N} tests)
 
 {If deviations:}
+
 ### Deviations
 
 {count} deviation(s) from plan documented in artifact.

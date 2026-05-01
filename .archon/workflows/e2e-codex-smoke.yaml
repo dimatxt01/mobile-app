@@ -1,13 +1,13 @@
 # E2E smoke test — Codex provider
 # Verifies: provider selection, sendQuery, structured output
 name: e2e-codex-smoke
-description: "E2E smoke test for Codex provider. Runs a simple prompt + structured output node."
+description: 'E2E smoke test for Codex provider. Runs a simple prompt + structured output node.'
 provider: codex
 model: gpt-5.2
 
 nodes:
   - id: simple
-    prompt: "What is 2+2? Answer with just the number, nothing else."
+    prompt: 'What is 2+2? Answer with just the number, nothing else.'
     idle_timeout: 30000
 
   - id: structured
@@ -17,8 +17,8 @@ nodes:
       properties:
         category:
           type: string
-          enum: ["math", "text"]
-      required: ["category"]
+          enum: ['math', 'text']
+      required: ['category']
       additionalProperties: false
     idle_timeout: 30000
     depends_on: [simple]

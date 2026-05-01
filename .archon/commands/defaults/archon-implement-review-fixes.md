@@ -10,6 +10,7 @@ argument-hint: (none - reads from consolidated review artifact)
 ## IMPORTANT: Output Behavior
 
 **Your output will be posted as a GitHub comment.** Keep your working output minimal:
+
 - Do NOT narrate each step ("Now I'll read the file...", "Let me check...")
 - Do NOT output verbose progress updates
 - Only output the final structured report at the end
@@ -57,6 +58,7 @@ cat $ARTIFACTS_DIR/review/consolidated-review.md
 ```
 
 Extract:
+
 - All CRITICAL issues with fixes
 - All HIGH issues with fixes
 - MEDIUM issues (for reporting)
@@ -83,6 +85,7 @@ git branch --show-current
 Verify you are on the correct PR branch (should be `$HEAD_BRANCH`).
 
 **PHASE_1_CHECKPOINT:**
+
 - [ ] PR number identified
 - [ ] On the correct PR branch (NOT base branch, NOT a new branch)
 - [ ] Consolidated review loaded
@@ -114,6 +117,7 @@ If test-coverage-agent identified missing tests for fixed code:
 ### 2.4 Handle Unfixable Issues
 
 If a fix cannot be applied:
+
 - **Conflict**: Code has changed since review
 - **Complex**: Requires architectural changes
 - **Unclear**: Recommendation is ambiguous
@@ -122,6 +126,7 @@ If a fix cannot be applied:
 Document the reason clearly.
 
 **PHASE_2_CHECKPOINT:**
+
 - [ ] All CRITICAL fixes attempted
 - [ ] All HIGH fixes attempted
 - [ ] Tests added for fixes
@@ -164,6 +169,7 @@ bun run build
 Must succeed.
 
 **PHASE_3_CHECKPOINT:**
+
 - [ ] Type check passes
 - [ ] Lint passes
 - [ ] All tests pass
@@ -206,12 +212,14 @@ git push origin $HEAD_BRANCH
 ```
 
 If push fails due to divergence:
+
 ```bash
 git pull --rebase origin $HEAD_BRANCH
 git push origin $HEAD_BRANCH
 ```
 
 **PHASE_4_CHECKPOINT:**
+
 - [ ] Changes committed
 - [ ] Changes pushed to PR branch
 - [ ] PR now shows the fixes
@@ -241,25 +249,25 @@ Write to `$ARTIFACTS_DIR/review/fix-report.md`:
 
 ### CRITICAL Fixes ({n}/{total})
 
-| Issue | Location | Status | Details |
-|-------|----------|--------|---------|
-| {title} | `file:line` | ✅ FIXED | {what was done} |
-| {title} | `file:line` | ❌ SKIPPED | {why} |
+| Issue   | Location    | Status     | Details         |
+| ------- | ----------- | ---------- | --------------- |
+| {title} | `file:line` | ✅ FIXED   | {what was done} |
+| {title} | `file:line` | ❌ SKIPPED | {why}           |
 
 ---
 
 ### HIGH Fixes ({n}/{total})
 
-| Issue | Location | Status | Details |
-|-------|----------|--------|---------|
+| Issue   | Location    | Status   | Details         |
+| ------- | ----------- | -------- | --------------- |
 | {title} | `file:line` | ✅ FIXED | {what was done} |
 
 ---
 
 ## Tests Added
 
-| Test File | Test Cases | For Issue |
-|-----------|------------|-----------|
+| Test File       | Test Cases        | For Issue     |
+| --------------- | ----------------- | ------------- |
 | `src/x.test.ts` | `it('should...')` | {issue title} |
 
 ---
@@ -279,16 +287,16 @@ Write to `$ARTIFACTS_DIR/review/fix-report.md`:
 
 ## MEDIUM Issues (User Decision Required)
 
-| Issue | Location | Options |
-|-------|----------|---------|
+| Issue   | Location    | Options                       |
+| ------- | ----------- | ----------------------------- |
 | {title} | `file:line` | Fix now / Create issue / Skip |
 
 ---
 
 ## LOW Issues (For Consideration)
 
-| Issue | Location | Suggestion |
-|-------|----------|------------|
+| Issue   | Location    | Suggestion         |
+| ------- | ----------- | ------------------ |
 | {title} | `file:line` | {brief suggestion} |
 
 ---
@@ -296,19 +304,19 @@ Write to `$ARTIFACTS_DIR/review/fix-report.md`:
 ## Suggested Follow-up Issues
 
 | Issue Title | Priority | Related Finding |
-|-------------|----------|-----------------|
-| "{title}" | P{1/2/3} | {which finding} |
+| ----------- | -------- | --------------- |
+| "{title}"   | P{1/2/3} | {which finding} |
 
 ---
 
 ## Validation Results
 
-| Check | Status |
-|-------|--------|
-| Type check | ✅ |
-| Lint | ✅ |
-| Tests | ✅ ({n} passed) |
-| Build | ✅ |
+| Check      | Status          |
+| ---------- | --------------- |
+| Type check | ✅              |
+| Lint       | ✅              |
+| Tests      | ✅ ({n} passed) |
+| Build      | ✅              |
 
 ---
 
@@ -320,6 +328,7 @@ Write to `$ARTIFACTS_DIR/review/fix-report.md`:
 ```
 
 **PHASE_5_CHECKPOINT:**
+
 - [ ] Fix report created
 - [ ] All fixes documented
 
@@ -393,6 +402,7 @@ EOF
 ```
 
 **PHASE_6_CHECKPOINT:**
+
 - [ ] GitHub comment posted
 
 ---
@@ -408,10 +418,10 @@ Output only this summary (keep it brief):
 **Branch**: {HEAD_BRANCH}
 **Status**: {COMPLETE | PARTIAL}
 
-| Severity | Fixed |
-|----------|-------|
+| Severity | Fixed       |
+| -------- | ----------- |
 | CRITICAL | {n}/{total} |
-| HIGH | {n}/{total} |
+| HIGH     | {n}/{total} |
 
 **Validation**: ✅ All checks pass
 **Pushed**: ✅ Changes pushed to PR

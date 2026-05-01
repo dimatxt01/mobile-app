@@ -10,6 +10,7 @@ argument-hint: (none - operates on the current branch diff against $BASE_BRANCH)
 ## IMPORTANT: Output Behavior
 
 **Your output will be posted as a GitHub comment.** Keep working output minimal:
+
 - Do NOT narrate each step
 - Do NOT output verbose progress updates
 - Only output the final structured report at the end
@@ -26,16 +27,16 @@ Review ALL code changed on this branch and implement simplifications directly. Y
 
 ## What to Simplify
 
-| Opportunity | What to Look For |
-|-------------|------------------|
-| **Unnecessary complexity** | Deep nesting, convoluted logic paths |
-| **Redundant code** | Duplicated logic, unused variables/imports |
-| **Over-abstraction** | Abstractions that obscure rather than clarify |
-| **Poor naming** | Unclear variable/function names |
-| **Nested ternaries** | Multiple conditions in ternary chains — use if/else |
-| **Dense one-liners** | Compact code that sacrifices readability |
-| **Obvious comments** | Comments that describe what code clearly shows |
-| **Inconsistent patterns** | Code that doesn't follow project conventions (read CLAUDE.md) |
+| Opportunity                | What to Look For                                              |
+| -------------------------- | ------------------------------------------------------------- |
+| **Unnecessary complexity** | Deep nesting, convoluted logic paths                          |
+| **Redundant code**         | Duplicated logic, unused variables/imports                    |
+| **Over-abstraction**       | Abstractions that obscure rather than clarify                 |
+| **Poor naming**            | Unclear variable/function names                               |
+| **Nested ternaries**       | Multiple conditions in ternary chains — use if/else           |
+| **Dense one-liners**       | Compact code that sacrifices readability                      |
+| **Obvious comments**       | Comments that describe what code clearly shows                |
+| **Inconsistent patterns**  | Code that doesn't follow project conventions (read CLAUDE.md) |
 
 ## Rules
 
@@ -57,6 +58,7 @@ Review ALL code changed on this branch and implement simplifications directly. Y
 ### Phase 2: IMPLEMENT
 
 For each simplification:
+
 1. Edit the file
 2. Run `bun run type-check` — if it fails, revert that change
 3. Run `bun run lint` — if it fails, fix or revert
@@ -82,6 +84,7 @@ Write report to `$ARTIFACTS_DIR/review/simplify-report.md` and output:
 ### Changes Made
 
 #### 1. [Brief Title]
+
 **File**: `path/to/file.ts:45-60`
 **Type**: Reduced nesting / Improved naming / Removed redundancy / etc.
 **Before**: [snippet]
@@ -91,13 +94,14 @@ Write report to `$ARTIFACTS_DIR/review/simplify-report.md` and output:
 
 ### Summary
 
-| Metric | Value |
-|--------|-------|
-| Files analyzed | X |
-| Simplifications applied | Y |
-| Net line change | -N lines |
-| Validation | PASS / FAIL |
+| Metric                  | Value       |
+| ----------------------- | ----------- |
+| Files analyzed          | X           |
+| Simplifications applied | Y           |
+| Net line change         | -N lines    |
+| Validation              | PASS / FAIL |
 
 ### No Changes Needed
+
 (If nothing to simplify, say so — "Code is already clean. No simplifications applied.")
 ```

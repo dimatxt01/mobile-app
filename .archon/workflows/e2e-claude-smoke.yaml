@@ -3,14 +3,14 @@
 # Design: Only uses allowed_tools: [] (no tool use) and no output_format (no structured output)
 # because the Claude CLI subprocess is slow with those features in CI.
 name: e2e-claude-smoke
-description: "Smoke test for Claude provider. Verifies prompt response."
+description: 'Smoke test for Claude provider. Verifies prompt response.'
 provider: claude
 model: haiku
 
 nodes:
   # 1. Simple prompt — verifies Claude API connectivity via sendQuery
   - id: simple
-    prompt: "What is 2+2? Answer with just the number, nothing else."
+    prompt: 'What is 2+2? Answer with just the number, nothing else.'
     allowed_tools: []
     idle_timeout: 30000
 
