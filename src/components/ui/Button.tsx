@@ -1,4 +1,13 @@
-import { ActivityIndicator, Text, TouchableOpacity, TouchableOpacityProps } from 'react-native';
+import {
+  ActivityIndicator,
+  Text,
+  TouchableOpacity,
+  TouchableOpacityProps,
+  StyleSheet,
+  ViewStyle,
+  TextStyle,
+} from 'react-native';
+import { colors, fonts } from '@/lib/hmc-colors';
 
 type ButtonVariant = 'primary' | 'secondary' | 'outline';
 
@@ -8,12 +17,16 @@ type ButtonProps = TouchableOpacityProps & {
   loading?: boolean;
 };
 
-const variantStyles: Record<ButtonVariant, { container: string; text: string }> = {
-  primary: { container: 'bg-blue-600 active:bg-blue-700', text: 'text-white' },
-  secondary: { container: 'bg-gray-200 active:bg-gray-300', text: 'text-gray-900' },
+const variantMap: Record<ButtonVariant, { btn: ViewStyle; text: TextStyle }> = {
+  primary: { btn: { backgroundColor: colors.amber }, text: { color: colors.base } },
+  secondary: { btn: { backgroundColor: colors.elevated }, text: { color: colors.textPrimary } },
   outline: {
-    container: 'border border-gray-300 bg-white active:bg-gray-50',
-    text: 'text-gray-700',
+    btn: {
+      backgroundColor: 'transparent',
+      borderWidth: StyleSheet.hairlineWidth,
+      borderColor: colors.lineStrong,
+    },
+    text: { color: colors.textPrimary },
   },
 };
 
@@ -22,23 +35,40 @@ export function Button({
   variant = 'primary',
   loading = false,
   disabled,
+  style,
   ...props
 }: ButtonProps) {
-  const styles = variantStyles[variant];
+  const v = variantMap[variant];
+  const isDisabled = disabled || loading;
 
   return (
     <TouchableOpacity
-      className={`mb-3 w-full items-center rounded-lg px-4 py-3.5 ${styles.container} ${
-        disabled || loading ? 'opacity-60' : ''
-      }`}
-      disabled={disabled || loading}
+      style={[styles.btn, v.btn, isDisabled && styles.disabled, style]}
+      disabled={isDisabled}
       {...props}
     >
       {loading ? (
-        <ActivityIndicator color={variant === 'primary' ? '#fff' : '#374151'} />
+        <ActivityIndicator color={variant === 'primary' ? colors.base : colors.textPrimary} />
       ) : (
-        <Text className={`text-base font-semibold ${styles.text}`}>{title}</Text>
+        <Text style={[styles.text, v.text]}>{title}</Text>
       )}
     </TouchableOpacity>
   );
 }
+
+const styles = StyleSheet.create({
+  btn: {
+    marginBottom: 12,
+    width: '100%',
+    alignItems: 'center',
+    borderRadius: 8,
+    paddingHorizontal: 16,
+    paddingVertical: 16,
+  },
+  text: {
+    fontFamily: fonts.monoBold,
+    fontSize: 14,
+    letterSpacing: 1.5,
+  },
+  disabled: { opacity: 0.4 },
+});

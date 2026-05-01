@@ -1,11 +1,13 @@
 import { useState } from 'react';
-import { Text, View } from 'react-native';
+import { StyleSheet, Text, View } from 'react-native';
 import { Link, router } from 'expo-router';
 import { Screen } from '@/components/ui/Screen';
 import { Input } from '@/components/ui/Input';
 import { Button } from '@/components/ui/Button';
 import { useAuth } from '@/features/auth/hooks/use-auth';
 import { signUpSchema } from '@/features/auth/schemas/auth-schemas';
+import { colors, fonts } from '@/lib/hmc-colors';
+import { Eyebrow } from '@/components/hmc/Eyebrow';
 
 type FieldErrors = {
   fullName?: string;
@@ -66,13 +68,12 @@ export default function SignUpScreen() {
   if (checkEmail) {
     return (
       <Screen>
-        <View className="flex-1 items-center justify-center">
-          <Text className="mb-4 text-4xl">📧</Text>
-          <Text className="mb-2 text-2xl font-bold text-gray-900">Check your email</Text>
-          <Text className="text-center text-gray-500">
-            We sent a confirmation link to{' '}
-            <Text className="font-medium text-gray-900">{email}</Text>. Open it to activate your
-            account.
+        <View style={s.centerWrap}>
+          <Eyebrow label="CHECK INBOX" />
+          <Text style={s.checkTitle}>Confirmation sent.</Text>
+          <Text style={s.checkBody}>
+            We sent a confirmation link to <Text style={s.checkEmail}>{email}</Text>. Open it to
+            activate your account.
           </Text>
         </View>
       </Screen>
@@ -81,13 +82,13 @@ export default function SignUpScreen() {
 
   return (
     <Screen scroll>
-      <Text className="mb-2 text-3xl font-bold text-gray-900">Create account</Text>
-      <Text className="mb-8 text-gray-500">Join CoolifyAI</Text>
+      <Text style={s.title}>Create account</Text>
+      <Text style={s.subtitle}>Join HMC.</Text>
 
       {errors.general ? (
-        <Text className="mb-4 rounded-lg bg-red-50 px-4 py-3 text-center text-red-600">
-          {errors.general}
-        </Text>
+        <View style={s.error}>
+          <Text style={s.errorText}>{errors.general}</Text>
+        </View>
       ) : null}
 
       <Input
@@ -134,12 +135,50 @@ export default function SignUpScreen() {
         onPress={handleGoogleSignIn}
       />
 
-      <View className="mt-6 flex-row justify-center">
-        <Text className="text-gray-500">Already have an account? </Text>
+      <View style={s.footer}>
+        <Text style={s.footerText}>Already have an account? </Text>
         <Link href="/(auth)/sign-in">
-          <Text className="font-semibold text-blue-600">Sign in</Text>
+          <Text style={s.footerLink}>Sign in</Text>
         </Link>
       </View>
     </Screen>
   );
 }
+
+const s = StyleSheet.create({
+  title: { fontFamily: fonts.monoBold, fontSize: 28, color: colors.textPrimary, marginBottom: 4 },
+  subtitle: {
+    fontFamily: fonts.display,
+    fontSize: 14,
+    color: colors.textSecondary,
+    marginBottom: 32,
+  },
+  error: {
+    backgroundColor: colors.elevated,
+    borderRadius: 8,
+    paddingHorizontal: 16,
+    paddingVertical: 12,
+    marginBottom: 16,
+    borderWidth: StyleSheet.hairlineWidth,
+    borderColor: colors.danger,
+  },
+  errorText: { fontFamily: fonts.display, fontSize: 13, color: colors.danger, textAlign: 'center' },
+  footer: { marginTop: 24, flexDirection: 'row', justifyContent: 'center' },
+  footerText: { fontFamily: fonts.display, fontSize: 14, color: colors.textSecondary },
+  footerLink: { fontFamily: fonts.displayMedium, fontSize: 14, color: colors.amber },
+  centerWrap: { flex: 1, alignItems: 'center', justifyContent: 'center' },
+  checkTitle: {
+    fontFamily: fonts.monoBold,
+    fontSize: 24,
+    color: colors.textPrimary,
+    marginTop: 16,
+    marginBottom: 8,
+  },
+  checkBody: {
+    fontFamily: fonts.display,
+    fontSize: 14,
+    color: colors.textSecondary,
+    textAlign: 'center',
+  },
+  checkEmail: { fontFamily: fonts.displayMedium, color: colors.textPrimary },
+});

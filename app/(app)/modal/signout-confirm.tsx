@@ -33,7 +33,7 @@ export default function SignoutConfirmScreen() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: colors.elevated,
+    backgroundColor: colors.base,
     alignItems: 'center',
     justifyContent: 'center',
     paddingHorizontal: spacing.pagePad,
@@ -49,15 +49,15 @@ const styles = StyleSheet.create({
     backgroundColor: colors.danger,
     borderRadius: 8,
     paddingVertical: 16,
-    paddingHorizontal: 48,
+    alignSelf: 'stretch',
     alignItems: 'center',
     marginTop: 32,
   },
   dangerText: {
     fontFamily: fonts.monoBold,
     fontSize: 14,
-    letterSpacing: 1,
-    color: colors.textPrimary,
+    letterSpacing: 1.5,
+    color: colors.base,
   },
   cancelBtn: { alignItems: 'center', marginTop: 16 },
   cancelText: {
