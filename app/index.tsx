@@ -15,12 +15,21 @@ export default function Index() {
       setProfile(null);
       return;
     }
+    let cancelled = false;
     supabase
       .from('profiles')
       .select('*')
       .eq('id', session.user.id)
-      .single()
-      .then(({ data }) => setProfile(data));
+      .maybeSingle()
+      .then(({ data, error }) => {
+        if (cancelled) return;
+        if (error) {
+          console.warn('Profile fetch error', error.message);
+          return; // stay in loading state — don't redirect on transient errors
+        }
+        setProfile(data);
+      });
+    return () => { cancelled = true; };
   }, [session?.user?.id]);
 
   if (!isInitialized || (session && isLoading)) {

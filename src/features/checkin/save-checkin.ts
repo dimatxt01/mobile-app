@@ -1,8 +1,11 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query';
-import { useRef, useCallback } from 'react';
+import { useRef, useCallback, useEffect } from 'react';
 import { supabase } from '@/lib/supabase';
 import { useAuth } from '@/features/auth/hooks/use-auth';
 import type { DailyCheckin } from '@/types/database';
+
+// balance write volume vs. UI responsiveness
+const SAVE_DEBOUNCE_MS = 800;
 
 type SavePayload = Partial<
   Pick<
@@ -24,8 +27,8 @@ export function useSaveCheckin() {
         .upsert({ user_id: user!.id, date, ...payload }, { onConflict: 'user_id,date' })
         .select()
         .single();
-      if (error) return { data: null, error };
-      return { data: data as DailyCheckin, error: null };
+      if (error) throw error;
+      return data as DailyCheckin;
     },
     onSuccess: () => {
       const date = new Date().toISOString().slice(0, 10);
@@ -36,10 +39,19 @@ export function useSaveCheckin() {
   const save = useCallback(
     (payload: SavePayload) => {
       if (timerRef.current) clearTimeout(timerRef.current);
-      timerRef.current = setTimeout(() => mutation.mutate(payload), 800);
+      timerRef.current = setTimeout(() => mutation.mutate(payload), SAVE_DEBOUNCE_MS);
     },
     [mutation],
   );
 
-  return { save, isPending: mutation.isPending };
+  const cancel = useCallback(() => {
+    if (timerRef.current) {
+      clearTimeout(timerRef.current);
+      timerRef.current = null;
+    }
+  }, []);
+
+  useEffect(() => () => { if (timerRef.current) clearTimeout(timerRef.current); }, []);
+
+  return { save, cancel, isPending: mutation.isPending };
 }

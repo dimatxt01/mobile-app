@@ -28,6 +28,7 @@ export default function EditHabitsScreen() {
   const [habits, setHabits] = useState<EditableHabit[]>([]);
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
+  const [saveError, setSaveError] = useState<string | null>(null);
 
   useEffect(() => {
     if (!user) return;
@@ -49,7 +50,19 @@ export default function EditHabitsScreen() {
   const handleSave = async () => {
     if (!user) return;
     setSaving(true);
-    await supabase.from('habits').delete().eq('user_id', user.id).eq('type', habitType);
+    setSaveError(null);
+
+    const { error: deleteError } = await supabase
+      .from('habits')
+      .delete()
+      .eq('user_id', user.id)
+      .eq('type', habitType);
+    if (deleteError) {
+      setSaveError('Failed to save. Your habits are unchanged.');
+      setSaving(false);
+      return;
+    }
+
     const rows = habits
       .filter((h) => h.label.trim())
       .map((h, i) => ({
@@ -60,7 +73,15 @@ export default function EditHabitsScreen() {
         sort_order: i,
         enabled: true,
       }));
-    if (rows.length) await supabase.from('habits').insert(rows);
+    if (rows.length) {
+      const { error: insertError } = await supabase.from('habits').insert(rows);
+      if (insertError) {
+        setSaveError('Habits deleted but re-save failed. Please try again immediately.');
+        setSaving(false);
+        return;
+      }
+    }
+
     qc.invalidateQueries({ queryKey: ['config'] });
     setSaving(false);
     router.back();
@@ -114,6 +135,7 @@ export default function EditHabitsScreen() {
       <TouchableOpacity onPress={() => setHabits([...habits, { label: '', points: 5 }])}>
         <Text style={styles.addBtn}>+ ADD HABIT</Text>
       </TouchableOpacity>
+      {saveError && <Text style={styles.errorText}>{saveError}</Text>}
       <TouchableOpacity style={styles.saveBtn} onPress={handleSave} disabled={saving}>
         <Text style={styles.saveText}>{saving ? 'SAVING...' : 'SAVE'}</Text>
       </TouchableOpacity>
@@ -168,5 +190,12 @@ const styles = StyleSheet.create({
     fontSize: 12,
     letterSpacing: 1.5,
     color: colors.textTertiary,
+  },
+  errorText: {
+    fontFamily: fonts.mono,
+    fontSize: 12,
+    color: colors.danger,
+    marginTop: 8,
+    textAlign: 'center',
   },
 });

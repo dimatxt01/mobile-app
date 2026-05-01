@@ -1,4 +1,5 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query';
+import { Alert } from 'react-native';
 import { supabase } from '@/lib/supabase';
 import { useAuth } from '@/features/auth/hooks/use-auth';
 
@@ -22,13 +23,16 @@ export function useLockCheckin() {
         p_outcome_score: args.outcomeScore,
         p_penalty_score: args.penaltyScore,
       });
-      if (error) return { data: null, error };
-      return { data: data as number, error: null };
+      if (error) throw error;
+      return data as number;
     },
     onSuccess: () => {
       const date = new Date().toISOString().slice(0, 10);
       qc.invalidateQueries({ queryKey: ['checkin', user?.id, date] });
       qc.invalidateQueries({ queryKey: ['history'] });
+    },
+    onError: () => {
+      Alert.alert('Lock Failed', "Could not lock today's check-in. Please try again.");
     },
   });
 }

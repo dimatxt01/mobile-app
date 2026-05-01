@@ -1,5 +1,5 @@
 import { useState, useRef } from 'react';
-import { View, Text, Image, TouchableOpacity, ActivityIndicator, StyleSheet } from 'react-native';
+import { View, Text, Image, TouchableOpacity, ActivityIndicator, StyleSheet, Alert } from 'react-native';
 import { router } from 'expo-router';
 import { CameraView, useCameraPermissions } from 'expo-camera';
 import { useQueryClient } from '@tanstack/react-query';
@@ -43,9 +43,13 @@ export default function MirrorCaptureScreen() {
     setIsUploading(true);
     const date = new Date().toISOString().slice(0, 10);
     const dayNumber = (profile?.day_count ?? 0) + 1;
-    await uploadMirrorPhoto(user.id, capturedUri, date, dayNumber);
-    qc.invalidateQueries({ queryKey: ['mirror'] });
+    const { error } = await uploadMirrorPhoto(user.id, capturedUri, date, dayNumber);
     setIsUploading(false);
+    if (error) {
+      Alert.alert('Upload Failed', 'Could not save photo. Please try again.');
+      return;
+    }
+    qc.invalidateQueries({ queryKey: ['mirror'] });
     router.back();
   };
 

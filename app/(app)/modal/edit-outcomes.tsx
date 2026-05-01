@@ -26,6 +26,7 @@ export default function EditOutcomesScreen() {
   const [items, setItems] = useState<EditableOutcome[]>([]);
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
+  const [saveError, setSaveError] = useState<string | null>(null);
 
   useEffect(() => {
     if (!user) return;
@@ -45,11 +46,30 @@ export default function EditOutcomesScreen() {
   const handleSave = async () => {
     if (!user) return;
     setSaving(true);
-    await supabase.from('outcome_metrics').delete().eq('user_id', user.id);
+    setSaveError(null);
+
+    const { error: deleteError } = await supabase
+      .from('outcome_metrics')
+      .delete()
+      .eq('user_id', user.id);
+    if (deleteError) {
+      setSaveError('Failed to save. Your outcomes are unchanged.');
+      setSaving(false);
+      return;
+    }
+
     const rows = items
       .filter((i) => i.label.trim())
       .map((i, idx) => ({ user_id: user.id, label: i.label.trim(), sort_order: idx }));
-    if (rows.length) await supabase.from('outcome_metrics').insert(rows);
+    if (rows.length) {
+      const { error: insertError } = await supabase.from('outcome_metrics').insert(rows);
+      if (insertError) {
+        setSaveError('Outcomes deleted but re-save failed. Please try again immediately.');
+        setSaving(false);
+        return;
+      }
+    }
+
     qc.invalidateQueries({ queryKey: ['config'] });
     setSaving(false);
     router.back();
@@ -95,6 +115,7 @@ export default function EditOutcomesScreen() {
           <Text style={styles.addBtn}>+ ADD OUTCOME</Text>
         </TouchableOpacity>
       )}
+      {saveError && <Text style={styles.errorText}>{saveError}</Text>}
       <TouchableOpacity style={styles.saveBtn} onPress={handleSave} disabled={saving}>
         <Text style={styles.saveText}>{saving ? 'SAVING...' : 'SAVE'}</Text>
       </TouchableOpacity>
@@ -148,5 +169,12 @@ const styles = StyleSheet.create({
     fontSize: 12,
     letterSpacing: 1.5,
     color: colors.textTertiary,
+  },
+  errorText: {
+    fontFamily: fonts.mono,
+    fontSize: 12,
+    color: colors.danger,
+    marginTop: 8,
+    textAlign: 'center',
   },
 });

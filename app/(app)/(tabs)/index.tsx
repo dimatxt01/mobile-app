@@ -19,14 +19,13 @@ import { BigNum } from '@/components/hmc/BigNum';
 import { Eyebrow } from '@/components/hmc/Eyebrow';
 import { Rule } from '@/components/hmc/Rule';
 import { BottomBar } from '@/components/hmc/BottomBar';
-import { supabase } from '@/lib/supabase';
 
 export default function TodayScreen() {
   const { user } = useAuth();
   const { profile } = useProfileStore();
   const config = useConfig();
   const { data: checkin } = useCheckin();
-  const { save } = useSaveCheckin();
+  const { save, cancel } = useSaveCheckin();
   const lockCheckin = useLockCheckin();
   const { data: history } = useHistory(14);
 
@@ -103,9 +102,9 @@ export default function TodayScreen() {
     if (daysDiff > 2) router.push('/(app)/modal/returning-user');
   }, [history]);
 
-  const handleLock = async () => {
+  const handleLock = () => {
     if (!checkin || !score) return;
-    await supabase.from('daily_checkins').update({ perf_9to5: perf9to5 }).eq('id', checkin.id);
+    cancel(); // prevent stale debounce write to now-locked row
     lockCheckin.mutate({
       checkinId: checkin.id,
       identityScore: score.identity,
