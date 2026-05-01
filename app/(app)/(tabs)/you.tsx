@@ -32,18 +32,14 @@ export default function YouScreen() {
     queryKey: ['stats', user?.id],
     queryFn: async () => {
       const { data, error } = await supabase.rpc('get_user_stats');
-      if (error) return null;
-      return (
-        (
-          data as Array<{
-            streak: number;
-            day_count: number;
-            lifetime_avg: number;
-            best_score: number | null;
-            best_date: string | null;
-          }>
-        )?.[0] ?? null
-      );
+      if (error) throw error;
+      return (data as {
+        streak: number;
+        day_count: number;
+        lifetime_avg: number;
+        best_score: number | null;
+        best_date: string | null;
+      }[])?.[0] ?? null;
     },
     enabled: !!user,
   });

@@ -10,14 +10,16 @@ export function useScoreDensity(): [ScoreDensity, (v: ScoreDensity) => void] {
   const [density, setDensity] = useState<ScoreDensity>(DEFAULT);
 
   useEffect(() => {
-    AsyncStorage.getItem(STORAGE_KEY).then((v) => {
-      if (v === 'ring' || v === 'breakdown') setDensity(v);
-    });
+    AsyncStorage.getItem(STORAGE_KEY)
+      .then((v) => {
+        if (v === 'ring' || v === 'breakdown') setDensity(v);
+      })
+      .catch(() => {});
   }, []);
 
   const set = useCallback((v: ScoreDensity) => {
     setDensity(v);
-    AsyncStorage.setItem(STORAGE_KEY, v);
+    void AsyncStorage.setItem(STORAGE_KEY, v);
   }, []);
 
   return [density, set];

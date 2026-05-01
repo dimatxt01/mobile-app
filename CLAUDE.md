@@ -1,5 +1,3 @@
-<<<<<<< HEAD
-
 # Half Milly Club (HMC) — Project Reference
 
 ## What This App Is
@@ -90,6 +88,7 @@ src/
     query-client.ts        # DO NOT TOUCH
     hmc-colors.ts          # All design token constants
     score.ts               # computeScore() pure function
+    score-density.ts       # ScoreDensity type + useScoreDensity hook (AsyncStorage-backed)
   store/
     profile-store.ts       # Zustand: profile fields + onboarding_completed
   types/
@@ -113,6 +112,12 @@ Colors:
   lineStrong:  rgba(255,255,255,0.14)
   amber:       #FFB020   ← ONLY on active states, totals, active tab
   danger:      #FF453A
+  bgHigher:    #222226                   (elevated surface, pill active bg)
+  textQuiet:   #48484C                   (deemphasized / footer text)
+  accentMuted: rgba(255,176,32,0.16)     (active pill background)
+  accentDim:   rgba(255,176,32,0.5)      (active pill border)
+  accentGlow:  rgba(255,176,32,0.28)     (BottomBar button shadow)
+  dangerMuted: rgba(255,69,58,0.12)      (danger surface / bg)
 
 Fonts:
   display:  Inter_400Regular, Inter_500Medium, Inter_700Bold
@@ -181,9 +186,10 @@ app/(app)/_layout.tsx:
 
 | Package                           | Status         | Notes                 |
 | --------------------------------- | -------------- | --------------------- |
-| expo-font                         | needs install  | font loading          |
-| @expo-google-fonts/inter          | needs install  | Inter display font    |
-| @expo-google-fonts/jetbrains-mono | needs install  | JetBrains Mono        |
+| expo-font                         | installed      | font loading          |
+| @expo-google-fonts/inter          | installed      | Inter display font    |
+| @expo-google-fonts/jetbrains-mono | installed      | JetBrains Mono        |
+| @react-native-async-storage/async-storage | installed | score-density display preference |
 | expo-camera                       | needs install  | MIRROR tab            |
 | expo-image-picker                 | needs install  | MIRROR tab alt        |
 | expo-notifications                | needs install  | local reminders       |
@@ -214,7 +220,7 @@ See `.archon/logs/progress.md` for current status of each phase.
 - **Phase 6** — MIRROR tab: camera, upload, gallery
 - **Phase 7** — YOU tab + edit modals
 - **Phase 8** — Post-lock triggers + notifications
-- # **Phase 9** — Stub modals: paywall, subscription, privacy, whoop
+- **Phase 9** — Stub modals: paywall, subscription, privacy, whoop
 
 # HMC Habit-Scoring App — Developer Guide
 
@@ -289,6 +295,7 @@ Expo Router (file-based). Key route groups:
 - **Auth**: Zustand store (`src/features/auth/store/auth-store.ts`) populated by Supabase `onAuthStateChange`
 - **Profile**: Zustand store (`src/store/profile-store.ts`) fetched in `app/index.tsx`
 - **Server state**: TanStack Query v5 throughout; query key convention: `[resource, userId, ...params]`
+- **Display preferences**: AsyncStorage via `useScoreDensity()` in `src/lib/score-density.ts` — survives auth sign-out (unlike profile state in Zustand)
 
 ### Data Layer
 
@@ -310,4 +317,3 @@ In `src/features/mirror/upload-photo.ts`, `encoding: 'base64'` is passed as a st
 
 - Paywall / subscription gating
 - Whoop OAuth integration (stub: `whoop_score_adj` field exists in check-ins)
-  > > > > > > > 35ae86c4ddb1472145ca485587f2c87162186555

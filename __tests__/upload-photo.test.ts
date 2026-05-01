@@ -85,7 +85,7 @@ describe('uploadMirrorPhoto', () => {
 
     expect(result.data).toBeNull();
     expect(result.error).toBeInstanceOf(Error);
-    expect((result.error as Error).message).toBe('Failed to read image file');
+    expect((result.error as Error).message).toBe('URI cleared by OS');
   });
 
   it('returns photo data on success', async () => {

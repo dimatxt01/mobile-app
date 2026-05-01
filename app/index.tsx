@@ -25,7 +25,8 @@ export default function Index() {
         if (cancelled) return;
         if (error) {
           console.warn('Profile fetch error', error.message);
-          return; // stay in loading state — don't redirect on transient errors
+          setProfile(null); // release loading state; routing guard handles redirect
+          return;
         }
         setProfile(data);
       });

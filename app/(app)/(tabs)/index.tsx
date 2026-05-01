@@ -30,7 +30,7 @@ export default function TodayScreen() {
   const lockCheckin = useLockCheckin();
   const { data: history } = useHistory(14);
   const [scoreDensity] = useScoreDensity();
-  void scoreDensity;
+  void scoreDensity; // rendering deferred to Sprint 2; keeps hook alive in render cycle
 
   const [identityChecks, setIdentityChecks] = useState<Record<string, boolean>>({});
   const [executionChecks, setExecutionChecks] = useState<Record<string, boolean>>({});
@@ -79,6 +79,7 @@ export default function TodayScreen() {
   const prevDayRow = useMemo(() => {
     if (!history) return null;
     const todayStr = new Date().toISOString().slice(0, 10);
+    // relies on get_history() returning rows ORDER BY date DESC
     return history.find((r) => r.date < todayStr) ?? null;
   }, [history]);
 
@@ -209,8 +210,8 @@ export default function TodayScreen() {
           <Eyebrow label="TOTAL" />
           <BigNum value={score?.total ?? 0} highlight={checkin?.is_locked} />
           {delta !== null && (
-            <Text style={[styles.delta, delta >= 0 ? styles.deltaPositive : styles.deltaNegative]}>
-              {delta >= 0 ? `+${delta}` : `${delta}`} VS YESTERDAY
+            <Text style={[styles.delta, delta > 0 ? styles.deltaPositive : styles.deltaNegative]}>
+              {delta > 0 ? `+${delta}` : `${delta}`} VS YESTERDAY
             </Text>
           )}
           <Text style={styles.hint}>TAP FOR BREAKDOWN</Text>

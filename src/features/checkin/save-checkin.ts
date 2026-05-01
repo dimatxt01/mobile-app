@@ -34,6 +34,7 @@ export function useSaveCheckin() {
       const date = new Date().toISOString().slice(0, 10);
       qc.invalidateQueries({ queryKey: ['checkin', user?.id, date] });
     },
+    onError: (e) => console.warn('[save-checkin] auto-save failed', e),
   });
 
   const save = useCallback(

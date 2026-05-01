@@ -48,7 +48,7 @@ const styles = StyleSheet.create({
     shadowRadius: 24,
     elevation: 8,
   },
-  btnDisabled: { backgroundColor: colors.lineStrong },
+  btnDisabled: { backgroundColor: colors.lineStrong, shadowOpacity: 0, elevation: 0 },
   label: {
     fontFamily: fonts.monoBold,
     fontSize: 15,
