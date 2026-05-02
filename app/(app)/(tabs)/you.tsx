@@ -8,12 +8,9 @@ import { colors, fonts, spacing } from '@/lib/hmc-colors';
 import { PrintBar } from '@/components/hmc/PrintBar';
 import { Eyebrow } from '@/components/hmc/Eyebrow';
 import { Rule } from '@/components/hmc/Rule';
-import { useScoreDensity } from '@/lib/score-density';
-
 export default function YouScreen() {
   const { user } = useAuth();
   const { profile } = useProfileStore();
-  const [scoreDensity, setScoreDensity] = useScoreDensity();
 
   const { data: stats } = useQuery({
     queryKey: ['stats', user?.id],
@@ -77,26 +74,6 @@ export default function YouScreen() {
         </TouchableOpacity>
       </View>
 
-      <Rule />
-
-      {/* Display preference */}
-      <View style={styles.section}>
-        <Eyebrow label="DISPLAY" />
-        <View style={styles.pillRow}>
-          {(['number', 'ring', 'breakdown'] as const).map((v) => (
-            <TouchableOpacity
-              key={v}
-              style={[styles.pill, scoreDensity === v && styles.pillActive]}
-              onPress={() => setScoreDensity(v)}
-              activeOpacity={0.7}
-            >
-              <Text style={[styles.pillText, scoreDensity === v && styles.pillTextActive]}>
-                {v.toUpperCase()}
-              </Text>
-            </TouchableOpacity>
-          ))}
-        </View>
-      </View>
 
       <Rule />
 
@@ -177,21 +154,6 @@ const styles = StyleSheet.create({
     letterSpacing: 1.5,
     color: colors.amber,
   },
-  pillRow: { flexDirection: 'row', gap: 8, paddingTop: 10 },
-  pill: {
-    flex: 1,
-    paddingVertical: 8,
-    borderRadius: 6,
-    borderWidth: 1,
-    borderColor: colors.lineRegular,
-    alignItems: 'center',
-  },
-  pillActive: {
-    backgroundColor: colors.accentMuted,
-    borderColor: colors.accentDim,
-  },
-  pillText: { fontFamily: fonts.mono, fontSize: 10, letterSpacing: 1.5, color: colors.textTertiary },
-  pillTextActive: { color: colors.amber },
   navRow: {
     flexDirection: 'row',
     justifyContent: 'space-between',
