@@ -115,7 +115,7 @@ export default function DayCompleteScreen() {
           {sealed ? (
             <View style={styles.sealedBlock}>
               <Text style={styles.sealedIcon}>✉</Text>
-              <Text style={styles.sealedText}>Sealed. You'll read this tomorrow.</Text>
+              <Text style={styles.sealedText}>{"Sealed. You'll read this tomorrow."}</Text>
             </View>
           ) : letterOpen ? (
             <View style={styles.letterBlock}>
@@ -144,7 +144,7 @@ export default function DayCompleteScreen() {
               activeOpacity={0.8}
             >
               <Text style={styles.letterCtaText}>WRITE A LETTER →</Text>
-              <Text style={styles.letterCtaHint}>A note you'll read before tomorrow's check-in</Text>
+              <Text style={styles.letterCtaHint}>{"A note you'll read before tomorrow's check-in"}</Text>
             </TouchableOpacity>
           )}
         </View>

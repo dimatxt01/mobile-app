@@ -75,7 +75,7 @@ export default function ProfileScreen() {
       <View style={styles.headerSection}>
         <Text style={styles.name}>{profile?.full_name ?? 'User'}</Text>
         {profile?.identity_sentence ? (
-          <Text style={styles.identitySentence}>"{profile.identity_sentence}"</Text>
+          <Text style={styles.identitySentence}>{`"${profile.identity_sentence}"`}</Text>
         ) : null}
       </View>
 
