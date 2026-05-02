@@ -21,6 +21,7 @@ export type ScoreResult = {
   outcome: number;
   penalty: number;
   whoopAdj: number;
+  lateAdj: number;
   total: number;
 };
 
@@ -49,5 +50,5 @@ export function computeScore(
   const raw = identity + execution + outcome - penalty + state.whoopScoreAdj + lateAdj;
   const total = Math.max(0, raw);
 
-  return { identity, execution, outcome, penalty, whoopAdj: state.whoopScoreAdj, total };
+  return { identity, execution, outcome, penalty, whoopAdj: state.whoopScoreAdj, lateAdj, total };
 }
