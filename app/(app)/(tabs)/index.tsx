@@ -1,5 +1,5 @@
 import { useState, useEffect, useMemo } from 'react';
-import { View, Text, TextInput, ScrollView, TouchableOpacity, StyleSheet } from 'react-native';
+import { Alert, View, Text, TextInput, ScrollView, TouchableOpacity, StyleSheet } from 'react-native';
 import { router } from 'expo-router';
 import { useAuth } from '@/features/auth/hooks/use-auth';
 import { useProfileStore } from '@/store/profile-store';
@@ -133,6 +133,10 @@ export default function TodayScreen() {
     const daysDiff = Math.floor((Date.now() - new Date(lastDate).getTime()) / 86400000);
     if (daysDiff > 2) router.push('/(app)/modal/returning-user');
   }, [history]);
+
+  useEffect(() => {
+    if (lockCheckin.isError) Alert.alert('Lock Failed', "Could not lock today's check-in. Please try again.");
+  }, [lockCheckin.isError]);
 
   const handleLock = () => {
     if (!checkin || !score) return;

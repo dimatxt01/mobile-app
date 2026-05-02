@@ -9,8 +9,10 @@
     "web": "expo start --web",
     "test": "jest",
     "typecheck": "tsc --noEmit",
+    "type-check": "tsc --noEmit",
     "lint": "eslint . --ext .ts,.tsx",
     "format": "prettier --write .",
+    "validate": "bun run type-check && bun run lint && bun run test",
     "doctor": "npx expo-doctor"
   },
   "dependencies": {

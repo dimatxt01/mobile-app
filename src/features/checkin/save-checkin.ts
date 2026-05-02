@@ -2,6 +2,7 @@ import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { useRef, useCallback, useEffect } from 'react';
 import { supabase } from '@/lib/supabase';
 import { useAuth } from '@/features/auth/hooks/use-auth';
+import { todayDate } from '@/lib/date';
 import type { DailyCheckin } from '@/types/database';
 
 // balance write volume vs. UI responsiveness
@@ -28,7 +29,7 @@ export function useSaveCheckin() {
 
   const mutation = useMutation({
     mutationFn: async (payload: SavePayload) => {
-      const date = new Date().toISOString().slice(0, 10);
+      const date = todayDate();
       const { data, error } = await supabase
         .from('daily_checkins')
         .upsert({ user_id: user!.id, date, ...payload }, { onConflict: 'user_id,date' })
@@ -37,9 +38,8 @@ export function useSaveCheckin() {
       if (error) throw error;
       return data as DailyCheckin;
     },
-    onSuccess: () => {
-      const date = new Date().toISOString().slice(0, 10);
-      qc.invalidateQueries({ queryKey: ['checkin', user?.id, date] });
+    onSuccess: (data) => {
+      qc.invalidateQueries({ queryKey: ['checkin', user?.id, data.date] });
     },
     onError: (e) => console.warn('[save-checkin] auto-save failed', e),
   });
