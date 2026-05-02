@@ -6,7 +6,7 @@ import { Input } from '@/components/ui/Input';
 import { Button } from '@/components/ui/Button';
 import { useAuth } from '@/features/auth/hooks/use-auth';
 import { signInSchema } from '@/features/auth/schemas/auth-schemas';
-import { colors, fonts } from '@/lib/hmc-colors';
+import { colors, fonts, spacing } from '@/lib/hmc-colors';
 
 export default function SignInScreen() {
   const { signIn, signInWithGoogle } = useAuth();
@@ -111,7 +111,7 @@ const s = StyleSheet.create({
     fontFamily: fonts.display,
     fontSize: 14,
     color: colors.textSecondary,
-    marginBottom: 32,
+    marginBottom: spacing.sectionGap,
   },
   error: {
     backgroundColor: colors.elevated,
@@ -127,5 +127,5 @@ const s = StyleSheet.create({
   forgotText: { fontFamily: fonts.mono, fontSize: 12, letterSpacing: 1.5, color: colors.amber },
   footer: { marginTop: 24, flexDirection: 'row', justifyContent: 'center' },
   footerText: { fontFamily: fonts.display, fontSize: 14, color: colors.textSecondary },
-  footerLink: { fontFamily: fonts.displayMedium, fontSize: 14, color: colors.amber },
+  footerLink: { fontFamily: fonts.mono, fontSize: 12, letterSpacing: 1.5, color: colors.amber },
 });

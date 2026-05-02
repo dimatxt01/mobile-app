@@ -175,6 +175,8 @@ export default function OnboardingScreen() {
                     copy[i] = { ...copy[i], label: t };
                     setIdentityHabits(copy);
                   }}
+                  placeholderTextColor={colors.textTertiary}
+                  autoCapitalize="none"
                 />
                 <Text style={styles.pts}>+{h.points}</Text>
                 <TouchableOpacity
@@ -208,6 +210,8 @@ export default function OnboardingScreen() {
                     copy[i] = { ...copy[i], label: t };
                     setExecutionHabits(copy);
                   }}
+                  placeholderTextColor={colors.textTertiary}
+                  autoCapitalize="none"
                 />
                 <Text style={styles.pts}>+{h.points}</Text>
                 <TouchableOpacity
@@ -253,6 +257,8 @@ export default function OnboardingScreen() {
                     copy[i] = t;
                     setOutcomes(copy);
                   }}
+                  placeholderTextColor={colors.textTertiary}
+                  autoCapitalize="none"
                 />
                 <TouchableOpacity onPress={() => setOutcomes(outcomes.filter((_, j) => j !== i))}>
                   <Text style={styles.removeBtn}>×</Text>
@@ -281,6 +287,8 @@ export default function OnboardingScreen() {
                     copy[i] = t;
                     setPenalties(copy);
                   }}
+                  placeholderTextColor={colors.textTertiary}
+                  autoCapitalize="none"
                 />
                 <TouchableOpacity onPress={() => setPenalties(penalties.filter((_, j) => j !== i))}>
                   <Text style={styles.removeBtn}>×</Text>

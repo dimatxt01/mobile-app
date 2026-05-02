@@ -6,7 +6,7 @@ import { Input } from '@/components/ui/Input';
 import { Button } from '@/components/ui/Button';
 import { useAuth } from '@/features/auth/hooks/use-auth';
 import { signUpSchema } from '@/features/auth/schemas/auth-schemas';
-import { colors, fonts } from '@/lib/hmc-colors';
+import { colors, fonts, spacing } from '@/lib/hmc-colors';
 import { Eyebrow } from '@/components/hmc/Eyebrow';
 
 type FieldErrors = {
@@ -75,6 +75,9 @@ export default function SignUpScreen() {
             We sent a confirmation link to <Text style={s.checkEmail}>{email}</Text>. Open it to
             activate your account.
           </Text>
+          <Link href="/(auth)/sign-in">
+            <Text style={s.backLink}>Back to sign in</Text>
+          </Link>
         </View>
       </Screen>
     );
@@ -151,7 +154,7 @@ const s = StyleSheet.create({
     fontFamily: fonts.display,
     fontSize: 14,
     color: colors.textSecondary,
-    marginBottom: 32,
+    marginBottom: spacing.sectionGap,
   },
   error: {
     backgroundColor: colors.elevated,
@@ -165,7 +168,7 @@ const s = StyleSheet.create({
   errorText: { fontFamily: fonts.display, fontSize: 13, color: colors.danger, textAlign: 'center' },
   footer: { marginTop: 24, flexDirection: 'row', justifyContent: 'center' },
   footerText: { fontFamily: fonts.display, fontSize: 14, color: colors.textSecondary },
-  footerLink: { fontFamily: fonts.displayMedium, fontSize: 14, color: colors.amber },
+  footerLink: { fontFamily: fonts.mono, fontSize: 12, letterSpacing: 1.5, color: colors.amber },
   centerWrap: { flex: 1, alignItems: 'center', justifyContent: 'center' },
   checkTitle: {
     fontFamily: fonts.monoBold,
@@ -181,4 +184,5 @@ const s = StyleSheet.create({
     textAlign: 'center',
   },
   checkEmail: { fontFamily: fonts.displayMedium, color: colors.textPrimary },
+  backLink: { fontFamily: fonts.mono, fontSize: 12, letterSpacing: 1.5, color: colors.amber, marginTop: 32 },
 });
