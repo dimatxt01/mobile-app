@@ -23,7 +23,7 @@ app/
   _layout.tsx              # Root layout — font loading, providers
   index.tsx                # Auth+onboarding redirect guard
   (auth)/                  # Sign-in, sign-up, forgot/reset password — DO NOT TOUCH
-  (onboarding)/            # 13-step wizard (single screen, step state machine)
+  (onboarding)/            # 14-step wizard (single screen, step state machine)
   (app)/
     _layout.tsx            # Session + onboarding_completed guard
     (tabs)/
@@ -52,6 +52,7 @@ app/
       signout-confirm.tsx
       whoop-connect.tsx
       notification-settings.tsx
+      life-in-weeks.tsx    # Life in Weeks 4,004-square grid modal
 
 src/
   components/
@@ -90,6 +91,7 @@ src/
     hmc-colors.ts          # All design token constants
     score.ts               # computeScore() pure function
     score-density.ts       # ScoreDensity type + useScoreDensity hook (AsyncStorage-backed)
+    life-in-weeks.ts       # computeWeeksLived(), isDobValid(), clampDobDay() pure functions
   store/
     profile-store.ts       # Zustand: profile fields + onboarding_completed
   types/
@@ -207,7 +209,7 @@ All packages except react-native-svg and react-native-purchases work in Expo Go 
 - `src/lib/supabase.ts` — Supabase client with SecureStore adapter
 - `src/lib/query-client.ts` — TanStack Query config
 - `src/components/ui/Button.tsx`, `Input.tsx`, `Screen.tsx`
-- `supabase/migrations/0001–0007` — complete schema + RPCs
+- `supabase/migrations/0001–0008` — complete schema + RPCs
 
 ## Implementation Phases
 
@@ -215,7 +217,7 @@ See `.archon/logs/progress.md` for current status of each phase.
 
 - **Phase 1** — Foundation: design tokens, fonts, primitives, score.ts, 5-tab scaffold
 - **Phase 2** — Data layer: DB types, profile store, hooks (checkin/habits/history)
-- **Phase 3** — Routing & Onboarding: guards, 13-step wizard
+- **Phase 3** — Routing & Onboarding: guards, 14-step wizard
 - **Phase 4** — TODAY tab: full scoring UI + lock + score-breakdown modal
 - **Phase 5** — WEEK + TRENDS tabs: View-based charts, history data
 - **Phase 6** — MIRROR tab: camera, upload, gallery
@@ -255,7 +257,7 @@ npm install --legacy-peer-deps
 supabase db push
 ```
 
-This applies all 7 migrations in `supabase/migrations/` in order:
+This applies all 8 migrations in `supabase/migrations/` in order:
 
 | File                     | Contents                              |
 | ------------------------ | ------------------------------------- |
@@ -266,6 +268,7 @@ This applies all 7 migrations in `supabase/migrations/` in order:
 | `0005_hmc_mirror.sql`    | Mirror photos                         |
 | `0006_hmc_reviews.sql`   | Weekly/monthly reviews                |
 | `0007_hmc_functions.sql` | `lock_checkin` and `get_history` RPCs |
+| `0008_hmc_dob.sql`       | Add `date_of_birth` to profiles       |
 
 ## Commands
 

@@ -26,6 +26,7 @@ export interface Database {
           whoop_refresh_token: string | null;
           subscription_status: string;
           trial_ends_at: string | null;
+          date_of_birth: string | null;
           created_at: string;
           updated_at: string;
         };
@@ -48,6 +49,7 @@ export interface Database {
           whoop_access_token?: string | null;
           whoop_refresh_token?: string | null;
           subscription_status?: string;
+          date_of_birth?: string | null;
           trial_ends_at?: string | null;
           created_at?: string;
           updated_at?: string;
@@ -71,6 +73,7 @@ export interface Database {
           whoop_access_token?: string | null;
           whoop_refresh_token?: string | null;
           subscription_status?: string;
+          date_of_birth?: string | null;
           trial_ends_at?: string | null;
           updated_at?: string;
         };
