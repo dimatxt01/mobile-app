@@ -39,7 +39,7 @@ export default function Index() {
     return (
       <View style={styles.center}>
         <Text style={styles.wordmark}>HMC.</Text>
-        <ActivityIndicator color={colors.amber} />
+        <ActivityIndicator size="large" color={colors.amber} />
       </View>
     );
   }

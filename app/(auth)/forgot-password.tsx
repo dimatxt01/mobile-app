@@ -1,11 +1,13 @@
 import { useState } from 'react';
-import { Text, View } from 'react-native';
+import { StyleSheet, Text, View } from 'react-native';
 import { Link } from 'expo-router';
 import { Screen } from '@/components/ui/Screen';
 import { Input } from '@/components/ui/Input';
 import { Button } from '@/components/ui/Button';
 import { useAuth } from '@/features/auth/hooks/use-auth';
 import { forgotPasswordSchema } from '@/features/auth/schemas/auth-schemas';
+import { colors, fonts, spacing } from '@/lib/hmc-colors';
+import { Eyebrow } from '@/components/hmc/Eyebrow';
 
 export default function ForgotPasswordScreen() {
   const { resetPassword } = useAuth();
@@ -32,15 +34,15 @@ export default function ForgotPasswordScreen() {
   if (sent) {
     return (
       <Screen>
-        <View className="flex-1 items-center justify-center">
-          <Text className="mb-4 text-4xl">✉️</Text>
-          <Text className="mb-2 text-2xl font-bold text-gray-900">Check your email</Text>
-          <Text className="mb-8 text-center text-gray-500">
-            If an account exists for <Text className="font-medium text-gray-900">{email}</Text>, you
+        <View style={s.centerWrap}>
+          <Eyebrow label="CHECK INBOX" />
+          <Text style={s.sentTitle}>Reset link sent.</Text>
+          <Text style={s.sentBody}>
+            If an account exists for <Text style={s.sentEmail}>{email}</Text>, you
             {"'"}ll receive a reset link shortly.
           </Text>
           <Link href="/(auth)/sign-in">
-            <Text className="font-semibold text-blue-600">Back to sign in</Text>
+            <Text style={s.backLink}>Back to sign in</Text>
           </Link>
         </View>
       </Screen>
@@ -49,10 +51,8 @@ export default function ForgotPasswordScreen() {
 
   return (
     <Screen scroll>
-      <Text className="mb-2 text-3xl font-bold text-gray-900">Reset password</Text>
-      <Text className="mb-8 text-gray-500">
-        {"Enter your email and we'll send you a reset link."}
-      </Text>
+      <Text style={s.title}>Reset password</Text>
+      <Text style={s.subtitle}>{"Enter your email and we'll send you a reset link."}</Text>
 
       <Input
         label="Email"
@@ -66,11 +66,38 @@ export default function ForgotPasswordScreen() {
 
       <Button title="Send Reset Link" loading={loading} onPress={handleReset} />
 
-      <View className="mt-4 items-center">
+      <View style={s.backRow}>
         <Link href="/(auth)/sign-in">
-          <Text className="text-sm text-blue-600">Back to sign in</Text>
+          <Text style={s.backLink}>Back to sign in</Text>
         </Link>
       </View>
     </Screen>
   );
 }
+
+const s = StyleSheet.create({
+  title: { fontFamily: fonts.monoBold, fontSize: 28, color: colors.textPrimary, marginBottom: 4 },
+  subtitle: {
+    fontFamily: fonts.display,
+    fontSize: 14,
+    color: colors.textSecondary,
+    marginBottom: spacing.sectionGap,
+  },
+  backRow: { marginTop: 16, alignItems: 'center' },
+  backLink: { fontFamily: fonts.mono, fontSize: 12, letterSpacing: 1.5, color: colors.amber },
+  centerWrap: { flex: 1, alignItems: 'center', justifyContent: 'center' },
+  sentTitle: {
+    fontFamily: fonts.monoBold,
+    fontSize: 24,
+    color: colors.textPrimary,
+    marginTop: 16,
+    marginBottom: 8,
+  },
+  sentBody: {
+    fontFamily: fonts.display,
+    fontSize: 14,
+    color: colors.textSecondary,
+    textAlign: 'center',
+  },
+  sentEmail: { fontFamily: fonts.displayMedium, color: colors.textPrimary },
+});

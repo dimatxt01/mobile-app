@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
-import { Text, View } from 'react-native';
-import { router, useLocalSearchParams } from 'expo-router';
+import { StyleSheet, Text, View } from 'react-native';
+import { Link, router, useLocalSearchParams } from 'expo-router';
 import * as Linking from 'expo-linking';
 import { supabase } from '@/lib/supabase';
 import { Screen } from '@/components/ui/Screen';
@@ -8,6 +8,8 @@ import { Input } from '@/components/ui/Input';
 import { Button } from '@/components/ui/Button';
 import { useAuth } from '@/features/auth/hooks/use-auth';
 import { resetPasswordSchema } from '@/features/auth/schemas/auth-schemas';
+import { colors, fonts, spacing } from '@/lib/hmc-colors';
+import { Eyebrow } from '@/components/hmc/Eyebrow';
 
 export default function ResetPasswordScreen() {
   const { updatePassword } = useAuth();
@@ -71,9 +73,13 @@ export default function ResetPasswordScreen() {
   if (sessionError) {
     return (
       <Screen>
-        <View className="flex-1 items-center justify-center">
-          <Text className="mb-2 text-xl font-bold text-red-600">Link expired or invalid</Text>
-          <Text className="text-center text-gray-500">{sessionError}</Text>
+        <View style={s.centerWrap}>
+          <Eyebrow label="LINK EXPIRED" />
+          <Text style={s.errorTitle}>Reset link invalid.</Text>
+          <Text style={s.stateBody}>{sessionError}</Text>
+          <Link href="/(auth)/forgot-password">
+            <Text style={s.link}>Request a new link</Text>
+          </Link>
         </View>
       </Screen>
     );
@@ -82,8 +88,9 @@ export default function ResetPasswordScreen() {
   if (!sessionReady) {
     return (
       <Screen>
-        <View className="flex-1 items-center justify-center">
-          <Text className="text-gray-500">Verifying reset link…</Text>
+        <View style={s.centerWrap}>
+          <Eyebrow label="PLEASE WAIT" />
+          <Text style={s.stateBody}>Verifying reset link…</Text>
         </View>
       </Screen>
     );
@@ -92,9 +99,10 @@ export default function ResetPasswordScreen() {
   if (success) {
     return (
       <Screen>
-        <View className="flex-1 items-center justify-center">
-          <Text className="mb-2 text-2xl font-bold text-gray-900">Password updated!</Text>
-          <Text className="text-gray-500">Redirecting to sign in…</Text>
+        <View style={s.centerWrap}>
+          <Eyebrow label="ALL DONE" />
+          <Text style={s.successTitle}>Password updated.</Text>
+          <Text style={s.stateBody}>Redirecting to sign in…</Text>
         </View>
       </Screen>
     );
@@ -102,8 +110,8 @@ export default function ResetPasswordScreen() {
 
   return (
     <Screen scroll>
-      <Text className="mb-2 text-3xl font-bold text-gray-900">New password</Text>
-      <Text className="mb-8 text-gray-500">Choose a strong password for your account.</Text>
+      <Text style={s.title}>New password</Text>
+      <Text style={s.subtitle}>Choose a strong password for your account.</Text>
 
       <Input
         label="New password"
@@ -125,6 +133,45 @@ export default function ResetPasswordScreen() {
       />
 
       <Button title="Update Password" loading={loading} onPress={handleUpdatePassword} />
+      <View style={s.backRow}>
+        <Link href="/(auth)/sign-in">
+          <Text style={s.link}>Back to sign in</Text>
+        </Link>
+      </View>
     </Screen>
   );
 }
+
+const s = StyleSheet.create({
+  title: { fontFamily: fonts.monoBold, fontSize: 28, color: colors.textPrimary, marginBottom: 4 },
+  subtitle: {
+    fontFamily: fonts.display,
+    fontSize: 14,
+    color: colors.textSecondary,
+    marginBottom: spacing.sectionGap,
+  },
+  centerWrap: { flex: 1, alignItems: 'center', justifyContent: 'center' },
+  stateBody: {
+    fontFamily: fonts.display,
+    fontSize: 14,
+    color: colors.textSecondary,
+    textAlign: 'center',
+    marginTop: 8,
+  },
+  errorTitle: {
+    fontFamily: fonts.monoBold,
+    fontSize: 20,
+    color: colors.danger,
+    marginTop: 16,
+    marginBottom: 4,
+  },
+  successTitle: {
+    fontFamily: fonts.monoBold,
+    fontSize: 24,
+    color: colors.textPrimary,
+    marginTop: 16,
+    marginBottom: 4,
+  },
+  backRow: { marginTop: 16, alignItems: 'center' },
+  link: { fontFamily: fonts.mono, fontSize: 12, letterSpacing: 1.5, color: colors.amber },
+});
