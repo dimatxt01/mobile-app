@@ -105,13 +105,25 @@ export default function TodayScreen() {
   }, [identityChecks, executionChecks, perf9to5, outcomeScores, penaltyScores, reflectionWin, reflectionBroke, reflectionTomorrow]);
 
   useEffect(() => {
-    if (!checkin?.is_locked) return;
+    if (!checkin?.is_locked || !score) return;
     const now = new Date();
     const isSunday = now.getDay() === 0;
     const isLastDay =
       new Date(now.getFullYear(), now.getMonth() + 1, 0).getDate() === now.getDate();
-    if (isSunday) router.push('/(app)/modal/weekly-review');
-    else if (isLastDay) router.push('/(app)/modal/monthly-review');
+    router.push({
+      pathname: '/(app)/modal/day-complete',
+      params: {
+        score: (checkin.total_score ?? score.total).toString(),
+        identityScore: score.identity.toString(),
+        executionScore: score.execution.toString(),
+        outcomeScore: score.outcome.toString(),
+        penaltyScore: score.penalty.toString(),
+        isSunday: isSunday ? '1' : '0',
+        isLastDay: isLastDay ? '1' : '0',
+        checkinId: checkin.id,
+      },
+    });
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [checkin?.is_locked]);
 
   useEffect(() => {
@@ -145,6 +157,20 @@ export default function TodayScreen() {
       )}
       <ScrollView contentContainerStyle={{ paddingBottom: 120 }}>
         <PrintBar dayNumber={(profile?.day_count ?? 0) + 1} />
+
+        {/* Yesterday's letter */}
+        {(() => {
+          const today = new Date().toISOString().slice(0, 10);
+          const yesterdayCheckin = history?.find((r) => r.date !== today);
+          const letter = (yesterdayCheckin as { reflection_tomorrow?: string } | undefined)?.reflection_tomorrow;
+          if (!letter || isLocked) return null;
+          return (
+            <View style={styles.letterCard}>
+              <Text style={styles.letterCardEyebrow}>✉  A LETTER FROM YESTERDAY-YOU</Text>
+              <Text style={styles.letterCardText}>{letter}</Text>
+            </View>
+          );
+        })()}
 
         {profile?.identity_sentence && (
           <View style={styles.sentence}>
@@ -305,6 +331,29 @@ const styles = StyleSheet.create({
     fontSize: 11,
     letterSpacing: 1.5,
     color: colors.textPrimary,
+  },
+  letterCard: {
+    marginHorizontal: spacing.pagePad,
+    marginTop: 12,
+    marginBottom: 4,
+    padding: 14,
+    backgroundColor: colors.accentMuted,
+    borderRadius: 4,
+    borderLeftWidth: 2,
+    borderLeftColor: colors.amber,
+    gap: 6,
+  },
+  letterCardEyebrow: {
+    fontFamily: fonts.mono,
+    fontSize: 9,
+    letterSpacing: 1.8,
+    color: colors.amber,
+  },
+  letterCardText: {
+    fontFamily: fonts.display,
+    fontSize: 14,
+    color: colors.textSecondary,
+    lineHeight: 20,
   },
   sentence: {
     paddingHorizontal: spacing.pagePad,

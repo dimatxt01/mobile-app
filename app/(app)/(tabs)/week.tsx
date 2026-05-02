@@ -1,6 +1,9 @@
 import { View, Text, ScrollView, TouchableOpacity, StyleSheet } from 'react-native';
 import { router } from 'expo-router';
+import { useQuery } from '@tanstack/react-query';
+import { useAuth } from '@/features/auth/hooks/use-auth';
 import { useHistory } from '@/features/history/use-history';
+import { supabase } from '@/lib/supabase';
 import { colors, fonts, spacing } from '@/lib/hmc-colors';
 import { PrintBar } from '@/components/hmc/PrintBar';
 import { BigNum } from '@/components/hmc/BigNum';
@@ -15,10 +18,37 @@ function getWeekNumber(d: Date): number {
 }
 
 export default function WeekScreen() {
+  const { user } = useAuth();
   const { data: history } = useHistory(14);
   const rows = history ?? [];
   const thisWeek = rows.slice(0, 7);
   const lastWeek = rows.slice(7, 14);
+
+  const now = new Date();
+  const dayOfWeek = now.getDay(); // 0=Sun
+  const isSunday = dayOfWeek === 0;
+  const daysUntilSunday = isSunday ? 0 : 7 - dayOfWeek;
+
+  const { data: weeklyReviews } = useQuery({
+    queryKey: ['weekly-reviews', user?.id],
+    queryFn: async () => {
+      const { data } = await supabase
+        .from('weekly_reviews')
+        .select('*')
+        .order('week_end', { ascending: false })
+        .limit(12);
+      return (data ?? []) as {
+        id: string;
+        week_start: string;
+        week_end: string;
+        win: string | null;
+        challenge: string | null;
+        next_week: string | null;
+        weekly_avg: number | null;
+      }[];
+    },
+    enabled: !!user,
+  });
   const thisAvg = thisWeek.length
     ? Math.round(thisWeek.reduce((s, r) => s + r.total_score, 0) / thisWeek.length)
     : 0;
@@ -156,6 +186,70 @@ export default function WeekScreen() {
           </TouchableOpacity>
         ))}
       </View>
+
+      <Rule strong />
+
+      {/* Weekly check-up CTA / countdown */}
+      <View style={styles.section}>
+        {isSunday ? (
+          <TouchableOpacity
+            style={styles.ctaBtn}
+            onPress={() => router.push('/(app)/modal/weekly-review')}
+            activeOpacity={0.8}
+          >
+            <Text style={styles.ctaText}>WEEKLY CHECK-UP →</Text>
+          </TouchableOpacity>
+        ) : (
+          <View style={styles.countdownBlock}>
+            <Eyebrow label="NEXT WEEKLY CHECK-UP IN" />
+            <View style={styles.countdownRow}>
+              <Text style={styles.countdownNum}>{daysUntilSunday}</Text>
+              <Text style={styles.countdownUnit}>DAYS</Text>
+            </View>
+          </View>
+        )}
+      </View>
+
+      {/* Past weekly reviews */}
+      {weeklyReviews && weeklyReviews.length > 0 && (
+        <>
+          <Rule />
+          <View style={styles.section}>
+            <Eyebrow label="PAST WEEKLY REVIEWS" />
+            {weeklyReviews.map((r) => {
+              const endDate = new Date(r.week_end + 'T00:00:00');
+              const label = endDate.toLocaleDateString('en-US', { month: 'short', day: 'numeric' }).toUpperCase();
+              return (
+                <TouchableOpacity
+                  key={r.id}
+                  style={styles.reviewRow}
+                  onPress={() =>
+                    router.push({
+                      pathname: '/(app)/modal/weekly-review',
+                      params: {
+                        readOnly: '1',
+                        weekStart: r.week_start,
+                        weekEnd: r.week_end,
+                      },
+                    })
+                  }
+                  activeOpacity={0.7}
+                >
+                  <View style={styles.reviewLeft}>
+                    <Text style={styles.reviewLabel}>WK OF {label}</Text>
+                    {r.win ? (
+                      <Text style={styles.reviewWin} numberOfLines={1}>{r.win}</Text>
+                    ) : null}
+                  </View>
+                  {r.weekly_avg != null && (
+                    <Text style={styles.reviewScore}>{Math.round(r.weekly_avg)}</Text>
+                  )}
+                </TouchableOpacity>
+              );
+            })}
+          </View>
+        </>
+      )}
     </ScrollView>
   );
 }
@@ -233,6 +327,41 @@ const styles = StyleSheet.create({
   dayDateMono: { fontFamily: fonts.mono, fontSize: 12, color: colors.textTertiary },
   dayWin: { fontFamily: fonts.display, fontSize: 12, color: colors.textTertiary },
   dayScore: {
+    fontFamily: fonts.monoBold,
+    fontSize: 20,
+    color: colors.textPrimary,
+    fontVariant: ['tabular-nums'],
+  },
+  ctaBtn: {
+    paddingVertical: 16,
+    borderWidth: 1,
+    borderColor: colors.amber,
+    borderRadius: 4,
+    alignItems: 'center',
+  },
+  ctaText: { fontFamily: fonts.monoBold, fontSize: 13, letterSpacing: 2, color: colors.amber },
+  countdownBlock: { gap: 8 },
+  countdownRow: { flexDirection: 'row', alignItems: 'baseline', gap: 6 },
+  countdownNum: {
+    fontFamily: fonts.monoBold,
+    fontSize: 48,
+    color: colors.textPrimary,
+    fontVariant: ['tabular-nums'],
+    lineHeight: 52,
+  },
+  countdownUnit: { fontFamily: fonts.mono, fontSize: 12, letterSpacing: 2, color: colors.textTertiary },
+  reviewRow: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    paddingVertical: 14,
+    borderBottomWidth: StyleSheet.hairlineWidth,
+    borderBottomColor: colors.lineRegular,
+  },
+  reviewLeft: { flex: 1, gap: 3 },
+  reviewLabel: { fontFamily: fonts.mono, fontSize: 11, letterSpacing: 1.5, color: colors.textPrimary },
+  reviewWin: { fontFamily: fonts.display, fontSize: 13, color: colors.textSecondary },
+  reviewScore: {
     fontFamily: fonts.monoBold,
     fontSize: 20,
     color: colors.textPrimary,

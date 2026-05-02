@@ -6,9 +6,12 @@ export default function TabsLayout() {
     <Tabs tabBar={(props) => <PrintTabBar {...props} />} screenOptions={{ headerShown: false }}>
       <Tabs.Screen name="index" options={{ title: 'Today' }} />
       <Tabs.Screen name="week" options={{ title: 'Week' }} />
-      <Tabs.Screen name="trends" options={{ title: 'Trends' }} />
-      <Tabs.Screen name="mirror" options={{ title: 'Mirror' }} />
-      <Tabs.Screen name="you" options={{ title: 'You' }} />
+      <Tabs.Screen name="month" options={{ title: 'Month' }} />
+      <Tabs.Screen name="profile" options={{ title: 'Profile' }} />
+      {/* Hidden routes — content moved into Profile tab */}
+      <Tabs.Screen name="you" options={{ href: null }} />
+      <Tabs.Screen name="trends" options={{ href: null }} />
+      <Tabs.Screen name="mirror" options={{ href: null }} />
     </Tabs>
   );
 }
