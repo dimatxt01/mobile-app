@@ -2,6 +2,7 @@ import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { Alert } from 'react-native';
 import { supabase } from '@/lib/supabase';
 import { useAuth } from '@/features/auth/hooks/use-auth';
+import { todayDate } from '@/lib/date';
 
 type LockArgs = {
   checkinId: string;
@@ -27,7 +28,7 @@ export function useLockCheckin() {
       return data as number;
     },
     onSuccess: () => {
-      const date = new Date().toISOString().slice(0, 10);
+      const date = todayDate();
       qc.invalidateQueries({ queryKey: ['checkin', user?.id, date] });
       qc.invalidateQueries({ queryKey: ['history'] });
     },
