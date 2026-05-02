@@ -6,8 +6,8 @@ import { Input } from '@/components/ui/Input';
 import { Button } from '@/components/ui/Button';
 import { useAuth } from '@/features/auth/hooks/use-auth';
 import { forgotPasswordSchema } from '@/features/auth/schemas/auth-schemas';
-import { colors, fonts, spacing } from '@/lib/hmc-colors';
-import { Eyebrow } from '@/components/hmc/Eyebrow';
+import { colors, fonts, spacing } from '@/lib/habits-colors';
+import { Eyebrow } from '@/components/habits/Eyebrow';
 
 export default function ForgotPasswordScreen() {
   const { resetPassword } = useAuth();

@@ -15,7 +15,7 @@ import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { useAuth } from '@/features/auth/hooks/use-auth';
 import { useProfileStore } from '@/store/profile-store';
 import { uploadMirrorPhoto } from '@/features/mirror/upload-photo';
-import { colors, fonts, spacing } from '@/lib/hmc-colors';
+import { colors, fonts, spacing } from '@/lib/habits-colors';
 
 export default function MirrorCaptureScreen() {
   const insets = useSafeAreaInsets();

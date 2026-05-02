@@ -1,5 +1,5 @@
 import { Text, StyleSheet } from 'react-native';
-import { colors, fonts } from '@/lib/hmc-colors';
+import { colors, fonts } from '@/lib/habits-colors';
 
 type Props = { label: string };
 export function Eyebrow({ label }: Props) {

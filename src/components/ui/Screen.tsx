@@ -1,6 +1,6 @@
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { ScrollView, View, StyleSheet } from 'react-native';
-import { colors, spacing } from '@/lib/hmc-colors';
+import { colors, spacing } from '@/lib/habits-colors';
 
 type ScreenProps = {
   children: React.ReactNode;

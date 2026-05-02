@@ -4,10 +4,10 @@ import { useQuery } from '@tanstack/react-query';
 import { useAuth } from '@/features/auth/hooks/use-auth';
 import { useProfileStore } from '@/store/profile-store';
 import { supabase } from '@/lib/supabase';
-import { colors, fonts, spacing } from '@/lib/hmc-colors';
-import { PrintBar } from '@/components/hmc/PrintBar';
-import { Eyebrow } from '@/components/hmc/Eyebrow';
-import { Rule } from '@/components/hmc/Rule';
+import { colors, fonts, spacing } from '@/lib/habits-colors';
+import { PrintBar } from '@/components/habits/PrintBar';
+import { Eyebrow } from '@/components/habits/Eyebrow';
+import { Rule } from '@/components/habits/Rule';
 export default function YouScreen() {
   const { user } = useAuth();
   const { profile } = useProfileStore();
@@ -100,7 +100,7 @@ export default function YouScreen() {
 
       <View style={styles.section}>
         <Eyebrow label="ACCOUNT" />
-        {navRow('Subscription', 'HMC PRO', () => router.push('/(app)/modal/manage-subscription'))}
+        {navRow('Subscription', 'HABITS PRO', () => router.push('/(app)/modal/manage-subscription'))}
         {navRow(
           'Notifications',
           profile?.reminder_time ?? '21:00',
@@ -110,7 +110,7 @@ export default function YouScreen() {
         {navRow('Sign Out', undefined, () => router.push('/(app)/modal/signout-confirm'))}
       </View>
 
-      <Text style={styles.footer}>HMC · HALF MILLY CLUB · v1.0</Text>
+      <Text style={styles.footer}>HABITS APP · v1.0</Text>
     </ScrollView>
   );
 }

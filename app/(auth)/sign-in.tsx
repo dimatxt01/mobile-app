@@ -6,7 +6,7 @@ import { Input } from '@/components/ui/Input';
 import { Button } from '@/components/ui/Button';
 import { useAuth } from '@/features/auth/hooks/use-auth';
 import { signInSchema } from '@/features/auth/schemas/auth-schemas';
-import { colors, fonts, spacing } from '@/lib/hmc-colors';
+import { colors, fonts, spacing } from '@/lib/habits-colors';
 
 export default function SignInScreen() {
   const { signIn, signInWithGoogle } = useAuth();
@@ -54,7 +54,7 @@ export default function SignInScreen() {
   return (
     <Screen scroll>
       <Text style={s.title}>Welcome back</Text>
-      <Text style={s.subtitle}>Sign in to HMC.</Text>
+      <Text style={s.subtitle}>Sign in to Habits.</Text>
 
       {errors.general ? (
         <View style={s.error}>

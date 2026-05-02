@@ -4,9 +4,9 @@ import { router } from 'expo-router';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { useAuth } from '@/features/auth/hooks/use-auth';
 import { supabase } from '@/lib/supabase';
-import { colors, fonts, spacing } from '@/lib/hmc-colors';
-import { Eyebrow } from '@/components/hmc/Eyebrow';
-import { Rule } from '@/components/hmc/Rule';
+import { colors, fonts, spacing } from '@/lib/habits-colors';
+import { Eyebrow } from '@/components/habits/Eyebrow';
+import { Rule } from '@/components/habits/Rule';
 
 export default function MonthlyReviewScreen() {
   const insets = useSafeAreaInsets();

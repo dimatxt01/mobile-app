@@ -9,16 +9,16 @@ import { useSaveCheckin } from '@/features/checkin/save-checkin';
 import { useLockCheckin } from '@/features/checkin/lock-checkin';
 import { useHistory } from '@/features/history/use-history';
 import { computeScore } from '@/lib/score';
-import { colors, fonts, spacing } from '@/lib/hmc-colors';
-import { PrintBar } from '@/components/hmc/PrintBar';
-import { BracketBlock } from '@/components/hmc/BracketBlock';
-import { HabitRow } from '@/components/hmc/HabitRow';
-import { Step05 } from '@/components/hmc/Step05';
-import { Slider10 } from '@/components/hmc/Slider10';
-import { BigNum } from '@/components/hmc/BigNum';
-import { Eyebrow } from '@/components/hmc/Eyebrow';
-import { Rule } from '@/components/hmc/Rule';
-import { BottomBar } from '@/components/hmc/BottomBar';
+import { colors, fonts, spacing } from '@/lib/habits-colors';
+import { PrintBar } from '@/components/habits/PrintBar';
+import { BracketBlock } from '@/components/habits/BracketBlock';
+import { HabitRow } from '@/components/habits/HabitRow';
+import { Step05 } from '@/components/habits/Step05';
+import { Slider10 } from '@/components/habits/Slider10';
+import { BigNum } from '@/components/habits/BigNum';
+import { Eyebrow } from '@/components/habits/Eyebrow';
+import { Rule } from '@/components/habits/Rule';
+import { BottomBar } from '@/components/habits/BottomBar';
 
 export default function TodayScreen() {
   const { user } = useAuth();

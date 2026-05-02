@@ -1,5 +1,5 @@
 import { View, TouchableOpacity, Text, StyleSheet } from 'react-native';
-import { colors, fonts } from '@/lib/hmc-colors';
+import { colors, fonts } from '@/lib/habits-colors';
 
 type Props = { value: number; onChange: (v: number) => void; disabled?: boolean };
 

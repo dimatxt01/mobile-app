@@ -2,8 +2,8 @@ import { View, Text, TouchableOpacity, StyleSheet } from 'react-native';
 import { router } from 'expo-router';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { useAuth } from '@/features/auth/hooks/use-auth';
-import { colors, fonts, spacing } from '@/lib/hmc-colors';
-import { Eyebrow } from '@/components/hmc/Eyebrow';
+import { colors, fonts, spacing } from '@/lib/habits-colors';
+import { Eyebrow } from '@/components/habits/Eyebrow';
 
 export default function SignoutConfirmScreen() {
   const insets = useSafeAreaInsets();

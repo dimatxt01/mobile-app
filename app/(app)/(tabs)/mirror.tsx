@@ -10,8 +10,8 @@ import {
 import { router } from 'expo-router';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { useMirror } from '@/features/mirror/use-mirror';
-import { colors, fonts, spacing } from '@/lib/hmc-colors';
-import { Eyebrow } from '@/components/hmc/Eyebrow';
+import { colors, fonts, spacing } from '@/lib/habits-colors';
+import { Eyebrow } from '@/components/habits/Eyebrow';
 import type { MirrorPhoto } from '@/types/database';
 
 const SCREEN_WIDTH = Dimensions.get('window').width;

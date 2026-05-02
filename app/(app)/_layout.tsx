@@ -2,7 +2,7 @@ import { Redirect, Stack } from 'expo-router';
 import { ActivityIndicator, View, StyleSheet } from 'react-native';
 import { useAuth } from '@/features/auth/hooks/use-auth';
 import { useProfileStore } from '@/store/profile-store';
-import { colors } from '@/lib/hmc-colors';
+import { colors } from '@/lib/habits-colors';
 
 export default function AppLayout() {
   const { session, isInitialized } = useAuth();

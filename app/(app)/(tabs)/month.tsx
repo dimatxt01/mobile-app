@@ -5,11 +5,11 @@ import { useQuery } from '@tanstack/react-query';
 import { useAuth } from '@/features/auth/hooks/use-auth';
 import { useHistory } from '@/features/history/use-history';
 import { supabase } from '@/lib/supabase';
-import { colors, fonts, spacing } from '@/lib/hmc-colors';
-import { Eyebrow } from '@/components/hmc/Eyebrow';
-import { Rule } from '@/components/hmc/Rule';
-import { PrintBar } from '@/components/hmc/PrintBar';
-import { BigNum } from '@/components/hmc/BigNum';
+import { colors, fonts, spacing } from '@/lib/habits-colors';
+import { Eyebrow } from '@/components/habits/Eyebrow';
+import { Rule } from '@/components/habits/Rule';
+import { PrintBar } from '@/components/habits/PrintBar';
+import { BigNum } from '@/components/habits/BigNum';
 
 const MONTH_NAMES = ['JAN', 'FEB', 'MAR', 'APR', 'MAY', 'JUN', 'JUL', 'AUG', 'SEP', 'OCT', 'NOV', 'DEC'] as const;
 

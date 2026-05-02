@@ -4,7 +4,7 @@ import { useEffect } from 'react';
 import { useAuth } from '@/features/auth/hooks/use-auth';
 import { useProfileStore } from '@/store/profile-store';
 import { supabase } from '@/lib/supabase';
-import { colors, fonts } from '@/lib/hmc-colors';
+import { colors, fonts } from '@/lib/habits-colors';
 
 export default function Index() {
   const { session, isInitialized } = useAuth();
@@ -38,7 +38,7 @@ export default function Index() {
   if (!isInitialized || (session && isLoading)) {
     return (
       <View style={styles.center}>
-        <Text style={styles.wordmark}>HMC.</Text>
+        <Text style={styles.wordmark}>HABITS.</Text>
         <ActivityIndicator size="large" color={colors.amber} />
       </View>
     );

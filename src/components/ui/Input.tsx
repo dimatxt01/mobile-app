@@ -1,5 +1,5 @@
 import { Text, TextInput, TextInputProps, View, StyleSheet } from 'react-native';
-import { colors, fonts } from '@/lib/hmc-colors';
+import { colors, fonts } from '@/lib/habits-colors';
 
 type InputProps = TextInputProps & {
   label?: string;

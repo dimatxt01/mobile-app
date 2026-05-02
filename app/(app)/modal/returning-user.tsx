@@ -1,15 +1,15 @@
 import { View, Text, TouchableOpacity, StyleSheet } from 'react-native';
 import { router } from 'expo-router';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
-import { colors, fonts, spacing } from '@/lib/hmc-colors';
-import { Eyebrow } from '@/components/hmc/Eyebrow';
+import { colors, fonts, spacing } from '@/lib/habits-colors';
+import { Eyebrow } from '@/components/habits/Eyebrow';
 
 export default function ReturningUserScreen() {
   const insets = useSafeAreaInsets();
   return (
     <View style={[styles.container, { paddingTop: insets.top }]}>
       <View style={styles.content}>
-        <Text style={styles.logo}>HMC.</Text>
+        <Text style={styles.logo}>HABITS.</Text>
         <Eyebrow label="WELCOME BACK" />
         <Text style={styles.body}>
           You&apos;ve been away for a while. Your streak has reset, but your data is still here.

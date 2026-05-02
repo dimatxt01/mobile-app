@@ -3,7 +3,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 
 export type ScoreDensity = 'number' | 'ring' | 'breakdown';
 
-const STORAGE_KEY = 'hmc_score_density';
+const STORAGE_KEY = 'habits_score_density';
 const DEFAULT: ScoreDensity = 'number';
 
 export function useScoreDensity(): [ScoreDensity, (v: ScoreDensity) => void] {

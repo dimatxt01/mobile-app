@@ -1,8 +1,8 @@
 import { View, Text, TouchableOpacity, StyleSheet, Alert } from 'react-native';
 import { router } from 'expo-router';
-import { colors, fonts, spacing } from '@/lib/hmc-colors';
-import { Eyebrow } from '@/components/hmc/Eyebrow';
-import { Rule } from '@/components/hmc/Rule';
+import { colors, fonts, spacing } from '@/lib/habits-colors';
+import { Eyebrow } from '@/components/habits/Eyebrow';
+import { Rule } from '@/components/habits/Rule';
 export default function PrivacyDataScreen() {
   return (
     <View style={styles.c}>

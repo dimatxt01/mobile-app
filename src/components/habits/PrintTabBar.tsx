@@ -1,13 +1,13 @@
 import { View, Text, TouchableOpacity, StyleSheet } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import type { BottomTabBarProps } from '@react-navigation/bottom-tabs';
-import { colors, fonts, spacing } from '@/lib/hmc-colors';
+import { colors, fonts, spacing } from '@/lib/habits-colors';
 
 const TAB_LABELS: Record<string, string> = {
   index: 'TODAY',
   week: 'WEEK',
   month: 'MONTH',
-  profile: 'PROFILE',
+  profile: 'YOU',
 };
 
 export function PrintTabBar({ state, descriptors, navigation }: BottomTabBarProps) {

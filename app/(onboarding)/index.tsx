@@ -16,11 +16,11 @@ import { useAuth } from '@/features/auth/hooks/use-auth';
 import { useProfileStore } from '@/store/profile-store';
 import { supabase } from '@/lib/supabase';
 import { scheduleReminder } from '@/features/notifications/schedule-reminder';
-import { colors, fonts, spacing } from '@/lib/hmc-colors';
-import { POBar } from '@/components/hmc/POBar';
-import { POCta } from '@/components/hmc/POCta';
-import { Eyebrow } from '@/components/hmc/Eyebrow';
-import { Rule } from '@/components/hmc/Rule';
+import { colors, fonts, spacing } from '@/lib/habits-colors';
+import { POBar } from '@/components/habits/POBar';
+import { POCta } from '@/components/habits/POCta';
+import { Eyebrow } from '@/components/habits/Eyebrow';
+import { Rule } from '@/components/habits/Rule';
 import { Input } from '@/components/ui/Input';
 
 const DEFAULT_IDENTITY_HABITS = [
@@ -149,7 +149,7 @@ export default function OnboardingScreen() {
       case 1:
         return (
           <View style={styles.centered}>
-            <Text style={styles.bigLogo}>HMC.</Text>
+            <Text style={styles.bigLogo}>HABITS.</Text>
             <Text style={styles.tagline}>{'Score your day.\nBuild your legend.'}</Text>
           </View>
         );
@@ -466,7 +466,7 @@ export default function OnboardingScreen() {
         return (
           <View style={styles.centered}>
             <ActivityIndicator size="large" color={colors.amber} />
-            <Text style={[styles.explainer, { marginTop: 16 }]}>Setting up your HMC...</Text>
+            <Text style={[styles.explainer, { marginTop: 16 }]}>Setting up Habits...</Text>
           </View>
         );
       default:

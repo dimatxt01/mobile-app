@@ -2,9 +2,9 @@ import { View, Text, TouchableOpacity, FlatList, Dimensions, StyleSheet } from '
 import { router } from 'expo-router';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { useProfileStore } from '@/store/profile-store';
-import { colors, fonts, spacing } from '@/lib/hmc-colors';
-import { Eyebrow } from '@/components/hmc/Eyebrow';
-import { Rule } from '@/components/hmc/Rule';
+import { colors, fonts, spacing } from '@/lib/habits-colors';
+import { Eyebrow } from '@/components/habits/Eyebrow';
+import { Rule } from '@/components/habits/Rule';
 import { computeWeeksLived } from '@/lib/life-in-weeks';
 
 const WEEKS_TOTAL = 4004; // 52 weeks x 77 years

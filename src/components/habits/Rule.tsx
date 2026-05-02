@@ -1,5 +1,5 @@
 import { View, StyleSheet } from 'react-native';
-import { colors, spacing } from '@/lib/hmc-colors';
+import { colors, spacing } from '@/lib/habits-colors';
 
 export function Rule({ strong }: { strong?: boolean }) {
   return <View style={strong ? styles.strong : styles.rule} />;

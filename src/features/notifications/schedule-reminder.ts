@@ -14,7 +14,7 @@ export async function scheduleReminder(time: string): Promise<void> {
   // Daily check-in reminder
   await Notifications.scheduleNotificationAsync({
     content: {
-      title: 'HMC Check-In',
+      title: 'Habits Check-In',
       body: 'Time to score your day.',
     },
     trigger: {
@@ -27,7 +27,7 @@ export async function scheduleReminder(time: string): Promise<void> {
   // Weekly check-up reminder on Sundays at the same time
   await Notifications.scheduleNotificationAsync({
     content: {
-      title: 'HMC Weekly Check-Up',
+      title: 'Habits Weekly Check-Up',
       body: 'Time for your weekly check-up.',
     },
     trigger: {

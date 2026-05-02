@@ -16,11 +16,11 @@ import { useAuth } from '@/features/auth/hooks/use-auth';
 import { useHistory } from '@/features/history/use-history';
 import { useProfileStore } from '@/store/profile-store';
 import { supabase } from '@/lib/supabase';
-import { colors, fonts, spacing } from '@/lib/hmc-colors';
-import { PrintBar } from '@/components/hmc/PrintBar';
-import { BigNum } from '@/components/hmc/BigNum';
-import { Eyebrow } from '@/components/hmc/Eyebrow';
-import { Rule } from '@/components/hmc/Rule';
+import { colors, fonts, spacing } from '@/lib/habits-colors';
+import { PrintBar } from '@/components/habits/PrintBar';
+import { BigNum } from '@/components/habits/BigNum';
+import { Eyebrow } from '@/components/habits/Eyebrow';
+import { Rule } from '@/components/habits/Rule';
 import { computeWeeksLived } from '@/lib/life-in-weeks';
 
 const DAY_LABELS = ['SUN', 'MON', 'TUE', 'WED', 'THU', 'FRI', 'SAT'];

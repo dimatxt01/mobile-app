@@ -1,5 +1,5 @@
 import { Stack } from 'expo-router';
-import { colors } from '@/lib/hmc-colors';
+import { colors } from '@/lib/habits-colors';
 export default function ModalLayout() {
   return (
     <Stack

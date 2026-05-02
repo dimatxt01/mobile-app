@@ -1,6 +1,6 @@
 import { View, TouchableOpacity, Text, ActivityIndicator, StyleSheet } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
-import { colors, fonts, spacing } from '@/lib/hmc-colors';
+import { colors, fonts, spacing } from '@/lib/habits-colors';
 
 type Props = {
   label: string;

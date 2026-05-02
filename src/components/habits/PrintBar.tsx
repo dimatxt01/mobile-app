@@ -1,6 +1,6 @@
 import { View, Text, StyleSheet } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
-import { colors, fonts, spacing } from '@/lib/hmc-colors';
+import { colors, fonts, spacing } from '@/lib/habits-colors';
 import { Rule } from './Rule';
 
 type Props = { dayNumber?: number; right?: string };
@@ -11,7 +11,7 @@ export function PrintBar({ dayNumber, right }: Props) {
   return (
     <View style={[styles.container, { paddingTop: insets.top + 8 }]}>
       <View style={styles.row}>
-        <Text style={styles.logo}>HMC.</Text>
+        <Text style={styles.logo}>HABITS.</Text>
         {rightLabel ? <Text style={styles.day}>{rightLabel}</Text> : null}
       </View>
       <Rule />

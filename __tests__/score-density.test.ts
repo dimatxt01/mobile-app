@@ -53,6 +53,6 @@ describe('useScoreDensity', () => {
       result.current[1]('ring');
     });
     expect(result.current[0]).toBe('ring');
-    expect(AsyncStorage.setItem).toHaveBeenCalledWith('hmc_score_density', 'ring');
+    expect(AsyncStorage.setItem).toHaveBeenCalledWith('habits_score_density', 'ring');
   });
 });

@@ -6,8 +6,8 @@ import { Input } from '@/components/ui/Input';
 import { Button } from '@/components/ui/Button';
 import { useAuth } from '@/features/auth/hooks/use-auth';
 import { signUpSchema } from '@/features/auth/schemas/auth-schemas';
-import { colors, fonts, spacing } from '@/lib/hmc-colors';
-import { Eyebrow } from '@/components/hmc/Eyebrow';
+import { colors, fonts, spacing } from '@/lib/habits-colors';
+import { Eyebrow } from '@/components/habits/Eyebrow';
 
 type FieldErrors = {
   fullName?: string;
@@ -86,7 +86,7 @@ export default function SignUpScreen() {
   return (
     <Screen scroll>
       <Text style={s.title}>Create account</Text>
-      <Text style={s.subtitle}>Join HMC.</Text>
+      <Text style={s.subtitle}>Join Habits.</Text>
 
       {errors.general ? (
         <View style={s.error}>

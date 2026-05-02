@@ -12,7 +12,7 @@ import { useQuery } from '@tanstack/react-query';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { useAuth } from '@/features/auth/hooks/use-auth';
 import { supabase } from '@/lib/supabase';
-import { colors, fonts, spacing } from '@/lib/hmc-colors';
+import { colors, fonts, spacing } from '@/lib/habits-colors';
 import type { MirrorPhoto, DailyCheckin } from '@/types/database';
 
 const SCREEN_WIDTH = Dimensions.get('window').width;

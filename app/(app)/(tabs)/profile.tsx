@@ -16,11 +16,11 @@ import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { useAuth } from '@/features/auth/hooks/use-auth';
 import { useProfileStore } from '@/store/profile-store';
 import { useMirror } from '@/features/mirror/use-mirror';
-import { useHistory } from '@/features/history/use-history';
+import { useHistory, type HistoryRow } from '@/features/history/use-history';
 import { supabase } from '@/lib/supabase';
-import { colors, fonts, spacing } from '@/lib/hmc-colors';
-import { Eyebrow } from '@/components/hmc/Eyebrow';
-import { Rule } from '@/components/hmc/Rule';
+import { colors, fonts, spacing } from '@/lib/habits-colors';
+import { Eyebrow } from '@/components/habits/Eyebrow';
+import { Rule } from '@/components/habits/Rule';
 import type { MirrorPhoto } from '@/types/database';
 
 const SCREEN_WIDTH = Dimensions.get('window').width;
@@ -31,6 +31,64 @@ const TRENDS_RANGES = [30, 90, 365] as const;
 
 function fmtDate(d: string): string {
   return new Date(d).toLocaleDateString('en-US', { month: 'short', day: 'numeric' }).toUpperCase();
+}
+
+const DAY_ABBR = ['M', 'T', 'W', 'T', 'F', 'S', 'S'];
+
+function colorForScore(score: number | null): string {
+  if (score === null) return colors.lineRegular;
+  if (score >= 80) return colors.amber;
+  if (score >= 65) return 'rgba(255,176,32,0.55)';
+  if (score >= 50) return 'rgba(255,176,32,0.30)';
+  return colors.lineStrong;
+}
+
+function CalendarHeatmap({ rows }: { rows: HistoryRow[] }) {
+  const scoreMap = new Map(rows.map((r) => [r.date, r.total_score]));
+  const today = new Date();
+  const todayStr = today.toISOString().slice(0, 10);
+  const dayOfWeek = today.getDay();
+  const daysFromMonday = dayOfWeek === 0 ? 6 : dayOfWeek - 1;
+  const gridStart = new Date(today);
+  gridStart.setDate(today.getDate() - daysFromMonday - 21);
+  const cells = Array.from({ length: 28 }, (_, i) => {
+    const d = new Date(gridStart);
+    d.setDate(gridStart.getDate() + i);
+    const dateStr = d.toISOString().slice(0, 10);
+    const isFuture = dateStr > todayStr;
+    const score = isFuture ? null : (scoreMap.get(dateStr) ?? null);
+    return { dateStr, score, isFuture };
+  });
+  return (
+    <View>
+      <View style={calStyles.headerRow}>
+        {DAY_ABBR.map((d, i) => (
+          <View key={i} style={calStyles.cell}>
+            <Text style={calStyles.dayLabel}>{d}</Text>
+          </View>
+        ))}
+      </View>
+      <View style={calStyles.grid}>
+        {cells.map((c, i) => (
+          <View
+            key={i}
+            style={[
+              calStyles.cell,
+              calStyles.scoreCell,
+              { backgroundColor: c.isFuture ? 'transparent' : colorForScore(c.score) },
+              c.isFuture && calStyles.futureCell,
+            ]}
+          >
+            {c.score !== null && !c.isFuture && (
+              <Text style={[calStyles.scoreText, c.score >= 65 && calStyles.scoreTextDark]}>
+                {c.score}
+              </Text>
+            )}
+          </View>
+        ))}
+      </View>
+    </View>
+  );
 }
 
 export default function ProfileScreen() {
@@ -252,7 +310,7 @@ export default function ProfileScreen() {
           {navRow('Sign Out', () => router.push('/(app)/modal/signout-confirm'))}
         </View>
 
-        <Text style={styles.footer}>HMC · HALF MILLY CLUB · v1.0</Text>
+        <Text style={styles.footer}>HABITS APP · v1.0</Text>
       </ScrollView>
 
       {/* ── Mirror Grid Modal */}
@@ -460,4 +518,36 @@ const styles = StyleSheet.create({
     textAlign: 'center',
     paddingVertical: 24,
   },
+});
+
+const calStyles = StyleSheet.create({
+  headerRow: { flexDirection: 'row', marginBottom: 6 },
+  grid: { flexDirection: 'row', flexWrap: 'wrap' },
+  cell: { width: `${100 / 7}%`, alignItems: 'center' },
+  scoreCell: {
+    aspectRatio: 1,
+    borderRadius: 4,
+    justifyContent: 'center',
+    marginBottom: 4,
+  },
+  futureCell: {
+    borderWidth: StyleSheet.hairlineWidth,
+    borderColor: colors.lineRegular,
+    borderStyle: 'dashed',
+  },
+  dayLabel: {
+    fontFamily: fonts.mono,
+    fontSize: 9,
+    color: colors.textQuiet,
+    letterSpacing: 1,
+    paddingBottom: 4,
+  },
+  scoreText: {
+    fontFamily: fonts.mono,
+    fontSize: 9,
+    color: colors.textPrimary,
+    fontWeight: '600',
+    fontVariant: ['tabular-nums'],
+  },
+  scoreTextDark: { color: '#001A0D' },
 });
