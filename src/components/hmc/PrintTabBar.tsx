@@ -6,9 +6,8 @@ import { colors, fonts, spacing } from '@/lib/hmc-colors';
 const TAB_LABELS: Record<string, string> = {
   index: 'TODAY',
   week: 'WEEK',
-  trends: 'TRENDS',
-  mirror: 'MIRROR',
-  you: 'YOU',
+  month: 'MONTH',
+  profile: 'YOU',
 };
 
 export function PrintTabBar({ state, descriptors, navigation }: BottomTabBarProps) {

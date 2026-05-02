@@ -8,9 +8,7 @@ export default function TabsLayout() {
       <Tabs.Screen name="week" options={{ title: 'Week' }} />
       <Tabs.Screen name="month" options={{ title: 'Month' }} />
       <Tabs.Screen name="profile" options={{ title: 'Profile' }} />
-      {/* Hidden routes — content moved into Profile tab */}
-      <Tabs.Screen name="you" options={{ href: null }} />
-      <Tabs.Screen name="trends" options={{ href: null }} />
+      {/* Hidden route — full gallery for View All navigation */}
       <Tabs.Screen name="mirror" options={{ href: null }} />
     </Tabs>
   );
