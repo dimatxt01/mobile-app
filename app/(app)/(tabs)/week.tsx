@@ -3,6 +3,7 @@ import { router } from 'expo-router';
 import { useQuery } from '@tanstack/react-query';
 import { useAuth } from '@/features/auth/hooks/use-auth';
 import { useHistory } from '@/features/history/use-history';
+import { useProfileStore } from '@/store/profile-store';
 import { supabase } from '@/lib/supabase';
 import { colors, fonts, spacing } from '@/lib/hmc-colors';
 import { PrintBar } from '@/components/hmc/PrintBar';
@@ -62,6 +63,10 @@ export default function WeekScreen() {
     0,
   );
   const weekNumber = getWeekNumber(new Date());
+  const { profile } = useProfileStore();
+  const weeksLived = profile?.date_of_birth
+    ? Math.max(0, Math.floor((Date.now() - new Date(profile.date_of_birth).getTime()) / (7 * 24 * 60 * 60 * 1000)))
+    : 0;
 
   if (!rows.length) {
     return (
@@ -100,6 +105,22 @@ export default function WeekScreen() {
       </View>
 
       <Rule strong />
+
+      {/* Life in Weeks */}
+      <TouchableOpacity
+        style={styles.lifeCard}
+        onPress={() => router.push('/(app)/modal/life-in-weeks')}
+        activeOpacity={0.8}
+      >
+        <Eyebrow label="LIFE IN WEEKS" />
+        <View style={styles.lifeCardRow}>
+          <Text style={styles.lifeNum}>{weeksLived.toLocaleString()}</Text>
+          <Text style={styles.lifeOf}> of ~4,000 weeks</Text>
+          <Text style={styles.lifeArrow}>→</Text>
+        </View>
+      </TouchableOpacity>
+
+      <Rule />
 
       {/* Bar chart */}
       <View style={styles.chartSection}>
@@ -366,5 +387,32 @@ const styles = StyleSheet.create({
     fontSize: 20,
     color: colors.textPrimary,
     fontVariant: ['tabular-nums'],
+  },
+  lifeCard: {
+    paddingHorizontal: spacing.pagePad,
+    paddingVertical: 16,
+  },
+  lifeCardRow: {
+    flexDirection: 'row',
+    alignItems: 'baseline',
+    marginTop: 6,
+  },
+  lifeNum: {
+    fontFamily: fonts.monoBold,
+    fontSize: 28,
+    color: colors.amber,
+    fontVariant: ['tabular-nums'],
+  },
+  lifeOf: {
+    fontFamily: fonts.display,
+    fontSize: 15,
+    color: colors.textTertiary,
+    flex: 1,
+  },
+  lifeArrow: {
+    fontFamily: fonts.mono,
+    fontSize: 13,
+    color: colors.textTertiary,
+    letterSpacing: 1,
   },
 });

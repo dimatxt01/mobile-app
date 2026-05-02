@@ -61,12 +61,18 @@ export default function OnboardingScreen() {
   const [penalties, setPenalties] = useState(DEFAULT_PENALTIES);
   const [reminderHour, setReminderHour] = useState(21);
   const [reminderMinute, setReminderMinute] = useState(0);
+  const [dobMonth, setDobMonth] = useState(1);
+  const [dobDay, setDobDay] = useState(1);
+  const [dobYear, setDobYear] = useState(1990);
   const [isSaving, setIsSaving] = useState(false);
 
   const reminderTime = `${String(reminderHour).padStart(2, '0')}:${String(reminderMinute).padStart(2, '0')}`;
+  const dobMaxDay = new Date(dobYear, dobMonth, 0).getDate();
+  const dobDayClamped = Math.min(dobDay, dobMaxDay);
+  const dob = `${dobYear}-${String(dobMonth).padStart(2, '0')}-${String(dobDayClamped).padStart(2, '0')}`;
 
   useEffect(() => {
-    if (step !== 13) return;
+    if (step !== 14) return;
     (async () => {
       setIsSaving(true);
       await supabase
@@ -76,6 +82,7 @@ export default function OnboardingScreen() {
           identity_sentence: identitySentence,
           vision,
           reminder_time: reminderTime,
+          date_of_birth: dob,
           onboarding_completed: true,
         })
         .eq('id', session!.user.id);
@@ -90,17 +97,22 @@ export default function OnboardingScreen() {
     switch (step) {
       case 2:
         return name.trim().length > 0;
-      case 3:
-        return vision.trim().length > 0;
+      case 3: {
+        const testDate = new Date(dob);
+        const oneYearAgo = new Date(Date.now() - 365 * 24 * 60 * 60 * 1000);
+        return !isNaN(testDate.getTime()) && testDate < oneYearAgo;
+      }
       case 4:
-        return identitySentence.trim().length > 0;
+        return vision.trim().length > 0;
       case 5:
-        return identityHabits.length > 0;
+        return identitySentence.trim().length > 0;
       case 6:
+        return identityHabits.length > 0;
+      case 7:
         return executionHabits.length > 0;
-      case 8:
-        return outcomes.length > 0;
       case 9:
+        return outcomes.length > 0;
+      case 10:
         return penalties.length > 0;
       default:
         return true;
@@ -132,6 +144,44 @@ export default function OnboardingScreen() {
       case 3:
         return (
           <View style={styles.stepContent}>
+            <Eyebrow label="DATE OF BIRTH" />
+            <Text style={styles.explainer}>Used for your Life in Weeks visualization.</Text>
+            <View style={styles.timeRow}>
+              <View style={styles.timePicker}>
+                <TouchableOpacity onPress={() => setDobMonth((m) => m === 12 ? 1 : m + 1)}>
+                  <Text style={styles.timeBtn}>▲</Text>
+                </TouchableOpacity>
+                <Text style={styles.timeVal}>
+                  {['JAN','FEB','MAR','APR','MAY','JUN','JUL','AUG','SEP','OCT','NOV','DEC'][dobMonth - 1]}
+                </Text>
+                <TouchableOpacity onPress={() => setDobMonth((m) => m === 1 ? 12 : m - 1)}>
+                  <Text style={styles.timeBtn}>▼</Text>
+                </TouchableOpacity>
+              </View>
+              <View style={styles.timePicker}>
+                <TouchableOpacity onPress={() => setDobDay((d) => d === dobMaxDay ? 1 : d + 1)}>
+                  <Text style={styles.timeBtn}>▲</Text>
+                </TouchableOpacity>
+                <Text style={styles.timeVal}>{String(dobDayClamped).padStart(2, '0')}</Text>
+                <TouchableOpacity onPress={() => setDobDay((d) => d === 1 ? dobMaxDay : d - 1)}>
+                  <Text style={styles.timeBtn}>▼</Text>
+                </TouchableOpacity>
+              </View>
+              <View style={styles.timePicker}>
+                <TouchableOpacity onPress={() => setDobYear((y) => Math.min(y + 1, new Date().getFullYear() - 1))}>
+                  <Text style={styles.timeBtn}>▲</Text>
+                </TouchableOpacity>
+                <Text style={[styles.timeVal, styles.yearVal]}>{dobYear}</Text>
+                <TouchableOpacity onPress={() => setDobYear((y) => Math.max(y - 1, 1930))}>
+                  <Text style={styles.timeBtn}>▼</Text>
+                </TouchableOpacity>
+              </View>
+            </View>
+          </View>
+        );
+      case 4:
+        return (
+          <View style={styles.stepContent}>
             <Eyebrow label="YOUR VISION" />
             <Input
               value={vision}
@@ -143,7 +193,7 @@ export default function OnboardingScreen() {
             />
           </View>
         );
-      case 4:
+      case 5:
         return (
           <View style={styles.stepContent}>
             <Eyebrow label="I AM" />
@@ -160,7 +210,7 @@ export default function OnboardingScreen() {
             </View>
           </View>
         );
-      case 5:
+      case 6:
         return (
           <View style={styles.stepContent}>
             <Eyebrow label="IDENTITY HABITS" />
@@ -195,7 +245,7 @@ export default function OnboardingScreen() {
             )}
           </View>
         );
-      case 6:
+      case 7:
         return (
           <View style={styles.stepContent}>
             <Eyebrow label="EXECUTION HABITS" />
@@ -230,7 +280,7 @@ export default function OnboardingScreen() {
             )}
           </View>
         );
-      case 7:
+      case 8:
         return (
           <View style={styles.stepContent}>
             <Eyebrow label="9-TO-5 SCORE" />
@@ -242,7 +292,7 @@ export default function OnboardingScreen() {
             </Text>
           </View>
         );
-      case 8:
+      case 9:
         return (
           <View style={styles.stepContent}>
             <Eyebrow label="OUTCOMES (0–5 NIGHTLY)" />
@@ -272,7 +322,7 @@ export default function OnboardingScreen() {
             )}
           </View>
         );
-      case 9:
+      case 10:
         return (
           <View style={styles.stepContent}>
             <Eyebrow label="PENALTIES (0–5, SUBTRACTED)" />
@@ -302,7 +352,7 @@ export default function OnboardingScreen() {
             )}
           </View>
         );
-      case 10:
+      case 11:
         return (
           <View style={styles.stepContent}>
             <Eyebrow label="WHOOP INTEGRATION" />
@@ -312,7 +362,7 @@ export default function OnboardingScreen() {
             </Text>
           </View>
         );
-      case 11:
+      case 12:
         return (
           <View style={styles.stepContent}>
             <Eyebrow label="DAILY REMINDER" />
@@ -339,7 +389,7 @@ export default function OnboardingScreen() {
             </View>
           </View>
         );
-      case 12:
+      case 13:
         return (
           <View style={styles.stepContent}>
             <Eyebrow label="YOUR CONFIG" />
@@ -347,6 +397,10 @@ export default function OnboardingScreen() {
             <View style={styles.summaryRow}>
               <Text style={styles.summaryLabel}>NAME</Text>
               <Text style={styles.summaryValue}>{name}</Text>
+            </View>
+            <View style={styles.summaryRow}>
+              <Text style={styles.summaryLabel}>BIRTH DATE</Text>
+              <Text style={styles.summaryValue}>{dob}</Text>
             </View>
             <View style={styles.summaryRow}>
               <Text style={styles.summaryLabel}>VISION</Text>
@@ -382,7 +436,7 @@ export default function OnboardingScreen() {
             </View>
           </View>
         );
-      case 13:
+      case 14:
         return (
           <View style={styles.centered}>
             <ActivityIndicator size="large" color={colors.amber} />
@@ -398,19 +452,19 @@ export default function OnboardingScreen() {
     switch (step) {
       case 1:
         return 'BEGIN';
-      case 5:
       case 6:
-        return 'LOOKS GOOD';
       case 7:
-        return 'GOT IT';
+        return 'LOOKS GOOD';
       case 8:
+        return 'GOT IT';
       case 9:
-        return 'DONE';
       case 10:
-        return 'SKIP FOR NOW';
+        return 'DONE';
       case 11:
-        return 'SET REMINDER';
+        return 'SKIP FOR NOW';
       case 12:
+        return 'SET REMINDER';
+      case 13:
         return 'LOCK IN MY CONFIG';
       default:
         return 'NEXT';
@@ -422,11 +476,11 @@ export default function OnboardingScreen() {
       style={[styles.container, { paddingTop: insets.top }]}
       behavior={Platform.OS === 'ios' ? 'padding' : undefined}
     >
-      {step < 13 && <POBar step={step} />}
+      {step < 14 && <POBar step={step} total={14} />}
       <ScrollView contentContainerStyle={styles.scroll} keyboardShouldPersistTaps="handled">
         {renderStep()}
       </ScrollView>
-      {step < 13 && (
+      {step < 14 && (
         <View style={{ paddingBottom: insets.bottom + 16 }}>
           <POCta label={ctaLabel()} onPress={() => setStep(step + 1)} disabled={!canNext()} />
           {step > 1 && (
@@ -513,6 +567,7 @@ const styles = StyleSheet.create({
     color: colors.textPrimary,
     fontVariant: ['tabular-nums'],
   },
+  yearVal: { fontSize: 28, letterSpacing: 0 },
   timeSep: { fontFamily: fonts.monoBold, fontSize: 36, color: colors.textTertiary },
   summaryRow: { flexDirection: 'row', justifyContent: 'space-between', paddingVertical: 10 },
   summaryLabel: {
