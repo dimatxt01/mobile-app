@@ -23,7 +23,8 @@ export function PrintTabBar({ state, descriptors, navigation }: BottomTabBarProp
         {visibleRoutes.map((route) => {
           const index = state.routes.indexOf(route);
           const isFocused = state.index === index;
-          const label = TAB_LABELS[route.name] ?? route.name.toUpperCase();
+          const { options } = descriptors[route.key]!;
+          const label = (options.title ?? TAB_LABELS[route.name] ?? route.name).toUpperCase();
           return (
             <TouchableOpacity
               key={route.key}

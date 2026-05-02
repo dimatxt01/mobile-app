@@ -19,21 +19,6 @@ import { BigNum } from '@/components/hmc/BigNum';
 import { Eyebrow } from '@/components/hmc/Eyebrow';
 import { Rule } from '@/components/hmc/Rule';
 import { BottomBar } from '@/components/hmc/BottomBar';
-function isoWeekKey(dateStr: string): string {
-  const d = new Date(dateStr + 'T12:00:00');
-  const day = d.getDay() || 7;
-  d.setDate(d.getDate() + 4 - day);
-  const yearStart = new Date(d.getFullYear(), 0, 1);
-  const week = Math.ceil(((d.getTime() - yearStart.getTime()) / 86400000 + 1) / 7);
-  return `${d.getFullYear()}-${String(week).padStart(2, '0')}`;
-}
-
-function scoreColor(score: number): string {
-  if (score >= 80) return colors.amber;
-  if (score >= 65) return 'rgba(255,176,32,0.55)';
-  if (score >= 50) return 'rgba(255,176,32,0.30)';
-  return colors.lineStrong;
-}
 
 export default function TodayScreen() {
   const { user } = useAuth();
@@ -42,7 +27,7 @@ export default function TodayScreen() {
   const { data: checkin } = useCheckin();
   const { save, cancel } = useSaveCheckin();
   const lockCheckin = useLockCheckin();
-  const { data: history } = useHistory(90);
+  const { data: history } = useHistory(14);
 
   const [identityChecks, setIdentityChecks] = useState<Record<string, boolean>>({});
   const [executionChecks, setExecutionChecks] = useState<Record<string, boolean>>({});
@@ -94,37 +79,11 @@ export default function TodayScreen() {
       )
     : null;
 
-  const prevDayRow = useMemo(() => {
-    if (!history) return null;
-    const todayStr = new Date().toISOString().slice(0, 10);
-    return history.find((r) => r.date < todayStr) ?? null;
-  }, [history]);
+  const prevDayRow = history
+    ? (history.find((r) => r.date < new Date().toISOString().slice(0, 10)) ?? null)
+    : null;
 
   const delta = prevDayRow != null && score != null ? score.total - prevDayRow.total_score : null;
-
-  const daySquares = useMemo(() => {
-    if (!history) return [];
-    const today = new Date().toISOString().slice(0, 10);
-    return history.filter((r) => r.date <= today).slice(0, 14).reverse();
-  }, [history]);
-
-  const weekSquares = useMemo(() => {
-    if (!history) return [];
-    const weekMap = new Map<string, number[]>();
-    history.forEach((r) => {
-      const key = isoWeekKey(r.date);
-      const arr = weekMap.get(key);
-      if (arr) arr.push(r.total_score);
-      else weekMap.set(key, [r.total_score]);
-    });
-    return Array.from(weekMap.entries())
-      .sort(([a], [b]) => a.localeCompare(b))
-      .slice(-12)
-      .map(([key, scores]) => ({
-        key,
-        avg: Math.round(scores.reduce((s, v) => s + v, 0) / scores.length),
-      }));
-  }, [history]);
 
   useEffect(() => {
     if (!config.data) return;
@@ -197,31 +156,6 @@ export default function TodayScreen() {
       )}
       <ScrollView contentContainerStyle={{ paddingBottom: 120 }}>
         <PrintBar dayNumber={(profile?.day_count ?? 0) + 1} />
-
-        {(daySquares.length > 0 || weekSquares.length > 0) && (
-          <View style={styles.trendStrip}>
-            {daySquares.length > 0 && (
-              <View style={styles.trendRow}>
-                <Text style={styles.trendLabel}>DAYS</Text>
-                <View style={styles.trendSquares}>
-                  {daySquares.map((r) => (
-                    <View key={r.id} style={[styles.trendSquare, { backgroundColor: scoreColor(r.total_score) }]} />
-                  ))}
-                </View>
-              </View>
-            )}
-            {weekSquares.length > 0 && (
-              <View style={styles.trendRow}>
-                <Text style={styles.trendLabel}>WKS</Text>
-                <View style={styles.trendSquares}>
-                  {weekSquares.map((w) => (
-                    <View key={w.key} style={[styles.trendSquare, { backgroundColor: scoreColor(w.avg) }]} />
-                  ))}
-                </View>
-              </View>
-            )}
-          </View>
-        )}
 
         {/* Yesterday's letter */}
         {(() => {
@@ -480,36 +414,6 @@ const styles = StyleSheet.create({
   },
   deltaPositive: { color: colors.amber },
   deltaNegative: { color: colors.danger },
-  trendStrip: {
-    marginHorizontal: spacing.pagePad,
-    marginTop: 10,
-    marginBottom: 4,
-    padding: 12,
-    backgroundColor: colors.elevated,
-    borderRadius: 8,
-    gap: 8,
-  },
-  trendRow: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    gap: 10,
-  },
-  trendLabel: {
-    fontFamily: fonts.mono,
-    fontSize: 9,
-    letterSpacing: 1.5,
-    color: colors.textTertiary,
-    width: 30,
-  },
-  trendSquares: {
-    flexDirection: 'row',
-    gap: 3,
-  },
-  trendSquare: {
-    width: 14,
-    height: 14,
-    borderRadius: 3,
-  },
   lockedBar: {
     paddingVertical: 16,
     alignItems: 'center',
