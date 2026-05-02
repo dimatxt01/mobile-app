@@ -1,5 +1,5 @@
 import { useState, useEffect, useMemo } from 'react';
-import { View, Text, ScrollView, TouchableOpacity, StyleSheet } from 'react-native';
+import { View, Text, TextInput, ScrollView, TouchableOpacity, StyleSheet } from 'react-native';
 import { router } from 'expo-router';
 import { useAuth } from '@/features/auth/hooks/use-auth';
 import { useProfileStore } from '@/store/profile-store';
@@ -30,13 +30,16 @@ export default function TodayScreen() {
   const lockCheckin = useLockCheckin();
   const { data: history } = useHistory(14);
   const [scoreDensity] = useScoreDensity();
-  void scoreDensity; // rendering deferred to Sprint 2; keeps hook alive in render cycle
+  void scoreDensity;
 
   const [identityChecks, setIdentityChecks] = useState<Record<string, boolean>>({});
   const [executionChecks, setExecutionChecks] = useState<Record<string, boolean>>({});
   const [perf9to5, setPerf9to5] = useState(0);
   const [outcomeScores, setOutcomeScores] = useState<Record<string, number>>({});
   const [penaltyScores, setPenaltyScores] = useState<Record<string, number>>({});
+  const [reflectionWin, setReflectionWin] = useState('');
+  const [reflectionBroke, setReflectionBroke] = useState('');
+  const [reflectionTomorrow, setReflectionTomorrow] = useState('');
 
   useEffect(() => {
     if (!checkin) return;
@@ -45,6 +48,9 @@ export default function TodayScreen() {
     setPerf9to5(checkin.perf_9to5 ?? 0);
     setOutcomeScores((checkin.outcome_scores as Record<string, number>) ?? {});
     setPenaltyScores((checkin.penalty_scores as Record<string, number>) ?? {});
+    setReflectionWin(checkin.reflection_win ?? '');
+    setReflectionBroke(checkin.reflection_broke ?? '');
+    setReflectionTomorrow(checkin.reflection_tomorrow ?? '');
   }, [checkin?.id]);
 
   const isLate = useMemo(() => {
@@ -79,7 +85,6 @@ export default function TodayScreen() {
   const prevDayRow = useMemo(() => {
     if (!history) return null;
     const todayStr = new Date().toISOString().slice(0, 10);
-    // relies on get_history() returning rows ORDER BY date DESC
     return history.find((r) => r.date < todayStr) ?? null;
   }, [history]);
 
@@ -93,8 +98,11 @@ export default function TodayScreen() {
       perf_9to5: perf9to5,
       outcome_scores: outcomeScores,
       penalty_scores: penaltyScores,
+      reflection_win: reflectionWin || null,
+      reflection_broke: reflectionBroke || null,
+      reflection_tomorrow: reflectionTomorrow || null,
     });
-  }, [identityChecks, executionChecks, perf9to5, outcomeScores, penaltyScores]);
+  }, [identityChecks, executionChecks, perf9to5, outcomeScores, penaltyScores, reflectionWin, reflectionBroke, reflectionTomorrow]);
 
   useEffect(() => {
     if (!checkin?.is_locked) return;
@@ -116,7 +124,7 @@ export default function TodayScreen() {
 
   const handleLock = () => {
     if (!checkin || !score) return;
-    cancel(); // prevent stale debounce write to now-locked row
+    cancel();
     lockCheckin.mutate({
       checkinId: checkin.id,
       identityScore: score.identity,
@@ -125,6 +133,8 @@ export default function TodayScreen() {
       penaltyScore: score.penalty,
     });
   };
+
+  const isLocked = !!checkin?.is_locked;
 
   return (
     <View style={styles.container}>
@@ -135,12 +145,14 @@ export default function TodayScreen() {
       )}
       <ScrollView contentContainerStyle={{ paddingBottom: 120 }}>
         <PrintBar dayNumber={(profile?.day_count ?? 0) + 1} />
+
         {profile?.identity_sentence && (
           <View style={styles.sentence}>
             <Eyebrow label="TODAY, I AM" />
             <Text style={styles.sentenceText}>{profile.identity_sentence}</Text>
           </View>
         )}
+
         <BracketBlock title="IDENTITY" subtotal={score?.identity ?? 0}>
           {config.data?.identityHabits.map((h) => (
             <HabitRow
@@ -149,7 +161,7 @@ export default function TodayScreen() {
               points={h.points}
               checked={identityChecks[h.id] ?? false}
               onToggle={() => setIdentityChecks((prev) => ({ ...prev, [h.id]: !prev[h.id] }))}
-              disabled={checkin?.is_locked}
+              disabled={isLocked}
             />
           ))}
         </BracketBlock>
@@ -162,10 +174,10 @@ export default function TodayScreen() {
               points={h.points}
               checked={executionChecks[h.id] ?? false}
               onToggle={() => setExecutionChecks((prev) => ({ ...prev, [h.id]: !prev[h.id] }))}
-              disabled={checkin?.is_locked}
+              disabled={isLocked}
             />
           ))}
-          <Slider10 value={perf9to5} onChange={setPerf9to5} disabled={checkin?.is_locked} />
+          <Slider10 value={perf9to5} onChange={setPerf9to5} disabled={isLocked} />
         </BracketBlock>
         <Rule />
         <BracketBlock title="OUTCOMES" subtotal={score?.outcome ?? 0}>
@@ -175,7 +187,7 @@ export default function TodayScreen() {
               label={m.label}
               value={outcomeScores[m.id] ?? 0}
               onChange={(v) => setOutcomeScores((prev) => ({ ...prev, [m.id]: v }))}
-              disabled={checkin?.is_locked}
+              disabled={isLocked}
             />
           ))}
         </BracketBlock>
@@ -188,10 +200,58 @@ export default function TodayScreen() {
               value={penaltyScores[p.id] ?? 0}
               onChange={(v) => setPenaltyScores((prev) => ({ ...prev, [p.id]: v }))}
               danger
-              disabled={checkin?.is_locked}
+              disabled={isLocked}
             />
           ))}
         </BracketBlock>
+
+        <Rule />
+
+        {/* Reflection */}
+        <View style={styles.reflectionSection}>
+          <Eyebrow label="REFLECTION" />
+          <View style={styles.reflRow}>
+            <Text style={styles.reflLabel}>WIN TODAY</Text>
+            <TextInput
+              style={[styles.reflInput, isLocked && styles.reflInputDisabled]}
+              value={reflectionWin}
+              onChangeText={setReflectionWin}
+              placeholder="What did you do right?"
+              placeholderTextColor={colors.textTertiary}
+              multiline
+              editable={!isLocked}
+            />
+          </View>
+          <Rule />
+          <View style={styles.reflRow}>
+            <Text style={styles.reflLabel}>BROKE MY WORD</Text>
+            <TextInput
+              style={[styles.reflInput, isLocked && styles.reflInputDisabled]}
+              value={reflectionBroke}
+              onChangeText={setReflectionBroke}
+              placeholder="Where did you fall short?"
+              placeholderTextColor={colors.textTertiary}
+              multiline
+              editable={!isLocked}
+            />
+          </View>
+          <Rule />
+          <View style={styles.reflRow}>
+            <Text style={styles.reflLabel}>{"TOMORROW'S NON-NEGOTIABLE"}</Text>
+            <TextInput
+              style={[styles.reflInput, isLocked && styles.reflInputDisabled]}
+              value={reflectionTomorrow}
+              onChangeText={setReflectionTomorrow}
+              placeholder="The one thing that must happen."
+              placeholderTextColor={colors.textTertiary}
+              multiline
+              editable={!isLocked}
+            />
+          </View>
+        </View>
+
+        <Rule strong />
+
         <TouchableOpacity
           style={styles.totalSection}
           onPress={() =>
@@ -207,8 +267,8 @@ export default function TodayScreen() {
             })
           }
         >
-          <Eyebrow label="TOTAL" />
-          <BigNum value={score?.total ?? 0} highlight={checkin?.is_locked} />
+          <Eyebrow label="TOTAL SCORE" />
+          <BigNum value={score?.total ?? 0} highlight={isLocked} />
           {delta !== null && (
             <Text style={[styles.delta, delta > 0 ? styles.deltaPositive : styles.deltaNegative]}>
               {delta > 0 ? `+${delta}` : `${delta}`} VS YESTERDAY
@@ -217,7 +277,7 @@ export default function TodayScreen() {
           <Text style={styles.hint}>TAP FOR BREAKDOWN</Text>
         </TouchableOpacity>
       </ScrollView>
-      {!checkin?.is_locked ? (
+      {!isLocked ? (
         <BottomBar
           label={`LOCK IN · ${score?.total ?? 0} PTS`}
           onPress={handleLock}
@@ -248,16 +308,47 @@ const styles = StyleSheet.create({
   },
   sentence: {
     paddingHorizontal: spacing.pagePad,
-    paddingVertical: 12,
+    paddingTop: 12,
+    paddingBottom: 20,
+    borderBottomWidth: StyleSheet.hairlineWidth,
+    borderBottomColor: colors.lineRegular,
   },
   sentenceText: {
-    fontFamily: fonts.displayMedium,
-    fontSize: 16,
+    fontFamily: fonts.displayBold,
+    fontSize: 22,
+    color: colors.textPrimary,
+    lineHeight: 28,
+    letterSpacing: -0.4,
+    marginTop: 8,
+  },
+  reflectionSection: {
+    paddingHorizontal: spacing.pagePad,
+    paddingVertical: 20,
+  },
+  reflRow: {
+    paddingVertical: 14,
+  },
+  reflLabel: {
+    fontFamily: fonts.mono,
+    fontSize: 10,
+    letterSpacing: 1.5,
+    color: colors.textTertiary,
+    marginBottom: 8,
+  },
+  reflInput: {
+    fontFamily: fonts.display,
+    fontSize: 15,
+    color: colors.textPrimary,
+    borderBottomWidth: StyleSheet.hairlineWidth,
+    borderBottomColor: colors.lineStrong,
+    paddingBottom: 8,
+    minHeight: 36,
+  },
+  reflInputDisabled: {
     color: colors.textSecondary,
-    fontStyle: 'italic',
   },
   totalSection: {
-    alignItems: 'center',
+    paddingHorizontal: spacing.pagePad,
     paddingVertical: spacing.sectionGap,
   },
   hint: {

@@ -10,7 +10,14 @@ const SAVE_DEBOUNCE_MS = 800;
 type SavePayload = Partial<
   Pick<
     DailyCheckin,
-    'identity_checks' | 'execution_checks' | 'perf_9to5' | 'outcome_scores' | 'penalty_scores'
+    | 'identity_checks'
+    | 'execution_checks'
+    | 'perf_9to5'
+    | 'outcome_scores'
+    | 'penalty_scores'
+    | 'reflection_win'
+    | 'reflection_broke'
+    | 'reflection_tomorrow'
   >
 >;
 

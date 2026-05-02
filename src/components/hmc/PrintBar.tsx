@@ -3,15 +3,16 @@ import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { colors, fonts, spacing } from '@/lib/hmc-colors';
 import { Rule } from './Rule';
 
-type Props = { dayNumber: number };
+type Props = { dayNumber?: number; right?: string };
 
-export function PrintBar({ dayNumber }: Props) {
+export function PrintBar({ dayNumber, right }: Props) {
   const insets = useSafeAreaInsets();
+  const rightLabel = right ?? (dayNumber !== undefined ? `DAY ${dayNumber}` : undefined);
   return (
     <View style={[styles.container, { paddingTop: insets.top + 8 }]}>
       <View style={styles.row}>
         <Text style={styles.logo}>HMC.</Text>
-        <Text style={styles.day}>DAY {dayNumber}</Text>
+        {rightLabel ? <Text style={styles.day}>{rightLabel}</Text> : null}
       </View>
       <Rule />
     </View>
