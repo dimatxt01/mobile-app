@@ -12,11 +12,16 @@ const TAB_LABELS: Record<string, string> = {
 
 export function PrintTabBar({ state, descriptors, navigation }: BottomTabBarProps) {
   const insets = useSafeAreaInsets();
+  const visibleRoutes = state.routes.filter((route) => {
+    const { options } = descriptors[route.key]!;
+    return (options as { href?: unknown }).href !== null;
+  });
   return (
     <View style={[styles.bar, { paddingBottom: insets.bottom + 4 }]}>
       <View style={styles.topLine} />
       <View style={styles.tabs}>
-        {state.routes.map((route, index) => {
+        {visibleRoutes.map((route) => {
+          const index = state.routes.indexOf(route);
           const isFocused = state.index === index;
           const label = TAB_LABELS[route.name] ?? route.name.toUpperCase();
           return (
