@@ -19,8 +19,6 @@ import { BigNum } from '@/components/hmc/BigNum';
 import { Eyebrow } from '@/components/hmc/Eyebrow';
 import { Rule } from '@/components/hmc/Rule';
 import { BottomBar } from '@/components/hmc/BottomBar';
-import { useScoreDensity } from '@/lib/score-density';
-
 export default function TodayScreen() {
   const { user } = useAuth();
   const { profile } = useProfileStore();
@@ -29,8 +27,6 @@ export default function TodayScreen() {
   const { save, cancel } = useSaveCheckin();
   const lockCheckin = useLockCheckin();
   const { data: history } = useHistory(14);
-  const [scoreDensity] = useScoreDensity();
-  void scoreDensity;
 
   const [identityChecks, setIdentityChecks] = useState<Record<string, boolean>>({});
   const [executionChecks, setExecutionChecks] = useState<Record<string, boolean>>({});
