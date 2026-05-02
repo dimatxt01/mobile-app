@@ -1,21 +1,9 @@
 import { useQuery } from '@tanstack/react-query';
 import { supabase } from '@/lib/supabase';
 import { useAuth } from '@/features/auth/hooks/use-auth';
+import type { Database } from '@/types/database';
 
-// Manual type: supabase.rpc() returns `any` and generated types don't cover this RPC's return shape
-export type HistoryRow = {
-  id: string;
-  date: string;
-  total_score: number;
-  identity_score: number;
-  execution_score: number;
-  outcome_score: number;
-  penalty_score: number;
-  whoop_score_adj: number;
-  reflection_win: string | null;
-  reflection_broke: string | null;
-  is_late_checkin: boolean;
-};
+export type HistoryRow = Database['public']['Functions']['get_history']['Returns'][number];
 
 export function useHistory(days = 30) {
   const { user } = useAuth();
