@@ -1,0 +1,32 @@
+## Task 1: Loading Screen — ActivityIndicator size="large" — COMPLETED
+Date: 2026-05-01
+Files: app/index.tsx
+Commit: 657e6ca
+---
+## Task 2: Sign-in + Sign-up — Footer Link Typography — COMPLETED
+Date: 2026-05-01
+Files: app/(auth)/sign-in.tsx, app/(auth)/sign-up.tsx
+Commit: 657e6ca
+---
+## Task 3: Auth Form Subtitles — spacing.sectionGap Token — COMPLETED
+Date: 2026-05-01
+Files: app/(auth)/sign-in.tsx, app/(auth)/sign-up.tsx, app/(auth)/forgot-password.tsx
+Commit: 657e6ca
+Note: forgot-password.tsx was still in NativeWind; converted to StyleSheet with HMC design system as part of this task.
+---
+## Task 4: Sign-up Confirmation — Add Back-to-Sign-in Link — COMPLETED
+Date: 2026-05-01
+Files: app/(auth)/sign-up.tsx
+Commit: 657e6ca
+---
+## Task 5: Reset-password — Eyebrow Pattern + Back Navigation — COMPLETED
+Date: 2026-05-01
+Files: app/(auth)/reset-password.tsx
+Commit: 657e6ca
+Note: reset-password.tsx was still in NativeWind; converted to StyleSheet with HMC design system as part of this task.
+---
+## Task 6: Onboarding — Raw TextInput Props in Steps 5, 6, 8, 9 — COMPLETED
+Date: 2026-05-01
+Files: app/(onboarding)/index.tsx
+Commit: 657e6ca
+---
