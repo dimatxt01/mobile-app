@@ -5,18 +5,13 @@ import { useProfileStore } from '@/store/profile-store';
 import { colors, fonts, spacing } from '@/lib/hmc-colors';
 import { Eyebrow } from '@/components/hmc/Eyebrow';
 import { Rule } from '@/components/hmc/Rule';
+import { computeWeeksLived } from '@/lib/life-in-weeks';
 
 const WEEKS_TOTAL = 4004; // 52 weeks x 77 years
 const COLS = 52;
 const GAP = 1;
 const { width } = Dimensions.get('window');
 const SQUARE = Math.floor((width - spacing.pagePad * 2 - GAP * (COLS - 1)) / COLS);
-
-function computeWeeksLived(dob: string | null): number {
-  if (!dob) return 0;
-  const ms = Date.now() - new Date(dob).getTime();
-  return Math.max(0, Math.floor(ms / (7 * 24 * 60 * 60 * 1000)));
-}
 
 export default function LifeInWeeksScreen() {
   const insets = useSafeAreaInsets();
@@ -67,7 +62,6 @@ export default function LifeInWeeksScreen() {
         columnWrapperStyle={styles.gridRow}
         ListHeaderComponent={renderHeader}
         ListFooterComponent={<View style={styles.footer} />}
-        contentContainerStyle={styles.content}
         showsVerticalScrollIndicator={false}
         initialNumToRender={COLS * 8}
         windowSize={5}
@@ -78,7 +72,6 @@ export default function LifeInWeeksScreen() {
 
 const styles = StyleSheet.create({
   container: { flex: 1, backgroundColor: colors.elevated },
-  content: {},
   headerTop: {
     flexDirection: 'row',
     justifyContent: 'space-between',

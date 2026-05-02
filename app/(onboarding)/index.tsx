@@ -65,8 +65,10 @@ export default function OnboardingScreen() {
   const [dobDay, setDobDay] = useState(1);
   const [dobYear, setDobYear] = useState(1990);
   const [isSaving, setIsSaving] = useState(false);
+  const [saveError, setSaveError] = useState<string | null>(null);
 
   const reminderTime = `${String(reminderHour).padStart(2, '0')}:${String(reminderMinute).padStart(2, '0')}`;
+  // day 0 rolls back to last day of preceding month
   const dobMaxDay = new Date(dobYear, dobMonth, 0).getDate();
   const dobDayClamped = Math.min(dobDay, dobMaxDay);
   const dob = `${dobYear}-${String(dobMonth).padStart(2, '0')}-${String(dobDayClamped).padStart(2, '0')}`;
@@ -75,7 +77,9 @@ export default function OnboardingScreen() {
     if (step !== 14) return;
     (async () => {
       setIsSaving(true);
-      await supabase
+      setSaveError(null);
+
+      const { error: profileError } = await supabase
         .from('profiles')
         .update({
           full_name: name,
@@ -86,9 +90,30 @@ export default function OnboardingScreen() {
           onboarding_completed: true,
         })
         .eq('id', session!.user.id);
-      await supabase.rpc('seed_default_habits', { p_user_id: session!.user.id });
-      await scheduleReminder(reminderTime);
-      setProfile({ ...profile!, onboarding_completed: true });
+
+      if (profileError) {
+        setIsSaving(false);
+        setSaveError('Could not save your profile. Check your connection and try again.');
+        setStep(13);
+        return;
+      }
+
+      const { error: habitsError } = await supabase.rpc('seed_default_habits', {
+        p_user_id: session!.user.id,
+      });
+
+      if (habitsError) {
+        setIsSaving(false);
+        setSaveError('Could not seed habits. Check your connection and try again.');
+        setStep(13);
+        return;
+      }
+
+      await scheduleReminder(reminderTime).catch((e) =>
+        console.warn('[onboarding] scheduleReminder failed', e),
+      );
+
+      setProfile({ ...profile!, onboarding_completed: true, date_of_birth: dob });
       router.replace('/(app)/(tabs)');
     })();
   }, [step]);
@@ -393,6 +418,7 @@ export default function OnboardingScreen() {
         return (
           <View style={styles.stepContent}>
             <Eyebrow label="YOUR CONFIG" />
+            {saveError && <Text style={styles.errorText}>{saveError}</Text>}
             <Rule />
             <View style={styles.summaryRow}>
               <Text style={styles.summaryLabel}>NAME</Text>
@@ -590,5 +616,12 @@ const styles = StyleSheet.create({
     fontSize: 12,
     letterSpacing: 1.5,
     color: colors.textTertiary,
+  },
+  errorText: {
+    fontFamily: fonts.display,
+    fontSize: 13,
+    color: colors.danger,
+    marginBottom: 12,
+    lineHeight: 20,
   },
 });

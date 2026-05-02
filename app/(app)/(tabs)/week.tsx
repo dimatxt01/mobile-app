@@ -10,6 +10,7 @@ import { PrintBar } from '@/components/hmc/PrintBar';
 import { BigNum } from '@/components/hmc/BigNum';
 import { Eyebrow } from '@/components/hmc/Eyebrow';
 import { Rule } from '@/components/hmc/Rule';
+import { computeWeeksLived } from '@/lib/life-in-weeks';
 
 const DAY_LABELS = ['SUN', 'MON', 'TUE', 'WED', 'THU', 'FRI', 'SAT'];
 
@@ -64,9 +65,7 @@ export default function WeekScreen() {
   );
   const weekNumber = getWeekNumber(new Date());
   const { profile } = useProfileStore();
-  const weeksLived = profile?.date_of_birth
-    ? Math.max(0, Math.floor((Date.now() - new Date(profile.date_of_birth).getTime()) / (7 * 24 * 60 * 60 * 1000)))
-    : 0;
+  const weeksLived = computeWeeksLived(profile?.date_of_birth ?? null);
 
   if (!rows.length) {
     return (
