@@ -14,7 +14,7 @@ import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { useAuth } from '@/features/auth/hooks/use-auth';
 import { useProfileStore } from '@/store/profile-store';
 import { useMirror } from '@/features/mirror/use-mirror';
-import { useHistory } from '@/features/history/use-history';
+import { useHistory, type HistoryRow } from '@/features/history/use-history';
 import { supabase } from '@/lib/supabase';
 import { colors, fonts, spacing } from '@/lib/hmc-colors';
 import { Eyebrow } from '@/components/hmc/Eyebrow';
@@ -27,6 +27,64 @@ const TRENDS_RANGES = [30, 90, 365] as const;
 
 function fmtDate(d: string): string {
   return new Date(d).toLocaleDateString('en-US', { month: 'short', day: 'numeric' }).toUpperCase();
+}
+
+const DAY_ABBR = ['M', 'T', 'W', 'T', 'F', 'S', 'S'];
+
+function colorForScore(score: number | null): string {
+  if (score === null) return colors.lineRegular;
+  if (score >= 80) return colors.amber;
+  if (score >= 65) return 'rgba(255,176,32,0.55)';
+  if (score >= 50) return 'rgba(255,176,32,0.30)';
+  return colors.lineStrong;
+}
+
+function CalendarHeatmap({ rows }: { rows: HistoryRow[] }) {
+  const scoreMap = new Map(rows.map((r) => [r.date, r.total_score]));
+  const today = new Date();
+  const todayStr = today.toISOString().slice(0, 10);
+  const dayOfWeek = today.getDay();
+  const daysFromMonday = dayOfWeek === 0 ? 6 : dayOfWeek - 1;
+  const gridStart = new Date(today);
+  gridStart.setDate(today.getDate() - daysFromMonday - 21);
+  const cells = Array.from({ length: 28 }, (_, i) => {
+    const d = new Date(gridStart);
+    d.setDate(gridStart.getDate() + i);
+    const dateStr = d.toISOString().slice(0, 10);
+    const isFuture = dateStr > todayStr;
+    const score = isFuture ? null : (scoreMap.get(dateStr) ?? null);
+    return { dateStr, score, isFuture };
+  });
+  return (
+    <View>
+      <View style={calStyles.headerRow}>
+        {DAY_ABBR.map((d, i) => (
+          <View key={i} style={calStyles.cell}>
+            <Text style={calStyles.dayLabel}>{d}</Text>
+          </View>
+        ))}
+      </View>
+      <View style={calStyles.grid}>
+        {cells.map((c, i) => (
+          <View
+            key={i}
+            style={[
+              calStyles.cell,
+              calStyles.scoreCell,
+              { backgroundColor: c.isFuture ? 'transparent' : colorForScore(c.score) },
+              c.isFuture && calStyles.futureCell,
+            ]}
+          >
+            {c.score !== null && !c.isFuture && (
+              <Text style={[calStyles.scoreText, c.score >= 65 && calStyles.scoreTextDark]}>
+                {c.score}
+              </Text>
+            )}
+          </View>
+        ))}
+      </View>
+    </View>
+  );
 }
 
 export default function ProfileScreen() {
@@ -156,9 +214,14 @@ export default function ProfileScreen() {
       <View style={styles.section}>
         <View style={styles.sectionHeader}>
           <Eyebrow label="MIRROR" />
-          <TouchableOpacity onPress={() => router.push('/(app)/modal/mirror-capture')} activeOpacity={0.7}>
-            <Text style={styles.sectionAction}>CAPTURE +</Text>
-          </TouchableOpacity>
+          <View style={styles.sectionActions}>
+            <TouchableOpacity onPress={() => router.push('/(app)/(tabs)/mirror')} activeOpacity={0.7}>
+              <Text style={styles.sectionAction}>VIEW ALL →</Text>
+            </TouchableOpacity>
+            <TouchableOpacity onPress={() => router.push('/(app)/modal/mirror-capture')} activeOpacity={0.7}>
+              <Text style={styles.sectionAction}>CAPTURE +</Text>
+            </TouchableOpacity>
+          </View>
         </View>
         {photos && photos.length > 0 ? (
           <ScrollView
@@ -237,6 +300,9 @@ export default function ProfileScreen() {
                 })}
               </View>
             </ScrollView>
+            <View style={styles.calendarWrap}>
+              <CalendarHeatmap rows={rows} />
+            </View>
             <View style={styles.bracketRows}>
               {(['identity', 'execution', 'outcome', 'penalty'] as const).map((bracket) => {
                 const bAvg = Math.round(rows.reduce((s, r) => s + (r[`${bracket}_score`] ?? 0), 0) / rows.length);
@@ -337,6 +403,8 @@ const styles = StyleSheet.create({
   pillActive: { backgroundColor: colors.accentMuted, borderColor: colors.accentDim },
   pillText: { fontFamily: fonts.mono, fontSize: 10, letterSpacing: 1.5, color: colors.textTertiary },
   pillTextActive: { color: colors.amber },
+  calendarWrap: { marginTop: 12, marginBottom: 4 },
+  sectionActions: { flexDirection: 'row', gap: 12, alignItems: 'center' },
   // Mirror
   mirrorScroll: { marginTop: 4 },
   mirrorThumb: {
@@ -370,4 +438,36 @@ const styles = StyleSheet.create({
   bracketLabel: { fontFamily: fonts.mono, fontSize: 11, letterSpacing: 1.5, color: colors.textTertiary },
   bracketVal: { fontFamily: fonts.monoBold, fontSize: 15, color: colors.textPrimary, fontVariant: ['tabular-nums'] },
   footer: { fontFamily: fonts.mono, fontSize: 10, letterSpacing: 2, color: colors.textQuiet, textAlign: 'center', paddingVertical: 24 },
+});
+
+const calStyles = StyleSheet.create({
+  headerRow: { flexDirection: 'row', marginBottom: 6 },
+  grid: { flexDirection: 'row', flexWrap: 'wrap' },
+  cell: { width: `${100 / 7}%`, alignItems: 'center' },
+  scoreCell: {
+    aspectRatio: 1,
+    borderRadius: 4,
+    justifyContent: 'center',
+    marginBottom: 4,
+  },
+  futureCell: {
+    borderWidth: StyleSheet.hairlineWidth,
+    borderColor: colors.lineRegular,
+    borderStyle: 'dashed',
+  },
+  dayLabel: {
+    fontFamily: fonts.mono,
+    fontSize: 9,
+    color: colors.textQuiet,
+    letterSpacing: 1,
+    paddingBottom: 4,
+  },
+  scoreText: {
+    fontFamily: fonts.mono,
+    fontSize: 9,
+    color: colors.textPrimary,
+    fontWeight: '600',
+    fontVariant: ['tabular-nums'],
+  },
+  scoreTextDark: { color: '#001A0D' },
 });
