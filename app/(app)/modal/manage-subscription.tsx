@@ -2,12 +2,14 @@ import { View, Text, TouchableOpacity, StyleSheet } from 'react-native';
 import { router } from 'expo-router';
 import { useProfileStore } from '@/store/profile-store';
 import { colors, fonts, spacing } from '@/lib/hmc-colors';
+import { radius } from '@/lib/hmc-tokens';
 import { Eyebrow } from '@/components/hmc/Eyebrow';
 import { Rule } from '@/components/hmc/Rule';
 export default function ManageSubscriptionScreen() {
   const { profile } = useProfileStore();
   return (
     <View style={styles.c}>
+      <View style={styles.dragHandle} />
       <Eyebrow label="SUBSCRIPTION" />
       <View style={styles.card}>
         <View style={styles.row}>
@@ -37,8 +39,24 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     paddingHorizontal: spacing.pagePad,
   },
-  card: { width: '100%', marginTop: 16 },
-  row: { flexDirection: 'row', justifyContent: 'space-between', paddingVertical: 10 },
+  dragHandle: {
+    width: 36,
+    height: 4,
+    backgroundColor: colors.borderDefault,
+    borderRadius: 2,
+    alignSelf: 'center',
+    marginBottom: 20,
+  },
+  card: {
+    width: '100%',
+    marginTop: 16,
+    backgroundColor: colors.surface02,
+    borderRadius: radius.lg,
+    borderWidth: StyleSheet.hairlineWidth,
+    borderColor: colors.borderMuted,
+    paddingHorizontal: 16,
+  },
+  row: { flexDirection: 'row', justifyContent: 'space-between', paddingVertical: 14 },
   label: { fontFamily: fonts.mono, fontSize: 11, letterSpacing: 1.5, color: colors.textTertiary },
   value: { fontFamily: fonts.monoBold, fontSize: 14, color: colors.textPrimary },
   body: {
@@ -52,9 +70,9 @@ const styles = StyleSheet.create({
     marginTop: 32,
     paddingVertical: 14,
     paddingHorizontal: 32,
-    borderRadius: 8,
+    borderRadius: radius.md,
     borderWidth: StyleSheet.hairlineWidth,
-    borderColor: colors.lineStrong,
+    borderColor: colors.borderDefault,
   },
   closeText: {
     fontFamily: fonts.mono,

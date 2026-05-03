@@ -1,6 +1,7 @@
 import { View, TouchableOpacity, Text, ActivityIndicator, StyleSheet } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { colors, fonts, spacing } from '@/lib/hmc-colors';
+import { radius, elevation } from '@/lib/hmc-tokens';
 
 type Props = {
   label: string;
@@ -33,20 +34,16 @@ const styles = StyleSheet.create({
   container: {
     paddingHorizontal: spacing.pagePad,
     paddingTop: 12,
-    backgroundColor: colors.base,
+    backgroundColor: colors.surface01,
     borderTopWidth: StyleSheet.hairlineWidth,
-    borderTopColor: colors.lineStrong,
+    borderTopColor: colors.borderDefault,
   },
   btn: {
     backgroundColor: colors.amber,
-    borderRadius: 8,
-    paddingVertical: 16,
+    borderRadius: radius.md,
+    paddingVertical: 18,
     alignItems: 'center',
-    shadowColor: colors.accentGlow,
-    shadowOffset: { width: 0, height: 8 },
-    shadowOpacity: 1,
-    shadowRadius: 24,
-    elevation: 8,
+    ...elevation.amber,
   },
   btnDisabled: { backgroundColor: colors.lineStrong, shadowOpacity: 0, elevation: 0 },
   label: {

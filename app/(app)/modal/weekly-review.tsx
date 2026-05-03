@@ -5,6 +5,7 @@ import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { useAuth } from '@/features/auth/hooks/use-auth';
 import { supabase } from '@/lib/supabase';
 import { colors, fonts, spacing } from '@/lib/hmc-colors';
+import { radius, scale } from '@/lib/hmc-tokens';
 import { Eyebrow } from '@/components/hmc/Eyebrow';
 import { Rule } from '@/components/hmc/Rule';
 
@@ -47,35 +48,37 @@ export default function WeeklyReviewScreen() {
       contentContainerStyle={{ paddingBottom: insets.bottom + 32 }}
       keyboardShouldPersistTaps="handled"
     >
+      <View style={styles.dragHandle} />
       <Eyebrow label="WEEKLY REVIEW" />
-      <Rule />
-      <Text style={styles.label}>Big win this week</Text>
-      <TextInput
-        style={styles.input}
-        value={win}
-        onChangeText={setWin}
-        multiline
-        placeholderTextColor={colors.textTertiary}
-        placeholder="What went well?"
-      />
-      <Text style={styles.label}>Biggest challenge</Text>
-      <TextInput
-        style={styles.input}
-        value={challenge}
-        onChangeText={setChallenge}
-        multiline
-        placeholderTextColor={colors.textTertiary}
-        placeholder="What was hard?"
-      />
-      <Text style={styles.label}>Intention for next week</Text>
-      <TextInput
-        style={styles.input}
-        value={nextWeek}
-        onChangeText={setNextWeek}
-        multiline
-        placeholderTextColor={colors.textTertiary}
-        placeholder="What will you focus on?"
-      />
+      <View style={styles.card}>
+        <Text style={styles.label}>Big win this week</Text>
+        <TextInput
+          style={styles.input}
+          value={win}
+          onChangeText={setWin}
+          multiline
+          placeholderTextColor={colors.textTertiary}
+          placeholder="What went well?"
+        />
+        <Text style={styles.label}>Biggest challenge</Text>
+        <TextInput
+          style={styles.input}
+          value={challenge}
+          onChangeText={setChallenge}
+          multiline
+          placeholderTextColor={colors.textTertiary}
+          placeholder="What was hard?"
+        />
+        <Text style={styles.label}>Intention for next week</Text>
+        <TextInput
+          style={styles.input}
+          value={nextWeek}
+          onChangeText={setNextWeek}
+          multiline
+          placeholderTextColor={colors.textTertiary}
+          placeholder="What will you focus on?"
+        />
+      </View>
       <TouchableOpacity style={styles.saveBtn} onPress={handleSave} disabled={saving}>
         <Text style={styles.saveText}>{saving ? 'SAVING...' : 'SAVE'}</Text>
       </TouchableOpacity>
@@ -88,30 +91,47 @@ export default function WeeklyReviewScreen() {
 
 const styles = StyleSheet.create({
   container: { flex: 1, backgroundColor: colors.elevated, paddingHorizontal: spacing.pagePad },
+  dragHandle: {
+    width: 36,
+    height: 4,
+    backgroundColor: colors.borderDefault,
+    borderRadius: 2,
+    alignSelf: 'center',
+    marginBottom: 20,
+  },
+  card: {
+    marginTop: 16,
+    backgroundColor: colors.surface02,
+    borderRadius: radius.lg,
+    borderWidth: StyleSheet.hairlineWidth,
+    borderColor: colors.borderMuted,
+    paddingHorizontal: 16,
+    paddingVertical: 16,
+  },
   label: {
     fontFamily: fonts.mono,
     fontSize: 11,
     letterSpacing: 1.5,
     color: colors.textTertiary,
-    marginTop: 20,
+    marginTop: 16,
   },
   input: {
     fontFamily: fonts.display,
     fontSize: 15,
     color: colors.textPrimary,
     backgroundColor: colors.high,
-    borderRadius: 8,
+    borderRadius: radius.sm,
     paddingHorizontal: 14,
     paddingVertical: 12,
     marginTop: 8,
     minHeight: 60,
     textAlignVertical: 'top',
     borderWidth: StyleSheet.hairlineWidth,
-    borderColor: colors.lineStrong,
+    borderColor: colors.borderMuted,
   },
   saveBtn: {
     backgroundColor: colors.amber,
-    borderRadius: 8,
+    borderRadius: radius.md,
     paddingVertical: 16,
     alignItems: 'center',
     marginTop: 32,

@@ -13,5 +13,10 @@ const styles = StyleSheet.create({
     color: colors.textPrimary,
     fontVariant: ['tabular-nums'],
   },
-  amber: { color: colors.amber },
+  amber: {
+    color: colors.amber,
+    textShadowColor: colors.accentGlow,
+    textShadowOffset: { width: 0, height: 0 },
+    textShadowRadius: 20,
+  },
 });

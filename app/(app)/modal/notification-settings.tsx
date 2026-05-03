@@ -7,6 +7,7 @@ import { useProfileStore } from '@/store/profile-store';
 import { supabase } from '@/lib/supabase';
 import { scheduleReminder } from '@/features/notifications/schedule-reminder';
 import { colors, fonts, spacing } from '@/lib/hmc-colors';
+import { radius } from '@/lib/hmc-tokens';
 import { Eyebrow } from '@/components/hmc/Eyebrow';
 
 export default function NotificationSettingsScreen() {
@@ -37,6 +38,7 @@ export default function NotificationSettingsScreen() {
     <View
       style={[styles.container, { paddingTop: insets.top + 16, paddingBottom: insets.bottom + 16 }]}
     >
+      <View style={styles.dragHandle} />
       <Eyebrow label="DAILY REMINDER" />
       <View style={styles.timeRow}>
         <View style={styles.timePicker}>
@@ -71,6 +73,14 @@ export default function NotificationSettingsScreen() {
 
 const styles = StyleSheet.create({
   container: { flex: 1, backgroundColor: colors.elevated, paddingHorizontal: spacing.pagePad },
+  dragHandle: {
+    width: 36,
+    height: 4,
+    backgroundColor: colors.borderDefault,
+    borderRadius: 2,
+    alignSelf: 'center',
+    marginBottom: 20,
+  },
   timeRow: {
     flexDirection: 'row',
     alignItems: 'center',
@@ -89,7 +99,7 @@ const styles = StyleSheet.create({
   timeSep: { fontFamily: fonts.monoBold, fontSize: 36, color: colors.textTertiary },
   saveBtn: {
     backgroundColor: colors.amber,
-    borderRadius: 8,
+    borderRadius: radius.md,
     paddingVertical: 16,
     alignItems: 'center',
     marginTop: 32,

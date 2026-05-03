@@ -3,6 +3,7 @@ import { router } from 'expo-router';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { useProfileStore } from '@/store/profile-store';
 import { colors, fonts, spacing } from '@/lib/hmc-colors';
+import { radius, scale } from '@/lib/hmc-tokens';
 import { Eyebrow } from '@/components/hmc/Eyebrow';
 import { Rule } from '@/components/hmc/Rule';
 import { computeWeeksLived } from '@/lib/life-in-weeks';
@@ -23,7 +24,10 @@ export default function LifeInWeeksScreen() {
 
   const renderHeader = () => (
     <View>
-      <View style={[styles.headerTop, { paddingTop: insets.top + 16 }]}>
+      <View style={[styles.dragHandleWrap, { paddingTop: insets.top + 12 }]}>
+        <View style={styles.dragHandle} />
+      </View>
+      <View style={styles.headerTop}>
         <Eyebrow label="LIFE IN WEEKS" />
         <TouchableOpacity onPress={() => router.back()}>
           <Text style={styles.closeText}>CLOSE</Text>
@@ -72,6 +76,13 @@ export default function LifeInWeeksScreen() {
 
 const styles = StyleSheet.create({
   container: { flex: 1, backgroundColor: colors.elevated },
+  dragHandleWrap: { alignItems: 'center', paddingBottom: 16 },
+  dragHandle: {
+    width: 36,
+    height: 4,
+    backgroundColor: colors.borderDefault,
+    borderRadius: 2,
+  },
   headerTop: {
     flexDirection: 'row',
     justifyContent: 'space-between',
@@ -120,6 +131,6 @@ const styles = StyleSheet.create({
     borderRadius: 1,
   },
   squareLived: { backgroundColor: colors.amber },
-  squareFuture: { backgroundColor: colors.lineStrong },
+  squareFuture: { backgroundColor: colors.surface03 },
   footer: { height: 40 },
 });

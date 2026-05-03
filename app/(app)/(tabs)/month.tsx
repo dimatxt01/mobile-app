@@ -6,6 +6,7 @@ import { useAuth } from '@/features/auth/hooks/use-auth';
 import { useHistory } from '@/features/history/use-history';
 import { supabase } from '@/lib/supabase';
 import { colors, fonts, spacing } from '@/lib/hmc-colors';
+import { scale, radius } from '@/lib/hmc-tokens';
 import { Eyebrow } from '@/components/hmc/Eyebrow';
 import { Rule } from '@/components/hmc/Rule';
 import { PrintBar } from '@/components/hmc/PrintBar';
@@ -226,11 +227,19 @@ const styles = StyleSheet.create({
   },
   heroMeta: { alignItems: 'flex-end', paddingBottom: 8, gap: 3 },
   metaLine: { fontFamily: fonts.mono, fontSize: 10, letterSpacing: 1, color: colors.textTertiary },
-  chartSection: { paddingHorizontal: spacing.pagePad, paddingVertical: 16 },
+  chartSection: {
+    marginHorizontal: spacing.pagePad,
+    paddingHorizontal: 16,
+    paddingVertical: 16,
+    backgroundColor: colors.surface02,
+    borderRadius: radius.md,
+    borderWidth: StyleSheet.hairlineWidth,
+    borderColor: colors.borderMuted,
+  },
   chartScroll: { marginTop: 12 },
   chart: { flexDirection: 'row', alignItems: 'flex-end', height: 88, gap: 4 },
   barCol: { alignItems: 'center', gap: 4 },
-  bar: { width: 10, borderRadius: 2 },
+  bar: { width: 10, borderRadius: 4 },
   barLabel: {
     fontFamily: fonts.mono,
     fontSize: 8,
@@ -258,7 +267,7 @@ const styles = StyleSheet.create({
     paddingVertical: 16,
     borderWidth: 1,
     borderColor: colors.amber,
-    borderRadius: 4,
+    borderRadius: radius.md,
     alignItems: 'center',
   },
   ctaText: { fontFamily: fonts.monoBold, fontSize: 13, letterSpacing: 2, color: colors.amber },

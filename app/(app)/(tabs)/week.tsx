@@ -6,6 +6,7 @@ import { useHistory } from '@/features/history/use-history';
 import { useProfileStore } from '@/store/profile-store';
 import { supabase } from '@/lib/supabase';
 import { colors, fonts, spacing } from '@/lib/hmc-colors';
+import { scale, radius } from '@/lib/hmc-tokens';
 import { PrintBar } from '@/components/hmc/PrintBar';
 import { BigNum } from '@/components/hmc/BigNum';
 import { Eyebrow } from '@/components/hmc/Eyebrow';
@@ -287,8 +288,6 @@ const styles = StyleSheet.create({
   avgBlock: {
     paddingHorizontal: spacing.pagePad,
     paddingVertical: 20,
-    borderBottomWidth: StyleSheet.hairlineWidth,
-    borderBottomColor: colors.lineStrong,
   },
   avgRow: { flexDirection: 'row', alignItems: 'flex-end', justifyContent: 'space-between', marginTop: 8 },
   avgMeta: { alignItems: 'flex-end', paddingBottom: 8, gap: 4 },
@@ -296,7 +295,16 @@ const styles = StyleSheet.create({
   deltaPos: { color: colors.amber },
   deltaNeg: { color: colors.danger },
   bestText: { fontFamily: fonts.mono, fontSize: 11, letterSpacing: 1, color: colors.textTertiary },
-  chartSection: { paddingHorizontal: spacing.pagePad, paddingTop: 20, paddingBottom: 16 },
+  chartSection: {
+    marginHorizontal: spacing.pagePad,
+    paddingHorizontal: 16,
+    paddingTop: 20,
+    paddingBottom: 16,
+    backgroundColor: colors.surface02,
+    borderRadius: radius.md,
+    borderWidth: StyleSheet.hairlineWidth,
+    borderColor: colors.borderMuted,
+  },
   chart: { flexDirection: 'row', alignItems: 'flex-end', height: 120, gap: 6, marginTop: 14 },
   barCol: { flex: 1, alignItems: 'center', justifyContent: 'flex-end', gap: 4 },
   barScore: {
@@ -305,7 +313,7 @@ const styles = StyleSheet.create({
     color: colors.textTertiary,
     fontVariant: ['tabular-nums'],
   },
-  bar: { width: '80%', borderRadius: 2 },
+  bar: { width: '80%', borderRadius: 4 },
   barBest: { backgroundColor: colors.amber },
   barNormal: { backgroundColor: colors.lineStrong },
   barLabel: { fontFamily: fonts.mono, fontSize: 9, color: colors.textTertiary, letterSpacing: 1 },
@@ -356,7 +364,7 @@ const styles = StyleSheet.create({
     paddingVertical: 16,
     borderWidth: 1,
     borderColor: colors.amber,
-    borderRadius: 4,
+    borderRadius: radius.md,
     alignItems: 'center',
   },
   ctaText: { fontFamily: fonts.monoBold, fontSize: 13, letterSpacing: 2, color: colors.amber },
