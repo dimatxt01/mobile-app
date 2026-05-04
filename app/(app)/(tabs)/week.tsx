@@ -31,6 +31,9 @@ export default function WeekScreen() {
   const dayOfWeek = now.getDay(); // 0=Sun
   const isSunday = dayOfWeek === 0;
   const daysUntilSunday = isSunday ? 0 : 7 - dayOfWeek;
+  const currentWeekStart = new Date(now);
+  currentWeekStart.setDate(now.getDate() - dayOfWeek);
+  const weekStart = currentWeekStart.toISOString().slice(0, 10);
 
   const { data: weeklyReviews } = useQuery({
     queryKey: ['weekly-reviews', user?.id],
@@ -40,7 +43,7 @@ export default function WeekScreen() {
         .select('*')
         .order('week_end', { ascending: false })
         .limit(12);
-      if (error) console.warn('weekly-reviews fetch failed:', error.message);
+      if (error) throw error;
       return (data ?? []) as {
         id: string;
         week_start: string;
@@ -54,6 +57,8 @@ export default function WeekScreen() {
     },
     enabled: !!user,
   });
+  const isActiveCheckup =
+    weeklyReviews !== undefined && !weeklyReviews.some((r) => r.week_start === weekStart);
   const thisAvg = thisWeek.length
     ? Math.round(thisWeek.reduce((s, r) => s + r.total_score, 0) / thisWeek.length)
     : 0;
@@ -86,7 +91,6 @@ export default function WeekScreen() {
     <ScrollView style={styles.container} contentContainerStyle={{ paddingBottom: 40 }}>
       <PrintBar right={`WK ${weekNumber}`} />
 
-      {/* Week average hero */}
       <View style={styles.avgBlock}>
         <Eyebrow label="WEEK AVERAGE" />
         <View style={styles.avgRow}>
@@ -110,7 +114,6 @@ export default function WeekScreen() {
 
       <Rule strong />
 
-      {/* Life in Weeks */}
       <TouchableOpacity
         style={styles.lifeCard}
         onPress={() => router.push('/(app)/modal/life-in-weeks')}
@@ -126,7 +129,6 @@ export default function WeekScreen() {
 
       <Rule />
 
-      {/* Bar chart */}
       <View style={styles.chartSection}>
         <Eyebrow label="DAILY TOTALS" />
         <View style={styles.chart}>
@@ -153,7 +155,6 @@ export default function WeekScreen() {
 
       <Rule />
 
-      {/* Bracket comparison */}
       <View style={styles.section}>
         <View style={styles.bracketHeader}>
           <Text style={[styles.bracketCol, styles.bracketLabelText]} />
@@ -201,7 +202,6 @@ export default function WeekScreen() {
 
       <Rule />
 
-      {/* Day by day */}
       <View style={styles.section}>
         <Eyebrow label="DAY BY DAY" />
         {thisWeek.map((r, i) => (
@@ -230,11 +230,10 @@ export default function WeekScreen() {
 
       <Rule strong />
 
-      {/* Weekly check-ups — unified section */}
       <View style={styles.section}>
         <Eyebrow label="WEEKLY CHECK-UPS" />
 
-        {isSunday ? (
+        {isActiveCheckup ? (
           <TouchableOpacity
             style={styles.activeRow}
             onPress={() => router.push('/(app)/modal/weekly-review')}

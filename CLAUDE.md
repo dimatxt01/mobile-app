@@ -26,11 +26,11 @@ app/
   (app)/
     _layout.tsx            # Session + onboarding_completed guard
     (tabs)/
-      _layout.tsx          # 4-tab PrintTabBar (TODAY/WEEK/TRENDS/YOU)
+      _layout.tsx          # 4-tab PrintTabBar (TODAY/WEEK/MONTH/PROFILE)
       index.tsx            # TODAY tab
       week.tsx             # WEEK tab
-      trends.tsx           # TRENDS tab
-      you.tsx              # YOU tab (profile)
+      month.tsx            # MONTH tab
+      profile.tsx          # PROFILE tab
     modal/
       _layout.tsx          # Modal stack
       score-breakdown.tsx
@@ -39,6 +39,7 @@ app/
       edit-outcomes.tsx
       edit-penalties.tsx
       edit-identity-sentence.tsx
+      day-complete.tsx
       weekly-review.tsx
       monthly-review.tsx
       returning-user.tsx
@@ -188,7 +189,7 @@ app/(app)/_layout.tsx:
 | @expo-google-fonts/inter                  | installed      | Inter display font               |
 | @expo-google-fonts/jetbrains-mono         | installed      | JetBrains Mono                   |
 | @react-native-async-storage/async-storage | installed      | score-density display preference |
-| expo-image-picker                         | needs install  | weekly review photos             |
+| expo-image-picker                         | installed      | weekly review photos             |
 | expo-notifications                        | needs install  | local reminders                  |
 | expo-file-system                          | needs install  | photo handling                   |
 | react-native-svg                          | SKIP (Expo Go) | use View-based charts            |
@@ -311,6 +312,10 @@ Pure function at `src/lib/score.ts`. Takes habits, outcomes, penalties, and chec
 **`expo-file-system` SDK 54 — `EncodingType` not re-exported**
 
 When using `FileSystem.readAsStringAsync` with base64 encoding, pass `encoding: 'base64'` as a string literal instead of `FileSystem.EncodingType.Base64`. The enum is not re-exported from the SDK 54 main module; using the import path causes a runtime error.
+
+**`expo-image-picker` SDK 54 — `MediaTypeOptions` deprecated**
+
+When calling `ImagePicker.launchImageLibraryAsync`, pass `mediaTypes: ['images']` as an array literal instead of `ImagePicker.MediaTypeOptions.Images`. The enum is deprecated in expo-image-picker ~17.0.11; TypeScript will surface an error if you use it.
 
 ## Out of Scope (Planned, Not Implemented)
 

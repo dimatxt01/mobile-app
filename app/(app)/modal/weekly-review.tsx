@@ -18,6 +18,7 @@ import { supabase } from '@/lib/supabase';
 import { uploadWeeklyPhoto } from '@/features/reviews/upload-weekly-photo';
 import { colors, fonts, spacing } from '@/lib/hmc-colors';
 import { radius } from '@/lib/hmc-tokens';
+import { computeCurrentWeek } from '@/lib/week-utils';
 import { Eyebrow } from '@/components/hmc/Eyebrow';
 import type { WeeklyReview } from '@/types/database';
 
@@ -38,14 +39,9 @@ export default function WeeklyReviewScreen() {
   }>();
   const isReadOnly = readOnly === '1';
 
-  const now = new Date();
-  const dayOfWeek = now.getDay();
-  const computedWeekStart = new Date(now);
-  computedWeekStart.setDate(now.getDate() - dayOfWeek);
-  const weekStart = paramWeekStart ?? computedWeekStart.toISOString().slice(0, 10);
-  const computedWeekEnd = new Date(computedWeekStart);
-  computedWeekEnd.setDate(computedWeekStart.getDate() + 6);
-  const weekEnd = paramWeekEnd ?? computedWeekEnd.toISOString().slice(0, 10);
+  const { weekStart: currentWeekStart, weekEnd: currentWeekEnd } = computeCurrentWeek();
+  const weekStart = paramWeekStart ?? currentWeekStart;
+  const weekEnd = paramWeekEnd ?? currentWeekEnd;
 
   const [win, setWin] = useState('');
   const [challenge, setChallenge] = useState('');
@@ -53,7 +49,7 @@ export default function WeeklyReviewScreen() {
   const [localPhotoUris, setLocalPhotoUris] = useState<string[]>([]);
   const [savedPhotoUrls, setSavedPhotoUrls] = useState<string[]>([]);
 
-  const { data: existingReview } = useQuery({
+  const { data: existingReview, isError } = useQuery({
     queryKey: ['weekly-review', user?.id, weekStart],
     queryFn: async () => {
       const { data } = await supabase
@@ -77,13 +73,17 @@ export default function WeeklyReviewScreen() {
 
   const handleAddPhoto = async () => {
     if (localPhotoUris.length + savedPhotoUrls.length >= MAX_PHOTOS) return;
-    const result = await ImagePicker.launchImageLibraryAsync({
-      mediaTypes: ['images'],
-      quality: 0.8,
-      allowsMultipleSelection: false,
-    });
-    if (!result.canceled && result.assets[0]) {
-      setLocalPhotoUris((prev) => [...prev, result.assets[0]!.uri]);
+    try {
+      const result = await ImagePicker.launchImageLibraryAsync({
+        mediaTypes: ['images'],
+        quality: 0.8,
+        allowsMultipleSelection: false,
+      });
+      if (!result.canceled && result.assets[0]) {
+        setLocalPhotoUris((prev) => [...prev, result.assets[0]!.uri]);
+      }
+    } catch (e) {
+      Alert.alert('Photo Picker Error', e instanceof Error ? e.message : 'Failed to open photo library');
     }
   };
 
@@ -194,6 +194,12 @@ export default function WeeklyReviewScreen() {
               </TouchableOpacity>
             )}
           </ScrollView>
+        </View>
+      )}
+
+      {isError && (
+        <View style={styles.errorBanner}>
+          <Text style={styles.errorText}>Failed to load existing review. Check your connection and try again.</Text>
         </View>
       )}
 
@@ -320,4 +326,17 @@ const styles = StyleSheet.create({
     marginTop: 32,
   },
   closeText: { fontFamily: fonts.monoBold, fontSize: 14, letterSpacing: 1, color: colors.textPrimary },
+  errorBanner: {
+    backgroundColor: colors.dangerMuted,
+    borderRadius: radius.sm,
+    paddingHorizontal: 16,
+    paddingVertical: 12,
+    marginTop: 16,
+  },
+  errorText: {
+    fontFamily: fonts.display,
+    fontSize: 13,
+    color: colors.danger,
+    lineHeight: 18,
+  },
 });
