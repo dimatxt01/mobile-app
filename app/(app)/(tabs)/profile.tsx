@@ -24,8 +24,8 @@ const DAY_ABBR = ['M', 'T', 'W', 'T', 'F', 'S', 'S'];
 function colorForScore(score: number | null): string {
   if (score === null) return colors.lineRegular;
   if (score >= 80) return colors.amber;
-  if (score >= 65) return 'rgba(255,176,32,0.55)';
-  if (score >= 50) return 'rgba(255,176,32,0.30)';
+  if (score >= 65) return colors.accentMid;
+  if (score >= 50) return colors.accentLow;
   return colors.lineStrong;
 }
 

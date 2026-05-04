@@ -35,11 +35,12 @@ export default function WeekScreen() {
   const { data: weeklyReviews } = useQuery({
     queryKey: ['weekly-reviews', user?.id],
     queryFn: async () => {
-      const { data } = await supabase
+      const { data, error } = await supabase
         .from('weekly_reviews')
         .select('*')
         .order('week_end', { ascending: false })
         .limit(12);
+      if (error) console.warn('weekly-reviews fetch failed:', error.message);
       return (data ?? []) as {
         id: string;
         week_start: string;
@@ -48,7 +49,7 @@ export default function WeekScreen() {
         challenge: string | null;
         next_week: string | null;
         weekly_avg: number | null;
-        photo_urls: string[];
+        photo_urls: string[] | null;
       }[];
     },
     enabled: !!user,

@@ -15,6 +15,8 @@ export const colors = {
   textQuiet: '#48484C',
   accentMuted: 'rgba(255,176,32,0.16)' as const,
   accentDim: 'rgba(255,176,32,0.5)' as const,
+  accentMid: 'rgba(255,176,32,0.55)' as const,
+  accentLow: 'rgba(255,176,32,0.30)' as const,
   accentGlow: 'rgba(255,176,32,0.28)' as const,
   dangerMuted: 'rgba(255,69,58,0.12)' as const,
 

@@ -18,6 +18,7 @@ const mockFetch = jest.fn();
 globalThis.fetch = mockFetch as unknown as typeof fetch;
 
 import { uploadWeeklyPhoto } from '../src/features/weekly-review/upload-weekly-photo';
+import { supabase } from '../src/lib/supabase';
 /* eslint-enable import/first */
 
 describe('uploadWeeklyPhoto', () => {
@@ -34,6 +35,7 @@ describe('uploadWeeklyPhoto', () => {
     const result = await uploadWeeklyPhoto('user-123', 'file:///photo.jpg', '2026-05-03', 0);
 
     expect(result).toEqual({ data: 'https://cdn.example.com/photo.jpg', error: null });
+    expect(supabase.storage.from).toHaveBeenCalledWith('weekly-review-photos');
     expect(mockUpload).toHaveBeenCalledWith('user-123/2026-05-03-0.jpg', fakeBlob, {
       contentType: 'image/jpeg',
       upsert: true,

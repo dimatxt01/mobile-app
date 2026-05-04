@@ -10,7 +10,7 @@ import {
   StyleSheet,
 } from 'react-native';
 import { router, useLocalSearchParams } from 'expo-router';
-import { useQuery, useQueryClient } from '@tanstack/react-query';
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import * as ImagePicker from 'expo-image-picker';
 import { useAuth } from '@/features/auth/hooks/use-auth';
@@ -55,9 +55,7 @@ export default function WeeklyReviewScreen() {
   const [nextWeek, setNextWeek] = useState('');
   const [existingPhotoUrls, setExistingPhotoUrls] = useState<string[]>([]);
   const [newLocalUris, setNewLocalUris] = useState<string[]>([]);
-  const [saving, setSaving] = useState(false);
-
-  const { data: existing } = useQuery({
+  const { data: existing, isError } = useQuery({
     queryKey: ['weekly-review', user?.id, weekStart],
     queryFn: async () => {
       const { data, error } = await supabase
@@ -66,11 +64,10 @@ export default function WeeklyReviewScreen() {
         .eq('user_id', user!.id)
         .eq('week_start', weekStart)
         .maybeSingle();
-      if (error) return { data: null, error };
-      return { data, error: null };
+      if (error) throw error;
+      return data;
     },
     enabled: !!user && !!weekStart,
-    select: (res) => res.data,
   });
 
   useEffect(() => {
@@ -98,51 +95,42 @@ export default function WeeklyReviewScreen() {
     setNewLocalUris((prev) => prev.filter((_, i) => i !== index));
   };
 
-  const handleSave = async () => {
-    if (!user) return;
-    setSaving(true);
-
-    let newPublicUrls: string[] = [];
-    for (let i = 0; i < newLocalUris.length; i++) {
-      const { data: url, error } = await uploadWeeklyPhoto(
-        user.id,
-        newLocalUris[i]!,
-        weekStart,
-        existingPhotoUrls.length + i,
-      );
-      if (error) {
-        Alert.alert('Upload Failed', error.message);
-        setSaving(false);
-        return;
+  const saveMutation = useMutation({
+    mutationFn: async () => {
+      if (!user) throw new Error('Not authenticated');
+      let newPublicUrls: string[] = [];
+      for (let i = 0; i < newLocalUris.length; i++) {
+        const { data: url, error } = await uploadWeeklyPhoto(
+          user.id,
+          newLocalUris[i]!,
+          weekStart,
+          existingPhotoUrls.length + i,
+        );
+        if (error) throw error;
+        if (url) newPublicUrls.push(url);
       }
-      if (url) newPublicUrls.push(url);
-    }
-
-    const allPhotoUrls = [...existingPhotoUrls, ...newPublicUrls];
-
-    const { error: upsertError } = await supabase.from('weekly_reviews').upsert(
-      {
-        user_id: user.id,
-        week_start: weekStart,
-        week_end: weekEnd,
-        win,
-        challenge,
-        next_week: nextWeek,
-        photo_urls: allPhotoUrls,
-      },
-      { onConflict: 'user_id,week_start' },
-    );
-
-    setSaving(false);
-    if (upsertError) {
-      Alert.alert('Save Failed', upsertError.message);
-      return;
-    }
-
-    qc.invalidateQueries({ queryKey: ['weekly-reviews', user.id] });
-    qc.invalidateQueries({ queryKey: ['weekly-review', user.id, weekStart] });
-    router.back();
-  };
+      const allPhotoUrls = [...existingPhotoUrls, ...newPublicUrls];
+      const { error: upsertError } = await supabase.from('weekly_reviews').upsert(
+        {
+          user_id: user.id,
+          week_start: weekStart,
+          week_end: weekEnd,
+          win,
+          challenge,
+          next_week: nextWeek,
+          photo_urls: allPhotoUrls,
+        },
+        { onConflict: 'user_id,week_start' },
+      );
+      if (upsertError) throw upsertError;
+    },
+    onError: (err: Error) => Alert.alert('Save Failed', err.message),
+    onSuccess: () => {
+      qc.invalidateQueries({ queryKey: ['weekly-reviews', user!.id] });
+      qc.invalidateQueries({ queryKey: ['weekly-review', user!.id, weekStart] });
+      router.back();
+    },
+  });
 
   return (
     <ScrollView
@@ -234,8 +222,12 @@ export default function WeeklyReviewScreen() {
         </TouchableOpacity>
       ) : (
         <>
-          <TouchableOpacity style={styles.saveBtn} onPress={handleSave} disabled={saving}>
-            <Text style={styles.saveText}>{saving ? 'SAVING...' : 'SAVE'}</Text>
+          <TouchableOpacity
+            style={styles.saveBtn}
+            onPress={() => saveMutation.mutate()}
+            disabled={saveMutation.isPending || isError}
+          >
+            <Text style={styles.saveText}>{saveMutation.isPending ? 'SAVING...' : 'SAVE'}</Text>
           </TouchableOpacity>
           <TouchableOpacity style={styles.cancelBtn} onPress={() => router.back()}>
             <Text style={styles.cancelText}>SKIP</Text>

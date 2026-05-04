@@ -137,6 +137,7 @@ export default function TodayScreen() {
         checkinId: checkin.id,
       },
     });
+    // fire only on lock transition; score/checkin values are current at the point of firing
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [checkin?.is_locked]);
 
