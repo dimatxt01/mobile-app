@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useState, useEffect } from 'react';
 import {
   View,
   Text,
@@ -15,101 +15,87 @@ import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import * as ImagePicker from 'expo-image-picker';
 import { useAuth } from '@/features/auth/hooks/use-auth';
 import { supabase } from '@/lib/supabase';
-import { uploadWeeklyPhoto } from '@/features/weekly-review/upload-weekly-photo';
+import { uploadWeeklyPhoto } from '@/features/reviews/upload-weekly-photo';
 import { colors, fonts, spacing } from '@/lib/hmc-colors';
 import { radius } from '@/lib/hmc-tokens';
 import { Eyebrow } from '@/components/hmc/Eyebrow';
+import type { WeeklyReview } from '@/types/database';
 
-const THUMB = 80;
-
-function computeCurrentWeek() {
-  const now = new Date();
-  const dayOfWeek = now.getDay();
-  const weekStart = new Date(now);
-  weekStart.setDate(now.getDate() - dayOfWeek);
-  const weekEnd = new Date(weekStart);
-  weekEnd.setDate(weekStart.getDate() + 6);
-  return {
-    weekStart: weekStart.toISOString().slice(0, 10),
-    weekEnd: weekEnd.toISOString().slice(0, 10),
-  };
-}
+const MAX_PHOTOS = 5;
 
 export default function WeeklyReviewScreen() {
   const insets = useSafeAreaInsets();
   const { user } = useAuth();
   const qc = useQueryClient();
-  const params = useLocalSearchParams<{
+  const {
+    readOnly,
+    weekStart: paramWeekStart,
+    weekEnd: paramWeekEnd,
+  } = useLocalSearchParams<{
+    readOnly?: string;
     weekStart?: string;
     weekEnd?: string;
-    readOnly?: string;
   }>();
+  const isReadOnly = readOnly === '1';
 
-  const isReadOnly = params.readOnly === '1';
-  const currentWeek = computeCurrentWeek();
-  const weekStart = params.weekStart ?? currentWeek.weekStart;
-  const weekEnd = params.weekEnd ?? currentWeek.weekEnd;
+  const now = new Date();
+  const dayOfWeek = now.getDay();
+  const computedWeekStart = new Date(now);
+  computedWeekStart.setDate(now.getDate() - dayOfWeek);
+  const weekStart = paramWeekStart ?? computedWeekStart.toISOString().slice(0, 10);
+  const computedWeekEnd = new Date(computedWeekStart);
+  computedWeekEnd.setDate(computedWeekStart.getDate() + 6);
+  const weekEnd = paramWeekEnd ?? computedWeekEnd.toISOString().slice(0, 10);
 
   const [win, setWin] = useState('');
   const [challenge, setChallenge] = useState('');
   const [nextWeek, setNextWeek] = useState('');
-  const [existingPhotoUrls, setExistingPhotoUrls] = useState<string[]>([]);
-  const [newLocalUris, setNewLocalUris] = useState<string[]>([]);
-  const { data: existing, isError } = useQuery({
+  const [localPhotoUris, setLocalPhotoUris] = useState<string[]>([]);
+  const [savedPhotoUrls, setSavedPhotoUrls] = useState<string[]>([]);
+
+  const { data: existingReview } = useQuery({
     queryKey: ['weekly-review', user?.id, weekStart],
     queryFn: async () => {
-      const { data, error } = await supabase
+      const { data } = await supabase
         .from('weekly_reviews')
         .select('*')
         .eq('user_id', user!.id)
         .eq('week_start', weekStart)
         .maybeSingle();
-      if (error) throw error;
-      return data;
+      return data as WeeklyReview | null;
     },
     enabled: !!user && !!weekStart,
   });
 
   useEffect(() => {
-    if (existing) {
-      setWin(existing.win ?? '');
-      setChallenge(existing.challenge ?? '');
-      setNextWeek(existing.next_week ?? '');
-      setExistingPhotoUrls(existing.photo_urls ?? []);
-    }
-  }, [existing]);
+    if (!existingReview) return;
+    setWin(existingReview.win ?? '');
+    setChallenge(existingReview.challenge ?? '');
+    setNextWeek(existingReview.next_week ?? '');
+    setSavedPhotoUrls(existingReview.photo_urls ?? []);
+  }, [existingReview]);
 
-  const handlePickPhotos = async () => {
+  const handleAddPhoto = async () => {
+    if (localPhotoUris.length + savedPhotoUrls.length >= MAX_PHOTOS) return;
     const result = await ImagePicker.launchImageLibraryAsync({
-      mediaTypes: ImagePicker.MediaTypeOptions.Images,
+      mediaTypes: ['images'],
       quality: 0.8,
-      allowsMultipleSelection: true,
-      selectionLimit: 5,
+      allowsMultipleSelection: false,
     });
-    if (!result.canceled) {
-      setNewLocalUris((prev) => [...prev, ...result.assets.map((a) => a.uri)]);
+    if (!result.canceled && result.assets[0]) {
+      setLocalPhotoUris((prev) => [...prev, result.assets[0]!.uri]);
     }
-  };
-
-  const removeNewPhoto = (index: number) => {
-    setNewLocalUris((prev) => prev.filter((_, i) => i !== index));
   };
 
   const saveMutation = useMutation({
     mutationFn: async () => {
       if (!user) throw new Error('Not authenticated');
-      let newPublicUrls: string[] = [];
-      for (let i = 0; i < newLocalUris.length; i++) {
-        const { data: url, error } = await uploadWeeklyPhoto(
-          user.id,
-          newLocalUris[i]!,
-          weekStart,
-          existingPhotoUrls.length + i,
-        );
+      const uploadedUrls: string[] = [];
+      for (const uri of localPhotoUris) {
+        const { data: url, error } = await uploadWeeklyPhoto(user.id, uri, weekStart);
         if (error) throw error;
-        if (url) newPublicUrls.push(url);
+        if (url) uploadedUrls.push(url);
       }
-      const allPhotoUrls = [...existingPhotoUrls, ...newPublicUrls];
       const { error: upsertError } = await supabase.from('weekly_reviews').upsert(
         {
           user_id: user.id,
@@ -118,7 +104,7 @@ export default function WeeklyReviewScreen() {
           win,
           challenge,
           next_week: nextWeek,
-          photo_urls: allPhotoUrls,
+          photo_urls: [...savedPhotoUrls, ...uploadedUrls],
         },
         { onConflict: 'user_id,week_start' },
       );
@@ -126,11 +112,17 @@ export default function WeeklyReviewScreen() {
     },
     onError: (err: Error) => Alert.alert('Save Failed', err.message),
     onSuccess: () => {
-      qc.invalidateQueries({ queryKey: ['weekly-reviews', user!.id] });
+      qc.invalidateQueries({ queryKey: ['weekly-reviews'] });
       qc.invalidateQueries({ queryKey: ['weekly-review', user!.id, weekStart] });
       router.back();
     },
   });
+
+  const weekStartDate = new Date(weekStart + 'T00:00:00');
+  const weekEndDate = new Date(weekEnd + 'T00:00:00');
+  const fmtRange = `${weekStartDate.toLocaleDateString('en-US', { month: 'short', day: 'numeric' }).toUpperCase()}–${weekEndDate.toLocaleDateString('en-US', { day: 'numeric' })}`;
+
+  const allPhotos = [...savedPhotoUrls, ...localPhotoUris];
 
   return (
     <ScrollView
@@ -139,7 +131,7 @@ export default function WeeklyReviewScreen() {
       keyboardShouldPersistTaps="handled"
     >
       <View style={styles.dragHandle} />
-      <Eyebrow label="WEEKLY REVIEW" />
+      <Eyebrow label={isReadOnly ? `WK OF ${fmtRange}` : 'WEEKLY CHECK-UP'} />
 
       <View style={styles.card}>
         <Text style={styles.label}>Big win this week</Text>
@@ -155,7 +147,6 @@ export default function WeeklyReviewScreen() {
             placeholder="What went well?"
           />
         )}
-
         <Text style={styles.label}>Biggest challenge</Text>
         {isReadOnly ? (
           <Text style={styles.readOnlyText}>{challenge || '—'}</Text>
@@ -169,7 +160,6 @@ export default function WeeklyReviewScreen() {
             placeholder="What was hard?"
           />
         )}
-
         <Text style={styles.label}>Intention for next week</Text>
         {isReadOnly ? (
           <Text style={styles.readOnlyText}>{nextWeek || '—'}</Text>
@@ -185,29 +175,20 @@ export default function WeeklyReviewScreen() {
         )}
       </View>
 
-      {/* Photo strip */}
-      {(existingPhotoUrls.length > 0 || newLocalUris.length > 0 || !isReadOnly) && (
+      {(allPhotos.length > 0 || !isReadOnly) && (
         <View style={styles.photoSection}>
-          <Eyebrow label="PICTURES OF THE WEEK" />
+          <Eyebrow label="PHOTOS OF THE WEEK" />
           <ScrollView
             horizontal
             showsHorizontalScrollIndicator={false}
             style={styles.photoScroll}
-            contentContainerStyle={styles.photoRow}
+            contentContainerStyle={{ gap: 8 }}
           >
-            {existingPhotoUrls.map((url, i) => (
-              <Image key={`existing-${i}`} source={{ uri: url }} style={styles.photoThumb} />
+            {allPhotos.map((uri, i) => (
+              <Image key={`${uri}-${i}`} source={{ uri }} style={styles.photoThumb} />
             ))}
-            {newLocalUris.map((uri, i) => (
-              <View key={`new-${i}`} style={styles.newPhotoWrap}>
-                <Image source={{ uri }} style={styles.photoThumb} />
-                <TouchableOpacity style={styles.removeBtn} onPress={() => removeNewPhoto(i)}>
-                  <Text style={styles.removeBtnText}>✕</Text>
-                </TouchableOpacity>
-              </View>
-            ))}
-            {!isReadOnly && (
-              <TouchableOpacity style={styles.addPhotoBtn} onPress={handlePickPhotos}>
+            {!isReadOnly && allPhotos.length < MAX_PHOTOS && (
+              <TouchableOpacity style={styles.addPhotoBtn} onPress={handleAddPhoto}>
                 <Text style={styles.addPhotoPlus}>+</Text>
                 <Text style={styles.addPhotoText}>ADD</Text>
               </TouchableOpacity>
@@ -225,7 +206,7 @@ export default function WeeklyReviewScreen() {
           <TouchableOpacity
             style={styles.saveBtn}
             onPress={() => saveMutation.mutate()}
-            disabled={saveMutation.isPending || isError}
+            disabled={saveMutation.isPending}
           >
             <Text style={styles.saveText}>{saveMutation.isPending ? 'SAVING...' : 'SAVE'}</Text>
           </TouchableOpacity>
@@ -286,54 +267,34 @@ const styles = StyleSheet.create({
     lineHeight: 22,
   },
   photoSection: { marginTop: 24 },
-  photoScroll: { marginTop: 10 },
-  photoRow: { gap: 8 },
+  photoScroll: { marginTop: 12 },
   photoThumb: {
-    width: THUMB,
-    height: THUMB,
-    borderRadius: 6,
+    width: 80,
+    height: 100,
+    borderRadius: radius.sm,
     backgroundColor: colors.high,
   },
-  newPhotoWrap: { position: 'relative' },
-  removeBtn: {
-    position: 'absolute',
-    top: -6,
-    right: -6,
-    width: 22,
-    height: 22,
-    borderRadius: 11,
-    backgroundColor: colors.danger,
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-  removeBtnText: {
-    fontFamily: fonts.monoBold,
-    fontSize: 11,
-    color: colors.textPrimary,
-    lineHeight: 13,
-  },
   addPhotoBtn: {
-    width: THUMB,
-    height: THUMB,
-    borderRadius: 6,
+    width: 80,
+    height: 100,
+    borderRadius: radius.sm,
     borderWidth: 1,
-    borderColor: colors.borderDefault,
+    borderColor: colors.borderMuted,
     borderStyle: 'dashed',
     alignItems: 'center',
     justifyContent: 'center',
-    gap: 2,
   },
   addPhotoPlus: {
-    fontFamily: fonts.monoBold,
+    fontFamily: fonts.mono,
     fontSize: 20,
     color: colors.textTertiary,
-    lineHeight: 22,
   },
   addPhotoText: {
     fontFamily: fonts.mono,
-    fontSize: 9,
+    fontSize: 10,
     letterSpacing: 1.5,
     color: colors.textTertiary,
+    marginTop: 2,
   },
   saveBtn: {
     backgroundColor: colors.amber,
@@ -358,10 +319,5 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     marginTop: 32,
   },
-  closeText: {
-    fontFamily: fonts.monoBold,
-    fontSize: 14,
-    letterSpacing: 1,
-    color: colors.textPrimary,
-  },
+  closeText: { fontFamily: fonts.monoBold, fontSize: 14, letterSpacing: 1, color: colors.textPrimary },
 });
