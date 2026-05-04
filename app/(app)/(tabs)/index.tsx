@@ -17,7 +17,7 @@ import { useSaveCheckin } from '@/features/checkin/save-checkin';
 import { useLockCheckin } from '@/features/checkin/lock-checkin';
 import { useHistory } from '@/features/history/use-history';
 import { computeScore } from '@/lib/score';
-import { colors, fonts, spacing } from '@/lib/habits-colors';
+import { colors, fonts, spacing, radius, scale } from '@/lib/habits-colors';
 import { PrintBar } from '@/components/habits/PrintBar';
 import { BracketBlock } from '@/components/habits/BracketBlock';
 import { HabitRow } from '@/components/habits/HabitRow';

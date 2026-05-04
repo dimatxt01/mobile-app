@@ -1,11 +1,5 @@
-<<<<<<< HEAD:src/components/habits/HabitRow.tsx
-import { TouchableOpacity, View, Text, StyleSheet } from 'react-native';
-import { colors, fonts } from '@/lib/habits-colors';
-=======
 import { Pressable, View, Text, StyleSheet } from 'react-native';
-import { colors, fonts } from '@/lib/hmc-colors';
-import { radius } from '@/lib/hmc-tokens';
->>>>>>> c17a8265a084b4125b138d6df2628fd553809dbb:src/components/hmc/HabitRow.tsx
+import { colors, fonts, radius } from '@/lib/habits-colors';
 
 type Props = {
   label: string;

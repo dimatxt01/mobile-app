@@ -13,7 +13,7 @@ import { useQueryClient } from '@tanstack/react-query';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { useAuth } from '@/features/auth/hooks/use-auth';
 import { supabase } from '@/lib/supabase';
-import { colors, fonts, spacing } from '@/lib/habits-colors';
+import { colors, fonts, spacing, radius } from '@/lib/habits-colors';
 import { Eyebrow } from '@/components/habits/Eyebrow';
 import type { OutcomeMetric } from '@/types/database';
 

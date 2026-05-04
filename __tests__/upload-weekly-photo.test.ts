@@ -1,80 +1,73 @@
 /* eslint-disable import/first */
-const mockUpload = jest.fn();
-const mockGetPublicUrl = jest.fn();
-
-jest.mock('../src/lib/supabase', () => ({
-  supabase: {
-    storage: {
-      from: jest.fn(() => ({
-        upload: mockUpload,
-        getPublicUrl: mockGetPublicUrl,
-      })),
+jest.mock('../src/lib/supabase', () => {
+  const mockUpload = jest.fn();
+  const mockGetPublicUrl = jest
+    .fn()
+    .mockReturnValue({ data: { publicUrl: 'https://example.com/weekly.jpg' } });
+  return {
+    supabase: {
+      storage: {
+        from: jest.fn().mockReturnValue({ upload: mockUpload, getPublicUrl: mockGetPublicUrl }),
+      },
     },
-  },
-}));
+    __mockUpload: mockUpload,
+  };
+});
 
-// Mock global fetch for blob conversion
-const mockFetch = jest.fn();
-globalThis.fetch = mockFetch as unknown as typeof fetch;
-
-import { uploadWeeklyPhoto } from '../src/features/weekly-review/upload-weekly-photo';
-import { supabase } from '../src/lib/supabase';
+import { uploadWeeklyPhoto } from '../src/features/reviews/upload-weekly-photo';
 /* eslint-enable import/first */
+
+const mockBlob = new Blob(['test'], { type: 'image/jpeg' });
+
+function mockFetchSuccess() {
+  jest.spyOn(globalThis, 'fetch').mockResolvedValue({
+    blob: () => Promise.resolve(mockBlob),
+  } as unknown as Response);
+}
+
+function mockFetchFailure() {
+  jest.spyOn(globalThis, 'fetch').mockRejectedValue(new Error('URI cleared by OS'));
+}
+
+function getMocks() {
+  // eslint-disable-next-line @typescript-eslint/no-require-imports
+  const mod = require('../src/lib/supabase') as { __mockUpload: jest.Mock };
+  return { upload: mod.__mockUpload };
+}
 
 describe('uploadWeeklyPhoto', () => {
   beforeEach(() => {
-    jest.clearAllMocks();
+    getMocks().upload.mockReset();
   });
 
-  it('uploads blob and returns public URL on success', async () => {
-    const fakeBlob = new Blob(['test']);
-    mockFetch.mockResolvedValue({ blob: () => Promise.resolve(fakeBlob) });
-    mockUpload.mockResolvedValue({ error: null });
-    mockGetPublicUrl.mockReturnValue({ data: { publicUrl: 'https://cdn.example.com/photo.jpg' } });
+  it('returns public URL on success', async () => {
+    mockFetchSuccess();
+    getMocks().upload.mockResolvedValue({ error: null });
 
-    const result = await uploadWeeklyPhoto('user-123', 'file:///photo.jpg', '2026-05-03', 0);
+    const result = await uploadWeeklyPhoto('user1', 'file://test.jpg', '2026-05-04');
 
-    expect(result).toEqual({ data: 'https://cdn.example.com/photo.jpg', error: null });
-    expect(supabase.storage.from).toHaveBeenCalledWith('weekly-review-photos');
-    expect(mockUpload).toHaveBeenCalledWith('user-123/2026-05-03-0.jpg', fakeBlob, {
-      contentType: 'image/jpeg',
-      upsert: true,
-    });
-  });
-
-  it('returns error when fetch fails', async () => {
-    mockFetch.mockRejectedValue(new Error('Network error'));
-
-    const result = await uploadWeeklyPhoto('user-123', 'file:///photo.jpg', '2026-05-03', 0);
-
-    expect(result.data).toBeNull();
-    expect(result.error).toBeInstanceOf(Error);
-    expect(result.error!.message).toBe('Network error');
+    expect(result.data).toBe('https://example.com/weekly.jpg');
+    expect(result.error).toBeNull();
   });
 
   it('returns error when storage upload fails', async () => {
-    const fakeBlob = new Blob(['test']);
-    mockFetch.mockResolvedValue({ blob: () => Promise.resolve(fakeBlob) });
-    mockUpload.mockResolvedValue({ error: new Error('Bucket not found') });
+    mockFetchSuccess();
+    const uploadErr = new Error('Storage quota exceeded');
+    getMocks().upload.mockResolvedValue({ error: uploadErr });
 
-    const result = await uploadWeeklyPhoto('user-123', 'file:///photo.jpg', '2026-05-03', 0);
+    const result = await uploadWeeklyPhoto('user1', 'file://test.jpg', '2026-05-04');
 
     expect(result.data).toBeNull();
-    expect(result.error!.message).toBe('Bucket not found');
+    expect(result.error).toBe(uploadErr);
   });
 
-  it('constructs correct storage path with index', async () => {
-    const fakeBlob = new Blob(['test']);
-    mockFetch.mockResolvedValue({ blob: () => Promise.resolve(fakeBlob) });
-    mockUpload.mockResolvedValue({ error: null });
-    mockGetPublicUrl.mockReturnValue({ data: { publicUrl: 'https://cdn.example.com/photo.jpg' } });
+  it('returns error when fetch fails', async () => {
+    mockFetchFailure();
 
-    await uploadWeeklyPhoto('user-456', 'file:///img.jpg', '2026-04-27', 3);
+    const result = await uploadWeeklyPhoto('user1', 'file://stale.jpg', '2026-05-04');
 
-    expect(mockUpload).toHaveBeenCalledWith(
-      'user-456/2026-04-27-3.jpg',
-      expect.any(Blob),
-      expect.any(Object),
-    );
+    expect(result.data).toBeNull();
+    expect(result.error).toBeInstanceOf(Error);
+    expect((result.error as Error).message).toBe('URI cleared by OS');
   });
 });

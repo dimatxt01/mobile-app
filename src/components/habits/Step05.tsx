@@ -1,10 +1,5 @@
 import { View, TouchableOpacity, Text, StyleSheet } from 'react-native';
-<<<<<<< HEAD:src/components/habits/Step05.tsx
-import { colors, fonts } from '@/lib/habits-colors';
-=======
-import { colors, fonts } from '@/lib/hmc-colors';
-import { radius } from '@/lib/hmc-tokens';
->>>>>>> c17a8265a084b4125b138d6df2628fd553809dbb:src/components/hmc/Step05.tsx
+import { colors, fonts, radius } from '@/lib/habits-colors';
 
 type Props = {
   label: string;

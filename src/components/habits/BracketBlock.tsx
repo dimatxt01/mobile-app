@@ -1,10 +1,5 @@
 import { View, Text, StyleSheet } from 'react-native';
-<<<<<<< HEAD:src/components/habits/BracketBlock.tsx
-import { colors, fonts, spacing } from '@/lib/habits-colors';
-=======
-import { colors, fonts } from '@/lib/hmc-colors';
-import { radius, elevation } from '@/lib/hmc-tokens';
->>>>>>> c17a8265a084b4125b138d6df2628fd553809dbb:src/components/hmc/BracketBlock.tsx
+import { colors, fonts, spacing, radius, elevation } from '@/lib/habits-colors';
 import { Eyebrow } from './Eyebrow';
 import { Rule } from './Rule';
 

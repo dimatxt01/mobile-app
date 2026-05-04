@@ -16,20 +16,11 @@ import { useAuth } from '@/features/auth/hooks/use-auth';
 import { useProfileStore } from '@/store/profile-store';
 import { supabase } from '@/lib/supabase';
 import { scheduleReminder } from '@/features/notifications/schedule-reminder';
-<<<<<<< HEAD
-import { colors, fonts, spacing } from '@/lib/habits-colors';
+import { colors, fonts, spacing, radius, scale } from '@/lib/habits-colors';
 import { POBar } from '@/components/habits/POBar';
 import { POCta } from '@/components/habits/POCta';
 import { Eyebrow } from '@/components/habits/Eyebrow';
 import { Rule } from '@/components/habits/Rule';
-=======
-import { colors, fonts, spacing } from '@/lib/hmc-colors';
-import { scale, radius } from '@/lib/hmc-tokens';
-import { POBar } from '@/components/hmc/POBar';
-import { POCta } from '@/components/hmc/POCta';
-import { Eyebrow } from '@/components/hmc/Eyebrow';
-import { Rule } from '@/components/hmc/Rule';
->>>>>>> c17a8265a084b4125b138d6df2628fd553809dbb
 import { Input } from '@/components/ui/Input';
 
 const DEFAULT_IDENTITY_HABITS = [

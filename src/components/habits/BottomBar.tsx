@@ -1,11 +1,6 @@
 import { View, TouchableOpacity, Text, ActivityIndicator, StyleSheet } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
-<<<<<<< HEAD:src/components/habits/BottomBar.tsx
-import { colors, fonts, spacing } from '@/lib/habits-colors';
-=======
-import { colors, fonts, spacing } from '@/lib/hmc-colors';
-import { radius, elevation } from '@/lib/hmc-tokens';
->>>>>>> c17a8265a084b4125b138d6df2628fd553809dbb:src/components/hmc/BottomBar.tsx
+import { colors, fonts, spacing, radius, elevation } from '@/lib/habits-colors';
 
 type Props = {
   label: string;

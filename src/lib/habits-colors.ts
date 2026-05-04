@@ -50,3 +50,5 @@ export const spacing = {
   sectionGap: 24,
   hairline: StyleSheet.hairlineWidth,
 } as const;
+
+export { scale, radius, typo, elevation } from './hmc-tokens';

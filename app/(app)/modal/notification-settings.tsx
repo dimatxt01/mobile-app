@@ -6,7 +6,7 @@ import { useAuth } from '@/features/auth/hooks/use-auth';
 import { useProfileStore } from '@/store/profile-store';
 import { supabase } from '@/lib/supabase';
 import { scheduleReminder } from '@/features/notifications/schedule-reminder';
-import { colors, fonts, spacing } from '@/lib/habits-colors';
+import { colors, fonts, spacing, radius } from '@/lib/habits-colors';
 import { Eyebrow } from '@/components/habits/Eyebrow';
 
 export default function NotificationSettingsScreen() {

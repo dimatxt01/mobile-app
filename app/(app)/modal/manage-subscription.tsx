@@ -1,7 +1,7 @@
 import { View, Text, TouchableOpacity, StyleSheet } from 'react-native';
 import { router } from 'expo-router';
 import { useProfileStore } from '@/store/profile-store';
-import { colors, fonts, spacing } from '@/lib/habits-colors';
+import { colors, fonts, spacing, radius } from '@/lib/habits-colors';
 import { Eyebrow } from '@/components/habits/Eyebrow';
 import { Rule } from '@/components/habits/Rule';
 export default function ManageSubscriptionScreen() {

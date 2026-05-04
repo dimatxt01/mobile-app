@@ -1,10 +1,5 @@
 import { TouchableOpacity, Text, StyleSheet } from 'react-native';
-<<<<<<< HEAD:src/components/habits/POCta.tsx
-import { colors, fonts } from '@/lib/habits-colors';
-=======
-import { colors, fonts } from '@/lib/hmc-colors';
-import { radius, elevation } from '@/lib/hmc-tokens';
->>>>>>> c17a8265a084b4125b138d6df2628fd553809dbb:src/components/hmc/POCta.tsx
+import { colors, fonts, radius, elevation } from '@/lib/habits-colors';
 
 type Props = { label: string; onPress: () => void; disabled?: boolean };
 export function POCta({ label, onPress, disabled = false }: Props) {

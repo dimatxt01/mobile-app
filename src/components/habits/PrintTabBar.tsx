@@ -1,12 +1,7 @@
 import { View, Text, TouchableOpacity, StyleSheet } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import type { BottomTabBarProps } from '@react-navigation/bottom-tabs';
-<<<<<<< HEAD:src/components/habits/PrintTabBar.tsx
-import { colors, fonts, spacing } from '@/lib/habits-colors';
-=======
-import { colors, fonts, spacing } from '@/lib/hmc-colors';
-import { radius } from '@/lib/hmc-tokens';
->>>>>>> c17a8265a084b4125b138d6df2628fd553809dbb:src/components/hmc/PrintTabBar.tsx
+import { colors, fonts, spacing, radius } from '@/lib/habits-colors';
 
 const TAB_LABELS: Record<string, string> = {
   index: 'TODAY',

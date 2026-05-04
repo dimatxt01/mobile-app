@@ -169,7 +169,6 @@ export default function WeekMonthScreen() {
   };
 
   return (
-<<<<<<< HEAD
     <ScrollView
       ref={scrollRef}
       horizontal
@@ -184,40 +183,6 @@ export default function WeekMonthScreen() {
         style={styles.page}
         contentContainerStyle={{ paddingBottom: 40 }}
         showsVerticalScrollIndicator={false}
-=======
-    <ScrollView style={styles.container} contentContainerStyle={{ paddingBottom: 40 }}>
-      <PrintBar right={`WK ${weekNumber}`} />
-
-      {/* Week average hero */}
-      <View style={styles.avgBlock}>
-        <Eyebrow label="WEEK AVERAGE" />
-        <View style={styles.avgRow}>
-          <BigNum value={thisAvg} highlight={false} />
-          <View style={styles.avgMeta}>
-            {weekDelta !== null && (
-              <Text style={[styles.deltaText, weekDelta >= 0 ? styles.deltaPos : styles.deltaNeg]}>
-                {weekDelta >= 0 ? '+' : ''}
-                {weekDelta} VS LAST WK
-              </Text>
-            )}
-            {thisWeek[bestIdx] && (
-              <Text style={styles.bestText}>
-                BEST: {DAY_LABELS[new Date(thisWeek[bestIdx]!.date + 'T00:00:00').getDay()] ?? '—'}{' '}
-                · {thisWeek[bestIdx]!.total_score}
-              </Text>
-            )}
-          </View>
-        </View>
-      </View>
-
-      <Rule strong />
-
-      {/* Life in Weeks */}
-      <TouchableOpacity
-        style={styles.lifeCard}
-        onPress={() => router.push('/(app)/modal/life-in-weeks')}
-        activeOpacity={0.8}
->>>>>>> c17a8265a084b4125b138d6df2628fd553809dbb
       >
         <PrintBar right={`WK ${weekNumber}`} />
 
@@ -249,7 +214,6 @@ export default function WeekMonthScreen() {
 
             <Rule strong />
 
-<<<<<<< HEAD
             <TouchableOpacity
               style={styles.lifeCard}
               onPress={() => router.push('/(app)/modal/life-in-weeks')}
@@ -359,46 +323,6 @@ export default function WeekMonthScreen() {
                 >
                   <Text style={styles.ctaText}>WEEKLY CHECK-UP →</Text>
                 </TouchableOpacity>
-=======
-      {/* Bracket comparison */}
-      <View style={styles.section}>
-        <View style={styles.bracketHeader}>
-          <Text style={[styles.bracketCol, styles.bracketLabelText]} />
-          <Text style={[styles.bracketCol, styles.bracketValue]}>THIS</Text>
-          <Text style={[styles.bracketCol, styles.bracketValue]}>LAST</Text>
-          <Text style={[styles.bracketCol, styles.bracketValue]}>Δ</Text>
-        </View>
-        {(['identity', 'execution', 'outcome', 'penalty'] as const).map((bracket) => {
-          const thisVal = thisWeek.length
-            ? Math.round(
-                thisWeek.reduce((s, r) => s + (r[`${bracket}_score`] ?? 0), 0) / thisWeek.length,
-              )
-            : 0;
-          const lastVal = lastWeek.length
-            ? Math.round(
-                lastWeek.reduce((s, r) => s + (r[`${bracket}_score`] ?? 0), 0) / lastWeek.length,
-              )
-            : 0;
-          const d = lastVal > 0 ? thisVal - lastVal : null;
-          return (
-            <View key={bracket} style={styles.bracketRow}>
-              <Text style={[styles.bracketCol, styles.bracketLabelText]}>
-                {bracket.toUpperCase()}
-              </Text>
-              <Text style={[styles.bracketCol, styles.bracketValue]}>{thisVal}</Text>
-              <Text style={[styles.bracketCol, styles.bracketDim]}>{lastVal || '—'}</Text>
-              {d !== null ? (
-                <Text
-                  style={[
-                    styles.bracketCol,
-                    styles.bracketValue,
-                    d >= 0 ? styles.deltaPos : styles.deltaNeg,
-                  ]}
-                >
-                  {d >= 0 ? '+' : ''}
-                  {d}
-                </Text>
->>>>>>> c17a8265a084b4125b138d6df2628fd553809dbb
               ) : (
                 <View style={styles.countdownBlock}>
                   <Eyebrow label="NEXT WEEKLY CHECK-UP IN" />
@@ -449,7 +373,6 @@ export default function WeekMonthScreen() {
         )}
       </ScrollView>
 
-<<<<<<< HEAD
       {/* ── MONTH PAGE ── */}
       <ScrollView
         style={styles.page}
@@ -516,66 +439,6 @@ export default function WeekMonthScreen() {
               const bAvg = Math.round(
                 monthRows.reduce((s, r) => s + (r[`${bracket}_score`] ?? 0), 0) / monthRows.length,
               );
-=======
-      {/* Day by day */}
-      <View style={styles.section}>
-        <Eyebrow label="DAY BY DAY" />
-        {thisWeek.map((r, i) => (
-          <TouchableOpacity
-            key={r.id}
-            style={[styles.dayRow, i === thisWeek.length - 1 && styles.dayRowLast]}
-            onPress={() =>
-              router.push({ pathname: '/(app)/modal/week-day/[date]', params: { date: r.date } })
-            }
-          >
-            <View style={styles.dayLeft}>
-              <Text style={styles.dayDate}>
-                {DAY_LABELS[new Date(r.date + 'T00:00:00').getDay()] ?? r.date} ·{' '}
-                <Text style={styles.dayDateMono}>{r.date.slice(5)}</Text>
-              </Text>
-              {r.reflection_win ? (
-                <Text style={styles.dayWin} numberOfLines={1}>
-                  {r.reflection_win}
-                </Text>
-              ) : null}
-            </View>
-            <Text style={styles.dayScore}>{r.total_score}</Text>
-          </TouchableOpacity>
-        ))}
-      </View>
-
-      <Rule strong />
-
-      {/* Weekly check-ups — unified section */}
-      <View style={styles.section}>
-        <Eyebrow label="WEEKLY CHECK-UPS" />
-
-        {isSunday ? (
-          <TouchableOpacity
-            style={styles.activeRow}
-            onPress={() => router.push('/(app)/modal/weekly-review')}
-            activeOpacity={0.8}
-          >
-            <Text style={styles.activeLabel}>THIS WEEK · CHECK-UP OPEN →</Text>
-            <Text style={styles.activeHint}>Tap to complete your weekly reflection</Text>
-          </TouchableOpacity>
-        ) : (
-          <View style={styles.countdownBlock}>
-            <View style={styles.countdownRow}>
-              <Text style={styles.countdownNum}>{daysUntilSunday}</Text>
-              <Text style={styles.countdownUnit}>DAYS</Text>
-            </View>
-          </View>
-        )}
-
-        {weeklyReviews && weeklyReviews.length > 0 && (
-          <View style={styles.reviewsList}>
-            {weeklyReviews.map((r) => {
-              const endDate = new Date(r.week_end + 'T00:00:00');
-              const label = endDate
-                .toLocaleDateString('en-US', { month: 'short', day: 'numeric' })
-                .toUpperCase();
->>>>>>> c17a8265a084b4125b138d6df2628fd553809dbb
               return (
                 <View key={bracket} style={styles.monthBracketRow}>
                   <Text style={styles.monthBracketLabel}>{bracket.toUpperCase()}</Text>
@@ -626,51 +489,30 @@ export default function WeekMonthScreen() {
                   activeOpacity={0.7}
                 >
                   <View style={styles.reviewLeft}>
-<<<<<<< HEAD
                     <Text style={styles.reviewMonth}>
                       {MONTH_NAMES[(r.month - 1) as number] ?? ''} {r.year}
                     </Text>
                     {r.verdict ? (
                       <Text style={styles.reviewVerdict} numberOfLines={1}>{r.verdict}</Text>
-=======
-                    <Text style={styles.reviewLabel}>WK OF {label}</Text>
-                    {r.win ? (
-                      <Text style={styles.reviewWin} numberOfLines={1}>
-                        {r.win}
-                      </Text>
->>>>>>> c17a8265a084b4125b138d6df2628fd553809dbb
                     ) : null}
                   </View>
                   {r.monthly_avg != null && (
                     <Text style={styles.reviewScore}>{Math.round(r.monthly_avg)}</Text>
                   )}
                 </TouchableOpacity>
-<<<<<<< HEAD
               ))}
             </View>
           </>
         )}
       </ScrollView>
-=======
-              );
-            })}
-          </View>
-        )}
-      </View>
->>>>>>> c17a8265a084b4125b138d6df2628fd553809dbb
     </ScrollView>
   );
 }
 
 const styles = StyleSheet.create({
   container: { flex: 1, backgroundColor: colors.base },
-<<<<<<< HEAD
   page: { width: SCREEN_WIDTH, backgroundColor: colors.base },
   centered: {
-=======
-  centered: {
-    flex: 1,
->>>>>>> c17a8265a084b4125b138d6df2628fd553809dbb
     alignItems: 'center',
     justifyContent: 'center',
     paddingHorizontal: spacing.pagePad,
@@ -700,7 +542,6 @@ const styles = StyleSheet.create({
   deltaPos: { color: colors.amber },
   deltaNeg: { color: colors.danger },
   bestText: { fontFamily: fonts.mono, fontSize: 11, letterSpacing: 1, color: colors.textTertiary },
-<<<<<<< HEAD
   lifeCard: { paddingHorizontal: spacing.pagePad, paddingVertical: 16 },
   lifeCardRow: { flexDirection: 'row', alignItems: 'baseline', marginTop: 6 },
   lifeNum: { fontFamily: fonts.monoBold, fontSize: 28, color: colors.amber, fontVariant: ['tabular-nums'] },
@@ -711,27 +552,6 @@ const styles = StyleSheet.create({
   weekBarCol: { flex: 1, alignItems: 'center', justifyContent: 'flex-end', gap: 4 },
   weekBarScore: { fontFamily: fonts.mono, fontSize: 10, color: colors.textTertiary, fontVariant: ['tabular-nums'] },
   weekBar: { width: '80%', borderRadius: 2 },
-=======
-  chartSection: {
-    marginHorizontal: spacing.pagePad,
-    paddingHorizontal: 16,
-    paddingTop: 20,
-    paddingBottom: 16,
-    backgroundColor: colors.surface02,
-    borderRadius: radius.md,
-    borderWidth: StyleSheet.hairlineWidth,
-    borderColor: colors.borderMuted,
-  },
-  chart: { flexDirection: 'row', alignItems: 'flex-end', height: 120, gap: 6, marginTop: 14 },
-  barCol: { flex: 1, alignItems: 'center', justifyContent: 'flex-end', gap: 4 },
-  barScore: {
-    fontFamily: fonts.mono,
-    fontSize: 10,
-    color: colors.textTertiary,
-    fontVariant: ['tabular-nums'],
-  },
-  bar: { width: '80%', borderRadius: 4 },
->>>>>>> c17a8265a084b4125b138d6df2628fd553809dbb
   barBest: { backgroundColor: colors.amber },
   barNormal: { backgroundColor: colors.lineStrong },
   weekBarLabel: { fontFamily: fonts.mono, fontSize: 9, color: colors.textTertiary, letterSpacing: 1 },
@@ -782,41 +602,10 @@ const styles = StyleSheet.create({
   },
   dayDateMono: { fontFamily: fonts.mono, fontSize: 12, color: colors.textTertiary },
   dayWin: { fontFamily: fonts.display, fontSize: 12, color: colors.textTertiary },
-<<<<<<< HEAD
   dayScore: { fontFamily: fonts.monoBold, fontSize: 20, color: colors.textPrimary, fontVariant: ['tabular-nums'] },
   ctaBtn: { paddingVertical: 16, borderWidth: 1, borderColor: colors.amber, borderRadius: 4, alignItems: 'center' },
   ctaText: { fontFamily: fonts.monoBold, fontSize: 13, letterSpacing: 2, color: colors.amber },
   countdownBlock: { gap: 8 },
-=======
-  dayScore: {
-    fontFamily: fonts.monoBold,
-    fontSize: 20,
-    color: colors.textPrimary,
-    fontVariant: ['tabular-nums'],
-  },
-  activeRow: {
-    paddingVertical: 16,
-    paddingHorizontal: 14,
-    borderWidth: 1,
-    borderColor: colors.danger,
-    borderRadius: radius.md,
-    marginTop: 12,
-    gap: 4,
-  },
-  activeLabel: {
-    fontFamily: fonts.monoBold,
-    fontSize: 13,
-    letterSpacing: 1.5,
-    color: colors.danger,
-  },
-  activeHint: {
-    fontFamily: fonts.display,
-    fontSize: 12,
-    color: colors.textTertiary,
-  },
-  reviewsList: { marginTop: 16 },
-  countdownBlock: { gap: 8, marginTop: 12 },
->>>>>>> c17a8265a084b4125b138d6df2628fd553809dbb
   countdownRow: { flexDirection: 'row', alignItems: 'baseline', gap: 6 },
   countdownNum: {
     fontFamily: fonts.monoBold,

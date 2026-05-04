@@ -1,6 +1,6 @@
 import { View, Text, TouchableOpacity, StyleSheet, Alert } from 'react-native';
 import { router } from 'expo-router';
-import { colors, fonts, spacing } from '@/lib/habits-colors';
+import { colors, fonts, spacing, radius } from '@/lib/habits-colors';
 import { Eyebrow } from '@/components/habits/Eyebrow';
 import { Rule } from '@/components/habits/Rule';
 export default function PrivacyDataScreen() {
