@@ -1,5 +1,11 @@
+<<<<<<< HEAD:src/components/habits/HabitRow.tsx
 import { TouchableOpacity, View, Text, StyleSheet } from 'react-native';
 import { colors, fonts } from '@/lib/habits-colors';
+=======
+import { Pressable, View, Text, StyleSheet } from 'react-native';
+import { colors, fonts } from '@/lib/hmc-colors';
+import { radius } from '@/lib/hmc-tokens';
+>>>>>>> c17a8265a084b4125b138d6df2628fd553809dbb:src/components/hmc/HabitRow.tsx
 
 type Props = {
   label: string;
@@ -11,7 +17,11 @@ type Props = {
 
 export function HabitRow({ label, points, checked, onToggle, disabled = false }: Props) {
   return (
-    <TouchableOpacity style={styles.row} onPress={onToggle} disabled={disabled} activeOpacity={0.7}>
+    <Pressable
+      onPress={onToggle}
+      disabled={disabled}
+      style={({ pressed }) => [styles.row, pressed && styles.rowPressed]}
+    >
       <View style={[styles.checkbox, checked && styles.checkboxActive]}>
         {checked && <View style={styles.checkMark} />}
       </View>
@@ -19,7 +29,7 @@ export function HabitRow({ label, points, checked, onToggle, disabled = false }:
         {label}
       </Text>
       <Text style={[styles.pts, checked && styles.ptsActive]}>+{points}</Text>
-    </TouchableOpacity>
+    </Pressable>
   );
 }
 
@@ -27,13 +37,16 @@ const styles = StyleSheet.create({
   row: {
     flexDirection: 'row',
     alignItems: 'center',
-    paddingVertical: 12,
+    paddingVertical: 14,
     gap: 12,
+  },
+  rowPressed: {
+    backgroundColor: colors.accentMuted,
   },
   checkbox: {
     width: 20,
     height: 20,
-    borderRadius: 4,
+    borderRadius: radius.sm,
     borderWidth: 1.5,
     borderColor: colors.lineStrong,
     alignItems: 'center',

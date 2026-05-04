@@ -15,8 +15,26 @@ export const colors = {
   textQuiet: '#48484C',
   accentMuted: 'rgba(255,176,32,0.16)' as const,
   accentDim: 'rgba(255,176,32,0.5)' as const,
+  accentMid: 'rgba(255,176,32,0.55)' as const,
+  accentLow: 'rgba(255,176,32,0.30)' as const,
   accentGlow: 'rgba(255,176,32,0.28)' as const,
   dangerMuted: 'rgba(255,69,58,0.12)' as const,
+
+  surface00: '#0A0A0B',
+  surface01: '#111113',
+  surface02: '#161618',
+  surface03: '#1A1A1D',
+  surface04: '#222226',
+
+  borderSubtle: 'rgba(255,255,255,0.05)' as const,
+  borderMuted: 'rgba(255,255,255,0.09)' as const,
+  borderDefault: 'rgba(255,255,255,0.14)' as const,
+  borderStrong: 'rgba(255,255,255,0.22)' as const,
+
+  statePositive: '#30D158',
+  stateMuted: 'rgba(48,209,88,0.14)' as const,
+
+  pressedOverlay: 'rgba(255,255,255,0.04)' as const,
 } as const;
 
 export const fonts = {

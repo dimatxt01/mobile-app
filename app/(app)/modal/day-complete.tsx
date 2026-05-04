@@ -81,6 +81,8 @@ export default function DayCompleteScreen() {
         contentContainerStyle={{ paddingBottom: insets.bottom + 40 }}
         keyboardShouldPersistTaps="handled"
       >
+        <View style={styles.dragHandle} />
+
         {/* Score receipt */}
         <View style={styles.scoreBlock}>
           <Eyebrow label="DAY SEALED" />
@@ -144,7 +146,9 @@ export default function DayCompleteScreen() {
               activeOpacity={0.8}
             >
               <Text style={styles.letterCtaText}>WRITE A LETTER →</Text>
-              <Text style={styles.letterCtaHint}>{"A note you'll read before tomorrow's check-in"}</Text>
+              <Text style={styles.letterCtaHint}>
+                {"A note you'll read before tomorrow's check-in"}
+              </Text>
             </TouchableOpacity>
           )}
         </View>
@@ -155,7 +159,11 @@ export default function DayCompleteScreen() {
         {(isSunday || isLastDay) && (
           <View style={styles.section}>
             {isSunday && (
-              <TouchableOpacity style={styles.reviewBtn} onPress={handleWeeklyReview} activeOpacity={0.8}>
+              <TouchableOpacity
+                style={styles.reviewBtn}
+                onPress={handleWeeklyReview}
+                activeOpacity={0.8}
+              >
                 <Text style={styles.reviewBtnText}>WEEKLY CHECK-UP →</Text>
                 <Text style={styles.reviewBtnHint}>Reflect on the week</Text>
               </TouchableOpacity>
@@ -186,7 +194,15 @@ export default function DayCompleteScreen() {
 
 const styles = StyleSheet.create({
   container: { flex: 1, backgroundColor: colors.base, paddingHorizontal: spacing.pagePad },
-  scoreBlock: { alignItems: 'center', paddingVertical: 32, gap: 4 },
+  dragHandle: {
+    width: 36,
+    height: 4,
+    backgroundColor: colors.borderDefault,
+    borderRadius: 2,
+    alignSelf: 'center',
+    marginBottom: 20,
+  },
+  scoreBlock: { alignItems: 'center', paddingVertical: scale.xl3, gap: 4 },
   scoreNum: {
     fontFamily: fonts.monoBold,
     fontSize: 80,
@@ -203,11 +219,26 @@ const styles = StyleSheet.create({
     borderBottomWidth: StyleSheet.hairlineWidth,
     borderBottomColor: colors.lineRegular,
   },
-  bracketLabel: { fontFamily: fonts.mono, fontSize: 11, letterSpacing: 1.5, color: colors.textTertiary },
-  bracketVal: { fontFamily: fonts.monoBold, fontSize: 14, color: colors.textPrimary, fontVariant: ['tabular-nums'] },
+  bracketLabel: {
+    fontFamily: fonts.mono,
+    fontSize: 11,
+    letterSpacing: 1.5,
+    color: colors.textTertiary,
+  },
+  bracketVal: {
+    fontFamily: fonts.monoBold,
+    fontSize: 14,
+    color: colors.textPrimary,
+    fontVariant: ['tabular-nums'],
+  },
   bracketDanger: { color: colors.danger },
   bracketTotal: { borderBottomWidth: 0, paddingTop: 12 },
-  totalLabel: { fontFamily: fonts.monoBold, fontSize: 13, letterSpacing: 2, color: colors.textPrimary },
+  totalLabel: {
+    fontFamily: fonts.monoBold,
+    fontSize: 13,
+    letterSpacing: 2,
+    color: colors.textPrimary,
+  },
   totalVal: {
     fontFamily: fonts.monoBold,
     fontSize: 22,
@@ -218,17 +249,22 @@ const styles = StyleSheet.create({
     paddingVertical: 16,
     borderWidth: 1,
     borderColor: colors.lineStrong,
-    borderRadius: 4,
+    borderRadius: radius.md,
     paddingHorizontal: 16,
     marginTop: 10,
     gap: 4,
   },
-  letterCtaText: { fontFamily: fonts.monoBold, fontSize: 12, letterSpacing: 2, color: colors.amber },
+  letterCtaText: {
+    fontFamily: fonts.monoBold,
+    fontSize: 12,
+    letterSpacing: 2,
+    color: colors.amber,
+  },
   letterCtaHint: { fontFamily: fonts.display, fontSize: 12, color: colors.textTertiary },
   letterBlock: { marginTop: 10, gap: 12 },
   letterInput: {
     backgroundColor: colors.elevated,
-    borderRadius: 4,
+    borderRadius: radius.md,
     borderWidth: StyleSheet.hairlineWidth,
     borderColor: colors.lineStrong,
     padding: 14,
@@ -240,7 +276,7 @@ const styles = StyleSheet.create({
   },
   sealBtn: {
     paddingVertical: 14,
-    borderRadius: 4,
+    borderRadius: radius.md,
     backgroundColor: colors.amber,
     alignItems: 'center',
   },
@@ -252,7 +288,7 @@ const styles = StyleSheet.create({
     paddingVertical: 20,
     gap: 8,
     backgroundColor: colors.accentMuted,
-    borderRadius: 4,
+    borderRadius: radius.lg,
   },
   sealedIcon: { fontSize: 28 },
   sealedText: { fontFamily: fonts.display, fontSize: 13, color: colors.textSecondary },
@@ -261,17 +297,27 @@ const styles = StyleSheet.create({
     paddingHorizontal: 16,
     borderWidth: 1,
     borderColor: colors.amber,
-    borderRadius: 4,
+    borderRadius: radius.md,
     gap: 4,
   },
-  reviewBtnText: { fontFamily: fonts.monoBold, fontSize: 13, letterSpacing: 2, color: colors.amber },
+  reviewBtnText: {
+    fontFamily: fonts.monoBold,
+    fontSize: 13,
+    letterSpacing: 2,
+    color: colors.amber,
+  },
   reviewBtnHint: { fontFamily: fonts.display, fontSize: 12, color: colors.textTertiary },
   doneBtn: {
     paddingVertical: 16,
     borderWidth: StyleSheet.hairlineWidth,
-    borderColor: colors.lineStrong,
-    borderRadius: 4,
+    borderColor: colors.borderDefault,
+    borderRadius: radius.md,
     alignItems: 'center',
   },
-  doneBtnText: { fontFamily: fonts.mono, fontSize: 13, letterSpacing: 2, color: colors.textSecondary },
+  doneBtnText: {
+    fontFamily: fonts.mono,
+    fontSize: 13,
+    letterSpacing: 2,
+    color: colors.textSecondary,
+  },
 });

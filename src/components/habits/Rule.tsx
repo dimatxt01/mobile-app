@@ -5,6 +5,6 @@ export function Rule({ strong }: { strong?: boolean }) {
   return <View style={strong ? styles.strong : styles.rule} />;
 }
 const styles = StyleSheet.create({
-  rule: { height: spacing.hairline, backgroundColor: colors.lineRegular },
-  strong: { height: spacing.hairline, backgroundColor: colors.lineStrong },
+  rule: { height: spacing.hairline, backgroundColor: colors.borderSubtle },
+  strong: { height: spacing.hairline, backgroundColor: colors.borderDefault },
 });

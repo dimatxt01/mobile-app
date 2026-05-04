@@ -23,7 +23,10 @@ export default function LifeInWeeksScreen() {
 
   const renderHeader = () => (
     <View>
-      <View style={[styles.headerTop, { paddingTop: insets.top + 16 }]}>
+      <View style={[styles.dragHandleWrap, { paddingTop: insets.top + 12 }]}>
+        <View style={styles.dragHandle} />
+      </View>
+      <View style={styles.headerTop}>
         <Eyebrow label="LIFE IN WEEKS" />
         <TouchableOpacity onPress={() => router.back()}>
           <Text style={styles.closeText}>CLOSE</Text>
@@ -32,13 +35,9 @@ export default function LifeInWeeksScreen() {
       <Rule />
       <View style={styles.statsBlock}>
         <Text style={styles.statPrimary}>
-          You have lived{' '}
-          <Text style={styles.statNum}>{weeksLived.toLocaleString()}</Text>
-          {' '}weeks
+          You have lived <Text style={styles.statNum}>{weeksLived.toLocaleString()}</Text> weeks
         </Text>
-        <Text style={styles.statSecondary}>
-          ~{weeksRemaining.toLocaleString()} weeks remaining
-        </Text>
+        <Text style={styles.statSecondary}>~{weeksRemaining.toLocaleString()} weeks remaining</Text>
       </View>
       <Rule />
       <View style={styles.gridPad} />
@@ -51,10 +50,7 @@ export default function LifeInWeeksScreen() {
         data={weeks}
         renderItem={({ item }) => (
           <View
-            style={[
-              styles.square,
-              item < weeksLived ? styles.squareLived : styles.squareFuture,
-            ]}
+            style={[styles.square, item < weeksLived ? styles.squareLived : styles.squareFuture]}
           />
         )}
         keyExtractor={(item) => String(item)}
@@ -72,6 +68,13 @@ export default function LifeInWeeksScreen() {
 
 const styles = StyleSheet.create({
   container: { flex: 1, backgroundColor: colors.elevated },
+  dragHandleWrap: { alignItems: 'center', paddingBottom: 16 },
+  dragHandle: {
+    width: 36,
+    height: 4,
+    backgroundColor: colors.borderDefault,
+    borderRadius: 2,
+  },
   headerTop: {
     flexDirection: 'row',
     justifyContent: 'space-between',
@@ -120,6 +123,6 @@ const styles = StyleSheet.create({
     borderRadius: 1,
   },
   squareLived: { backgroundColor: colors.amber },
-  squareFuture: { backgroundColor: colors.lineStrong },
+  squareFuture: { backgroundColor: colors.surface03 },
   footer: { height: 40 },
 });

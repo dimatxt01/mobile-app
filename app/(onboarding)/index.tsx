@@ -16,11 +16,20 @@ import { useAuth } from '@/features/auth/hooks/use-auth';
 import { useProfileStore } from '@/store/profile-store';
 import { supabase } from '@/lib/supabase';
 import { scheduleReminder } from '@/features/notifications/schedule-reminder';
+<<<<<<< HEAD
 import { colors, fonts, spacing } from '@/lib/habits-colors';
 import { POBar } from '@/components/habits/POBar';
 import { POCta } from '@/components/habits/POCta';
 import { Eyebrow } from '@/components/habits/Eyebrow';
 import { Rule } from '@/components/habits/Rule';
+=======
+import { colors, fonts, spacing } from '@/lib/hmc-colors';
+import { scale, radius } from '@/lib/hmc-tokens';
+import { POBar } from '@/components/hmc/POBar';
+import { POCta } from '@/components/hmc/POCta';
+import { Eyebrow } from '@/components/hmc/Eyebrow';
+import { Rule } from '@/components/hmc/Rule';
+>>>>>>> c17a8265a084b4125b138d6df2628fd553809dbb
 import { Input } from '@/components/ui/Input';
 
 const DEFAULT_IDENTITY_HABITS = [
@@ -156,7 +165,7 @@ export default function OnboardingScreen() {
       case 2:
         return (
           <View style={styles.stepContent}>
-            <Eyebrow label="YOUR NAME" />
+            <Eyebrow label="YOUR NAME" size="md" />
             <Input
               value={name}
               onChangeText={setName}
@@ -169,31 +178,48 @@ export default function OnboardingScreen() {
       case 3:
         return (
           <View style={styles.stepContent}>
-            <Eyebrow label="DATE OF BIRTH" />
+            <Eyebrow label="DATE OF BIRTH" size="md" />
             <Text style={styles.explainer}>Used for your Life in Weeks visualization.</Text>
             <View style={styles.timeRow}>
               <View style={styles.timePicker}>
-                <TouchableOpacity onPress={() => setDobMonth((m) => m === 12 ? 1 : m + 1)}>
+                <TouchableOpacity onPress={() => setDobMonth((m) => (m === 12 ? 1 : m + 1))}>
                   <Text style={styles.timeBtn}>▲</Text>
                 </TouchableOpacity>
                 <Text style={styles.timeVal}>
-                  {['JAN','FEB','MAR','APR','MAY','JUN','JUL','AUG','SEP','OCT','NOV','DEC'][dobMonth - 1]}
+                  {
+                    [
+                      'JAN',
+                      'FEB',
+                      'MAR',
+                      'APR',
+                      'MAY',
+                      'JUN',
+                      'JUL',
+                      'AUG',
+                      'SEP',
+                      'OCT',
+                      'NOV',
+                      'DEC',
+                    ][dobMonth - 1]
+                  }
                 </Text>
-                <TouchableOpacity onPress={() => setDobMonth((m) => m === 1 ? 12 : m - 1)}>
+                <TouchableOpacity onPress={() => setDobMonth((m) => (m === 1 ? 12 : m - 1))}>
                   <Text style={styles.timeBtn}>▼</Text>
                 </TouchableOpacity>
               </View>
               <View style={styles.timePicker}>
-                <TouchableOpacity onPress={() => setDobDay((d) => d === dobMaxDay ? 1 : d + 1)}>
+                <TouchableOpacity onPress={() => setDobDay((d) => (d === dobMaxDay ? 1 : d + 1))}>
                   <Text style={styles.timeBtn}>▲</Text>
                 </TouchableOpacity>
                 <Text style={styles.timeVal}>{String(dobDayClamped).padStart(2, '0')}</Text>
-                <TouchableOpacity onPress={() => setDobDay((d) => d === 1 ? dobMaxDay : d - 1)}>
+                <TouchableOpacity onPress={() => setDobDay((d) => (d === 1 ? dobMaxDay : d - 1))}>
                   <Text style={styles.timeBtn}>▼</Text>
                 </TouchableOpacity>
               </View>
               <View style={styles.timePicker}>
-                <TouchableOpacity onPress={() => setDobYear((y) => Math.min(y + 1, new Date().getFullYear() - 1))}>
+                <TouchableOpacity
+                  onPress={() => setDobYear((y) => Math.min(y + 1, new Date().getFullYear() - 1))}
+                >
                   <Text style={styles.timeBtn}>▲</Text>
                 </TouchableOpacity>
                 <Text style={[styles.timeVal, styles.yearVal]}>{dobYear}</Text>
@@ -207,7 +233,7 @@ export default function OnboardingScreen() {
       case 4:
         return (
           <View style={styles.stepContent}>
-            <Eyebrow label="YOUR VISION" />
+            <Eyebrow label="YOUR VISION" size="md" />
             <Input
               value={vision}
               onChangeText={setVision}
@@ -221,7 +247,7 @@ export default function OnboardingScreen() {
       case 5:
         return (
           <View style={styles.stepContent}>
-            <Eyebrow label="I AM" />
+            <Eyebrow label="I AM" size="md" />
             <View style={styles.prefixRow}>
               <Text style={styles.prefix}>I am </Text>
               <View style={styles.prefixInput}>
@@ -238,7 +264,7 @@ export default function OnboardingScreen() {
       case 6:
         return (
           <View style={styles.stepContent}>
-            <Eyebrow label="IDENTITY HABITS" />
+            <Eyebrow label="IDENTITY HABITS" size="md" />
             <Rule />
             {identityHabits.map((h, i) => (
               <View key={i} style={styles.habitEditRow}>
@@ -273,7 +299,7 @@ export default function OnboardingScreen() {
       case 7:
         return (
           <View style={styles.stepContent}>
-            <Eyebrow label="EXECUTION HABITS" />
+            <Eyebrow label="EXECUTION HABITS" size="md" />
             <Rule />
             {executionHabits.map((h, i) => (
               <View key={i} style={styles.habitEditRow}>
@@ -308,7 +334,7 @@ export default function OnboardingScreen() {
       case 8:
         return (
           <View style={styles.stepContent}>
-            <Eyebrow label="9-TO-5 SCORE" />
+            <Eyebrow label="9-TO-5 SCORE" size="md" />
             <Text style={styles.explainer}>
               Each night you rate your work day 0–10. This score gets added to your Execution
               bracket.
@@ -320,7 +346,7 @@ export default function OnboardingScreen() {
       case 9:
         return (
           <View style={styles.stepContent}>
-            <Eyebrow label="OUTCOMES (0–5 NIGHTLY)" />
+            <Eyebrow label="OUTCOMES (0–5 NIGHTLY)" size="md" />
             <Rule />
             {outcomes.map((o, i) => (
               <View key={i} style={styles.habitEditRow}>
@@ -350,7 +376,7 @@ export default function OnboardingScreen() {
       case 10:
         return (
           <View style={styles.stepContent}>
-            <Eyebrow label="PENALTIES (0–5, SUBTRACTED)" />
+            <Eyebrow label="PENALTIES (0–5, SUBTRACTED)" size="md" />
             <Rule />
             {penalties.map((p, i) => (
               <View key={i} style={styles.habitEditRow}>
@@ -380,7 +406,7 @@ export default function OnboardingScreen() {
       case 11:
         return (
           <View style={styles.stepContent}>
-            <Eyebrow label="WHOOP INTEGRATION" />
+            <Eyebrow label="WHOOP INTEGRATION" size="md" />
             <Text style={styles.explainer}>
               Coming soon. Whoop recovery and strain data will automatically adjust your daily
               score.
@@ -390,7 +416,7 @@ export default function OnboardingScreen() {
       case 12:
         return (
           <View style={styles.stepContent}>
-            <Eyebrow label="DAILY REMINDER" />
+            <Eyebrow label="DAILY REMINDER" size="md" />
             <View style={styles.timeRow}>
               <View style={styles.timePicker}>
                 <TouchableOpacity onPress={() => setReminderHour((h) => (h + 1) % 24)}>
@@ -417,7 +443,7 @@ export default function OnboardingScreen() {
       case 13:
         return (
           <View style={styles.stepContent}>
-            <Eyebrow label="YOUR CONFIG" />
+            <Eyebrow label="YOUR CONFIG" size="md" />
             {saveError && <Text style={styles.errorText}>{saveError}</Text>}
             <Rule />
             <View style={styles.summaryRow}>
@@ -526,27 +552,27 @@ const styles = StyleSheet.create({
   centered: { flex: 1, alignItems: 'center', justifyContent: 'center' },
   bigLogo: {
     fontFamily: fonts.monoBold,
-    fontSize: 72,
+    fontSize: 80,
     color: colors.textPrimary,
     letterSpacing: 4,
   },
   tagline: {
     fontFamily: fonts.display,
-    fontSize: 22,
+    fontSize: 24,
     color: colors.textSecondary,
     textAlign: 'center',
     marginTop: 16,
     lineHeight: 32,
   },
-  stepContent: { flex: 1, paddingTop: spacing.sectionGap },
+  stepContent: { flex: 1, paddingTop: scale.xl3 },
   input: {
     fontFamily: fonts.display,
     fontSize: 16,
     color: colors.textPrimary,
     backgroundColor: colors.elevated,
-    borderRadius: 8,
+    borderRadius: radius.md,
     paddingHorizontal: 16,
-    paddingVertical: 14,
+    paddingVertical: 16,
     marginTop: 12,
     borderWidth: StyleSheet.hairlineWidth,
     borderColor: colors.lineStrong,
@@ -560,9 +586,9 @@ const styles = StyleSheet.create({
     fontSize: 15,
     color: colors.textSecondary,
     lineHeight: 24,
-    marginTop: 16,
+    marginTop: 24,
   },
-  habitEditRow: { flexDirection: 'row', alignItems: 'center', gap: 8, marginTop: 8 },
+  habitEditRow: { flexDirection: 'row', alignItems: 'center', gap: 8, paddingVertical: 12 },
   pts: { fontFamily: fonts.mono, fontSize: 13, color: colors.amber, fontVariant: ['tabular-nums'] },
   removeBtn: {
     fontFamily: fonts.monoBold,
@@ -589,13 +615,13 @@ const styles = StyleSheet.create({
   timeBtn: { fontFamily: fonts.mono, fontSize: 18, color: colors.amber, padding: 8 },
   timeVal: {
     fontFamily: fonts.monoBold,
-    fontSize: 36,
+    fontSize: 40,
     color: colors.textPrimary,
     fontVariant: ['tabular-nums'],
   },
   yearVal: { fontSize: 28, letterSpacing: 0 },
-  timeSep: { fontFamily: fonts.monoBold, fontSize: 36, color: colors.textTertiary },
-  summaryRow: { flexDirection: 'row', justifyContent: 'space-between', paddingVertical: 10 },
+  timeSep: { fontFamily: fonts.monoBold, fontSize: 40, color: colors.textTertiary },
+  summaryRow: { flexDirection: 'row', justifyContent: 'space-between', paddingVertical: 14 },
   summaryLabel: {
     fontFamily: fonts.mono,
     fontSize: 11,
@@ -610,7 +636,7 @@ const styles = StyleSheet.create({
     textAlign: 'right',
     marginLeft: 16,
   },
-  backBtn: { alignItems: 'center', marginTop: 12 },
+  backBtn: { alignItems: 'center', marginTop: 20 },
   backText: {
     fontFamily: fonts.mono,
     fontSize: 12,

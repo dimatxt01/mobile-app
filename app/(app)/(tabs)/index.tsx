@@ -1,5 +1,13 @@
 import { useState, useEffect, useMemo } from 'react';
-import { Alert, View, Text, TextInput, ScrollView, TouchableOpacity, StyleSheet } from 'react-native';
+import {
+  Alert,
+  View,
+  Text,
+  TextInput,
+  ScrollView,
+  TouchableOpacity,
+  StyleSheet,
+} from 'react-native';
 import { router } from 'expo-router';
 import { useAuth } from '@/features/auth/hooks/use-auth';
 import { useProfileStore } from '@/store/profile-store';
@@ -97,7 +105,16 @@ export default function TodayScreen() {
       reflection_broke: reflectionBroke || null,
       reflection_tomorrow: reflectionTomorrow || null,
     });
-  }, [identityChecks, executionChecks, perf9to5, outcomeScores, penaltyScores, reflectionWin, reflectionBroke, reflectionTomorrow]);
+  }, [
+    identityChecks,
+    executionChecks,
+    perf9to5,
+    outcomeScores,
+    penaltyScores,
+    reflectionWin,
+    reflectionBroke,
+    reflectionTomorrow,
+  ]);
 
   useEffect(() => {
     if (!checkin?.is_locked || !score) return;
@@ -118,7 +135,8 @@ export default function TodayScreen() {
         checkinId: checkin.id,
       },
     });
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    // fire only on lock transition; score/checkin values are current at the point of firing
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [checkin?.is_locked]);
 
   useEffect(() => {
@@ -130,7 +148,8 @@ export default function TodayScreen() {
   }, [history]);
 
   useEffect(() => {
-    if (lockCheckin.isError) Alert.alert('Lock Failed', "Could not lock today's check-in. Please try again.");
+    if (lockCheckin.isError)
+      Alert.alert('Lock Failed', "Could not lock today's check-in. Please try again.");
   }, [lockCheckin.isError]);
 
   const handleLock = () => {
@@ -154,18 +173,19 @@ export default function TodayScreen() {
           <Text style={styles.lateText}>LATE CHECK-IN · −10 PTS</Text>
         </View>
       )}
-      <ScrollView contentContainerStyle={{ paddingBottom: 120 }}>
+      <ScrollView contentContainerStyle={{ paddingBottom: 120, paddingTop: 0 }}>
         <PrintBar dayNumber={(profile?.day_count ?? 0) + 1} />
 
         {/* Yesterday's letter */}
         {(() => {
           const today = new Date().toISOString().slice(0, 10);
           const yesterdayCheckin = history?.find((r) => r.date !== today);
-          const letter = (yesterdayCheckin as { reflection_tomorrow?: string } | undefined)?.reflection_tomorrow;
+          const letter = (yesterdayCheckin as { reflection_tomorrow?: string } | undefined)
+            ?.reflection_tomorrow;
           if (!letter || isLocked) return null;
           return (
             <View style={styles.letterCard}>
-              <Text style={styles.letterCardEyebrow}>✉  A LETTER FROM YESTERDAY-YOU</Text>
+              <Text style={styles.letterCardEyebrow}>✉ A LETTER FROM YESTERDAY-YOU</Text>
               <Text style={styles.letterCardText}>{letter}</Text>
             </View>
           );
@@ -178,59 +198,56 @@ export default function TodayScreen() {
           </View>
         )}
 
-        <BracketBlock title="IDENTITY" subtotal={score?.identity ?? 0}>
-          {config.data?.identityHabits.map((h) => (
-            <HabitRow
-              key={h.id}
-              label={h.label}
-              points={h.points}
-              checked={identityChecks[h.id] ?? false}
-              onToggle={() => setIdentityChecks((prev) => ({ ...prev, [h.id]: !prev[h.id] }))}
-              disabled={isLocked}
-            />
-          ))}
-        </BracketBlock>
-        <Rule />
-        <BracketBlock title="EXECUTION" subtotal={score?.execution ?? 0}>
-          {config.data?.executionHabits.map((h) => (
-            <HabitRow
-              key={h.id}
-              label={h.label}
-              points={h.points}
-              checked={executionChecks[h.id] ?? false}
-              onToggle={() => setExecutionChecks((prev) => ({ ...prev, [h.id]: !prev[h.id] }))}
-              disabled={isLocked}
-            />
-          ))}
-          <Slider10 value={perf9to5} onChange={setPerf9to5} disabled={isLocked} />
-        </BracketBlock>
-        <Rule />
-        <BracketBlock title="OUTCOMES" subtotal={score?.outcome ?? 0}>
-          {config.data?.outcomes.map((m) => (
-            <Step05
-              key={m.id}
-              label={m.label}
-              value={outcomeScores[m.id] ?? 0}
-              onChange={(v) => setOutcomeScores((prev) => ({ ...prev, [m.id]: v }))}
-              disabled={isLocked}
-            />
-          ))}
-        </BracketBlock>
-        <Rule />
-        <BracketBlock title="PENALTY" subtotal={score?.penalty ?? 0} danger>
-          {config.data?.penalties.map((p) => (
-            <Step05
-              key={p.id}
-              label={p.label}
-              value={penaltyScores[p.id] ?? 0}
-              onChange={(v) => setPenaltyScores((prev) => ({ ...prev, [p.id]: v }))}
-              danger
-              disabled={isLocked}
-            />
-          ))}
-        </BracketBlock>
-
-        <Rule />
+        <View style={styles.brackets}>
+          <BracketBlock title="IDENTITY" subtotal={score?.identity ?? 0}>
+            {config.data?.identityHabits.map((h) => (
+              <HabitRow
+                key={h.id}
+                label={h.label}
+                points={h.points}
+                checked={identityChecks[h.id] ?? false}
+                onToggle={() => setIdentityChecks((prev) => ({ ...prev, [h.id]: !prev[h.id] }))}
+                disabled={isLocked}
+              />
+            ))}
+          </BracketBlock>
+          <BracketBlock title="EXECUTION" subtotal={score?.execution ?? 0}>
+            {config.data?.executionHabits.map((h) => (
+              <HabitRow
+                key={h.id}
+                label={h.label}
+                points={h.points}
+                checked={executionChecks[h.id] ?? false}
+                onToggle={() => setExecutionChecks((prev) => ({ ...prev, [h.id]: !prev[h.id] }))}
+                disabled={isLocked}
+              />
+            ))}
+            <Slider10 value={perf9to5} onChange={setPerf9to5} disabled={isLocked} />
+          </BracketBlock>
+          <BracketBlock title="OUTCOMES" subtotal={score?.outcome ?? 0}>
+            {config.data?.outcomes.map((m) => (
+              <Step05
+                key={m.id}
+                label={m.label}
+                value={outcomeScores[m.id] ?? 0}
+                onChange={(v) => setOutcomeScores((prev) => ({ ...prev, [m.id]: v }))}
+                disabled={isLocked}
+              />
+            ))}
+          </BracketBlock>
+          <BracketBlock title="PENALTY" subtotal={score?.penalty ?? 0} danger>
+            {config.data?.penalties.map((p) => (
+              <Step05
+                key={p.id}
+                label={p.label}
+                value={penaltyScores[p.id] ?? 0}
+                onChange={(v) => setPenaltyScores((prev) => ({ ...prev, [p.id]: v }))}
+                danger
+                disabled={isLocked}
+              />
+            ))}
+          </BracketBlock>
+        </View>
 
         {/* Reflection */}
         <View style={styles.reflectionSection}>
@@ -274,8 +291,6 @@ export default function TodayScreen() {
             />
           </View>
         </View>
-
-        <Rule strong />
 
         <TouchableOpacity
           style={styles.totalSection}
@@ -331,13 +346,18 @@ const styles = StyleSheet.create({
     letterSpacing: 1.5,
     color: colors.textPrimary,
   },
+  brackets: {
+    paddingHorizontal: spacing.pagePad,
+    paddingTop: 20,
+    gap: scale.xl2,
+  },
   letterCard: {
     marginHorizontal: spacing.pagePad,
     marginTop: 12,
     marginBottom: 4,
     padding: 14,
     backgroundColor: colors.accentMuted,
-    borderRadius: 4,
+    borderRadius: radius.sm,
     borderLeftWidth: 2,
     borderLeftColor: colors.amber,
     gap: 6,
@@ -363,9 +383,9 @@ const styles = StyleSheet.create({
   },
   sentenceText: {
     fontFamily: fonts.displayBold,
-    fontSize: 22,
+    fontSize: 24,
     color: colors.textPrimary,
-    lineHeight: 28,
+    lineHeight: 32,
     letterSpacing: -0.4,
     marginTop: 8,
   },
@@ -381,7 +401,7 @@ const styles = StyleSheet.create({
     fontSize: 10,
     letterSpacing: 1.5,
     color: colors.textTertiary,
-    marginBottom: 8,
+    marginBottom: 12,
   },
   reflInput: {
     fontFamily: fonts.display,
@@ -396,8 +416,14 @@ const styles = StyleSheet.create({
     color: colors.textSecondary,
   },
   totalSection: {
-    paddingHorizontal: spacing.pagePad,
+    marginHorizontal: spacing.pagePad,
+    marginTop: scale.xl3,
+    paddingHorizontal: 16,
     paddingVertical: spacing.sectionGap,
+    backgroundColor: colors.surface02,
+    borderRadius: radius.lg,
+    borderWidth: StyleSheet.hairlineWidth,
+    borderColor: colors.borderMuted,
   },
   hint: {
     fontFamily: fonts.mono,

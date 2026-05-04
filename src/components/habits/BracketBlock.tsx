@@ -1,5 +1,10 @@
 import { View, Text, StyleSheet } from 'react-native';
+<<<<<<< HEAD:src/components/habits/BracketBlock.tsx
 import { colors, fonts, spacing } from '@/lib/habits-colors';
+=======
+import { colors, fonts } from '@/lib/hmc-colors';
+import { radius, elevation } from '@/lib/hmc-tokens';
+>>>>>>> c17a8265a084b4125b138d6df2628fd553809dbb:src/components/hmc/BracketBlock.tsx
 import { Eyebrow } from './Eyebrow';
 import { Rule } from './Rule';
 
@@ -12,7 +17,7 @@ type Props = {
 
 export function BracketBlock({ title, subtotal, children, danger = false }: Props) {
   return (
-    <View style={styles.block}>
+    <View style={styles.card}>
       <View style={styles.header}>
         <Eyebrow label={title} />
         <Text style={[styles.subtotal, danger && styles.danger]}>
@@ -26,12 +31,21 @@ export function BracketBlock({ title, subtotal, children, danger = false }: Prop
 }
 
 const styles = StyleSheet.create({
-  block: { paddingHorizontal: spacing.pagePad },
+  card: {
+    backgroundColor: colors.surface02,
+    borderRadius: radius.lg,
+    borderWidth: StyleSheet.hairlineWidth,
+    borderColor: colors.borderMuted,
+    ...elevation.sm,
+    overflow: 'hidden',
+    paddingHorizontal: 16,
+    paddingBottom: 12,
+  },
   header: {
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
-    paddingVertical: 10,
+    paddingVertical: 14,
   },
   subtotal: {
     fontFamily: fonts.monoBold,

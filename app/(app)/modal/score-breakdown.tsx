@@ -24,6 +24,7 @@ export default function ScoreBreakdownScreen() {
 
   return (
     <View style={[styles.container, { paddingTop: insets.top + 16 }]}>
+      <View style={styles.dragHandle} />
       <Eyebrow label="SCORE BREAKDOWN" />
       <View style={styles.card}>
         {rows.map((r) => (
@@ -52,8 +53,23 @@ export default function ScoreBreakdownScreen() {
 
 const styles = StyleSheet.create({
   container: { flex: 1, backgroundColor: colors.elevated, paddingHorizontal: spacing.pagePad },
-  card: { marginTop: 24 },
-  row: { flexDirection: 'row', justifyContent: 'space-between', paddingVertical: 14 },
+  dragHandle: {
+    width: 36,
+    height: 4,
+    backgroundColor: colors.borderDefault,
+    borderRadius: 2,
+    alignSelf: 'center',
+    marginBottom: 20,
+  },
+  card: {
+    marginTop: 24,
+    backgroundColor: colors.surface02,
+    borderRadius: radius.lg,
+    borderWidth: StyleSheet.hairlineWidth,
+    borderColor: colors.borderMuted,
+    paddingHorizontal: 16,
+  },
+  row: { flexDirection: 'row', justifyContent: 'space-between', paddingVertical: 16 },
   label: { fontFamily: fonts.mono, fontSize: 12, letterSpacing: 1.5, color: colors.textTertiary },
   value: {
     fontFamily: fonts.monoBold,
@@ -65,7 +81,7 @@ const styles = StyleSheet.create({
   totalLabel: { color: colors.textPrimary },
   totalValue: {
     fontFamily: fonts.monoBold,
-    fontSize: 28,
+    ...typo.d2,
     color: colors.amber,
     fontVariant: ['tabular-nums'],
   },
@@ -73,9 +89,9 @@ const styles = StyleSheet.create({
     marginTop: 32,
     alignItems: 'center',
     paddingVertical: 14,
-    borderRadius: 8,
+    borderRadius: radius.md,
     borderWidth: StyleSheet.hairlineWidth,
-    borderColor: colors.lineStrong,
+    borderColor: colors.borderDefault,
   },
   closeText: {
     fontFamily: fonts.mono,
