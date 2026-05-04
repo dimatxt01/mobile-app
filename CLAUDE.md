@@ -1,4 +1,3 @@
-
 # Half Milly Club (HMC) — Project Reference
 
 ## What This App Is
@@ -27,17 +26,14 @@ app/
   (app)/
     _layout.tsx            # Session + onboarding_completed guard
     (tabs)/
-      _layout.tsx          # 5-tab PrintTabBar (TODAY/WEEK/TRENDS/MIRROR/YOU)
+      _layout.tsx          # 4-tab PrintTabBar (TODAY/WEEK/TRENDS/YOU)
       index.tsx            # TODAY tab
       week.tsx             # WEEK tab
       trends.tsx           # TRENDS tab
-      mirror.tsx           # MIRROR tab
       you.tsx              # YOU tab (profile)
     modal/
       _layout.tsx          # Modal stack
       score-breakdown.tsx
-      mirror-capture.tsx
-      mirror-day/[date].tsx
       week-day/[date].tsx
       edit-habits.tsx      # ?type=identity|execution
       edit-outcomes.tsx
@@ -80,9 +76,8 @@ src/
       use-config.ts        # Habits + outcomes + penalties for current user
     history/
       use-history.ts       # get_history() RPC wrapper
-    mirror/
-      use-mirror.ts        # Mirror photos list
-      upload-photo.ts      # Upload to Supabase Storage 'mirror-photos'
+    weekly-review/
+      upload-weekly-photo.ts # Upload to Supabase Storage 'weekly-review-photos'
     notifications/
       schedule-reminder.ts # expo-notifications local scheduling
   lib/
@@ -187,18 +182,17 @@ app/(app)/_layout.tsx:
 
 ## Packages — Status
 
-| Package                           | Status         | Notes                 |
-| --------------------------------- | -------------- | --------------------- |
-| expo-font                         | installed      | font loading          |
-| @expo-google-fonts/inter          | installed      | Inter display font    |
-| @expo-google-fonts/jetbrains-mono | installed      | JetBrains Mono        |
-| @react-native-async-storage/async-storage | installed | score-density display preference |
-| expo-camera                       | needs install  | MIRROR tab            |
-| expo-image-picker                 | needs install  | MIRROR tab alt        |
-| expo-notifications                | needs install  | local reminders       |
-| expo-file-system                  | needs install  | photo handling        |
-| react-native-svg                  | SKIP (Expo Go) | use View-based charts |
-| react-native-purchases            | SKIP (stub)    | paywall "coming soon" |
+| Package                                   | Status         | Notes                            |
+| ----------------------------------------- | -------------- | -------------------------------- |
+| expo-font                                 | installed      | font loading                     |
+| @expo-google-fonts/inter                  | installed      | Inter display font               |
+| @expo-google-fonts/jetbrains-mono         | installed      | JetBrains Mono                   |
+| @react-native-async-storage/async-storage | installed      | score-density display preference |
+| expo-image-picker                         | needs install  | weekly review photos             |
+| expo-notifications                        | needs install  | local reminders                  |
+| expo-file-system                          | needs install  | photo handling                   |
+| react-native-svg                          | SKIP (Expo Go) | use View-based charts            |
+| react-native-purchases                    | SKIP (stub)    | paywall "coming soon"            |
 
 All packages except react-native-svg and react-native-purchases work in Expo Go SDK 54.
 
@@ -209,7 +203,7 @@ All packages except react-native-svg and react-native-purchases work in Expo Go 
 - `src/lib/supabase.ts` — Supabase client with SecureStore adapter
 - `src/lib/query-client.ts` — TanStack Query config
 - `src/components/ui/Button.tsx`, `Input.tsx`, `Screen.tsx`
-- `supabase/migrations/0001–0008` — complete schema + RPCs
+- `supabase/migrations/0001–0009` — complete schema + RPCs
 
 ## Implementation Phases
 
@@ -220,7 +214,7 @@ See `.archon/logs/progress.md` for current status of each phase.
 - **Phase 3** — Routing & Onboarding: guards, 14-step wizard
 - **Phase 4** — TODAY tab: full scoring UI + lock + score-breakdown modal
 - **Phase 5** — WEEK + TRENDS tabs: View-based charts, history data
-- **Phase 6** — MIRROR tab: camera, upload, gallery
+- **Phase 6** — Weekly Review: photo strip, readOnly view, week tab redesign (Mirror tab removed)
 - **Phase 7** — YOU tab + edit modals
 - **Phase 8** — Post-lock triggers + notifications
 - **Phase 9** — Stub modals: paywall, subscription, privacy, whoop
@@ -257,18 +251,19 @@ npm install --legacy-peer-deps
 supabase db push
 ```
 
-This applies all 8 migrations in `supabase/migrations/` in order:
+This applies all 9 migrations in `supabase/migrations/` in order:
 
-| File                     | Contents                              |
-| ------------------------ | ------------------------------------- |
-| `0001_init.sql`          | Auth + base schema                    |
-| `0002_hmc_profile.sql`   | User profiles                         |
-| `0003_hmc_habits.sql`    | Habits table                          |
-| `0004_hmc_checkins.sql`  | Daily check-ins                       |
-| `0005_hmc_mirror.sql`    | Mirror photos                         |
-| `0006_hmc_reviews.sql`   | Weekly/monthly reviews                |
-| `0007_hmc_functions.sql` | `lock_checkin` and `get_history` RPCs |
-| `0008_hmc_dob.sql`       | Add `date_of_birth` to profiles       |
+| File                                   | Contents                              |
+| -------------------------------------- | ------------------------------------- |
+| `0001_init.sql`                        | Auth + base schema                    |
+| `0002_hmc_profile.sql`                 | User profiles                         |
+| `0003_hmc_habits.sql`                  | Habits table                          |
+| `0004_hmc_checkins.sql`                | Daily check-ins                       |
+| `0005_hmc_mirror.sql`                  | Mirror photos                         |
+| `0006_hmc_reviews.sql`                 | Weekly/monthly reviews                |
+| `0007_hmc_functions.sql`               | `lock_checkin` and `get_history` RPCs |
+| `0008_hmc_dob.sql`                     | Add `date_of_birth` to profiles       |
+| `0009_weekly_review_storage.sql`       | Weekly review storage bucket + RLS    |
 
 ## Commands
 
@@ -290,7 +285,7 @@ Expo Router (file-based). Key route groups:
 
 - `app/(auth)/` — sign-in, sign-up, forgot-password
 - `app/(onboarding)/` — 5-step onboarding wizard
-- `app/(app)/(tabs)/` — main tab screens (Today, Mirror, History, Trends, Settings)
+- `app/(app)/(tabs)/` — main tab screens (Today, Week, Trends, Profile)
 - `app/(app)/modal/` — modal screens (edit config, capture photo, reviews)
 - `app/index.tsx` — root router; redirects based on auth/onboarding state
 
@@ -315,7 +310,7 @@ Pure function at `src/lib/score.ts`. Takes habits, outcomes, penalties, and chec
 
 **`expo-file-system` SDK 54 — `EncodingType` not re-exported**
 
-In `src/features/mirror/upload-photo.ts`, `encoding: 'base64'` is passed as a string literal instead of `FileSystem.EncodingType.Base64`. The enum is not re-exported from the SDK 54 main module; using the import path causes a runtime error.
+When using `FileSystem.readAsStringAsync` with base64 encoding, pass `encoding: 'base64'` as a string literal instead of `FileSystem.EncodingType.Base64`. The enum is not re-exported from the SDK 54 main module; using the import path causes a runtime error.
 
 ## Out of Scope (Planned, Not Implemented)
 

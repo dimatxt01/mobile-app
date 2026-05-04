@@ -8,13 +8,13 @@
 
 ## Summary
 
-| Check      | Result | Details                       |
-| ---------- | ------ | ----------------------------- |
-| Type check | ✅     | No errors                     |
+| Check      | Result | Details                              |
+| ---------- | ------ | ------------------------------------ |
+| Type check | ✅     | No errors                            |
 | Lint       | ✅     | 0 errors, 11 warnings (pre-existing) |
-| Format     | ✅     | All files formatted           |
-| Tests      | ✅     | 28 passed, 0 failed           |
-| Build      | ✅     | Export was successful         |
+| Format     | ✅     | All files formatted                  |
+| Tests      | ✅     | 28 passed, 0 failed                  |
+| Build      | ✅     | Export was successful                |
 
 ---
 
@@ -82,9 +82,9 @@ Build output: `dist/` — 1692 modules bundled, 57 assets, 5.27 MB iOS bundle.
 
 ## Files Modified During Validation
 
-| File                                | Changes                                                  |
-| ----------------------------------- | -------------------------------------------------------- |
-| `__tests__/upload-photo.test.ts`    | Rewrote tests to mock `fetch` (impl changed from FileSystem to fetch+Blob); removed untyped `global`/`Buffer` polyfill |
+| File                             | Changes                                                                                                                |
+| -------------------------------- | ---------------------------------------------------------------------------------------------------------------------- |
+| `__tests__/upload-photo.test.ts` | Rewrote tests to mock `fetch` (impl changed from FileSystem to fetch+Blob); removed untyped `global`/`Buffer` polyfill |
 
 ---
 

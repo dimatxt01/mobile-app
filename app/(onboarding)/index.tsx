@@ -174,27 +174,44 @@ export default function OnboardingScreen() {
             <Text style={styles.explainer}>Used for your Life in Weeks visualization.</Text>
             <View style={styles.timeRow}>
               <View style={styles.timePicker}>
-                <TouchableOpacity onPress={() => setDobMonth((m) => m === 12 ? 1 : m + 1)}>
+                <TouchableOpacity onPress={() => setDobMonth((m) => (m === 12 ? 1 : m + 1))}>
                   <Text style={styles.timeBtn}>▲</Text>
                 </TouchableOpacity>
                 <Text style={styles.timeVal}>
-                  {['JAN','FEB','MAR','APR','MAY','JUN','JUL','AUG','SEP','OCT','NOV','DEC'][dobMonth - 1]}
+                  {
+                    [
+                      'JAN',
+                      'FEB',
+                      'MAR',
+                      'APR',
+                      'MAY',
+                      'JUN',
+                      'JUL',
+                      'AUG',
+                      'SEP',
+                      'OCT',
+                      'NOV',
+                      'DEC',
+                    ][dobMonth - 1]
+                  }
                 </Text>
-                <TouchableOpacity onPress={() => setDobMonth((m) => m === 1 ? 12 : m - 1)}>
+                <TouchableOpacity onPress={() => setDobMonth((m) => (m === 1 ? 12 : m - 1))}>
                   <Text style={styles.timeBtn}>▼</Text>
                 </TouchableOpacity>
               </View>
               <View style={styles.timePicker}>
-                <TouchableOpacity onPress={() => setDobDay((d) => d === dobMaxDay ? 1 : d + 1)}>
+                <TouchableOpacity onPress={() => setDobDay((d) => (d === dobMaxDay ? 1 : d + 1))}>
                   <Text style={styles.timeBtn}>▲</Text>
                 </TouchableOpacity>
                 <Text style={styles.timeVal}>{String(dobDayClamped).padStart(2, '0')}</Text>
-                <TouchableOpacity onPress={() => setDobDay((d) => d === 1 ? dobMaxDay : d - 1)}>
+                <TouchableOpacity onPress={() => setDobDay((d) => (d === 1 ? dobMaxDay : d - 1))}>
                   <Text style={styles.timeBtn}>▼</Text>
                 </TouchableOpacity>
               </View>
               <View style={styles.timePicker}>
-                <TouchableOpacity onPress={() => setDobYear((y) => Math.min(y + 1, new Date().getFullYear() - 1))}>
+                <TouchableOpacity
+                  onPress={() => setDobYear((y) => Math.min(y + 1, new Date().getFullYear() - 1))}
+                >
                   <Text style={styles.timeBtn}>▲</Text>
                 </TouchableOpacity>
                 <Text style={[styles.timeVal, styles.yearVal]}>{dobYear}</Text>

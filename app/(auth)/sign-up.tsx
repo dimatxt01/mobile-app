@@ -184,5 +184,11 @@ const s = StyleSheet.create({
     textAlign: 'center',
   },
   checkEmail: { fontFamily: fonts.displayMedium, color: colors.textPrimary },
-  backLink: { fontFamily: fonts.mono, fontSize: 12, letterSpacing: 1.5, color: colors.amber, marginTop: 32 },
+  backLink: {
+    fontFamily: fonts.mono,
+    fontSize: 12,
+    letterSpacing: 1.5,
+    color: colors.amber,
+    marginTop: 32,
+  },
 });

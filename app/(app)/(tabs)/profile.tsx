@@ -1,19 +1,10 @@
 import { useState } from 'react';
-import {
-  View,
-  Text,
-  ScrollView,
-  TouchableOpacity,
-  Image,
-  Dimensions,
-  StyleSheet,
-} from 'react-native';
+import { View, Text, ScrollView, TouchableOpacity, StyleSheet } from 'react-native';
 import { router } from 'expo-router';
 import { useQuery } from '@tanstack/react-query';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { useAuth } from '@/features/auth/hooks/use-auth';
 import { useProfileStore } from '@/store/profile-store';
-import { useMirror } from '@/features/mirror/use-mirror';
 import { useHistory, type HistoryRow } from '@/features/history/use-history';
 import { supabase } from '@/lib/supabase';
 import { colors, fonts, spacing } from '@/lib/hmc-colors';
@@ -22,8 +13,6 @@ import { Eyebrow } from '@/components/hmc/Eyebrow';
 import { Rule } from '@/components/hmc/Rule';
 import { useScoreDensity } from '@/lib/score-density';
 
-const SCREEN_WIDTH = Dimensions.get('window').width;
-const MIRROR_THUMB = 88;
 const TRENDS_RANGES = [30, 90, 365] as const;
 
 function fmtDate(d: string): string {
@@ -35,8 +24,8 @@ const DAY_ABBR = ['M', 'T', 'W', 'T', 'F', 'S', 'S'];
 function colorForScore(score: number | null): string {
   if (score === null) return colors.lineRegular;
   if (score >= 80) return colors.amber;
-  if (score >= 65) return 'rgba(255,176,32,0.55)';
-  if (score >= 50) return 'rgba(255,176,32,0.30)';
+  if (score >= 65) return colors.accentMid;
+  if (score >= 50) return colors.accentLow;
   return colors.lineStrong;
 }
 
@@ -100,22 +89,27 @@ export default function ProfileScreen() {
     queryFn: async () => {
       const { data, error } = await supabase.rpc('get_user_stats');
       if (error) throw error;
-      return (data as {
-        streak: number;
-        day_count: number;
-        lifetime_avg: number;
-        best_score: number | null;
-        best_date: string | null;
-      }[])?.[0] ?? null;
+      return (
+        (
+          data as {
+            streak: number;
+            day_count: number;
+            lifetime_avg: number;
+            best_score: number | null;
+            best_date: string | null;
+          }[]
+        )?.[0] ?? null
+      );
     },
     enabled: !!user,
   });
 
-  const { data: photos } = useMirror();
   const { data: history } = useHistory(trendsRange);
   const rows = history ?? [];
-  const trendsAvg = rows.length ? Math.round(rows.reduce((s, r) => s + r.total_score, 0) / rows.length) : 0;
-  const trendsMax = Math.max(...rows.map(r => r.total_score), 1);
+  const trendsAvg = rows.length
+    ? Math.round(rows.reduce((s, r) => s + r.total_score, 0) / rows.length)
+    : 0;
+  const trendsMax = Math.max(...rows.map((r) => r.total_score), 1);
 
   const navRow = (label: string, onPress: () => void) => (
     <TouchableOpacity style={styles.navRow} onPress={onPress} activeOpacity={0.7}>
@@ -216,46 +210,6 @@ export default function ProfileScreen() {
 
       <Rule strong />
 
-      {/* ── Mirror Gallery */}
-      <View style={styles.section}>
-        <View style={styles.sectionHeader}>
-          <Eyebrow label="MIRROR" />
-          <View style={styles.sectionActions}>
-            <TouchableOpacity onPress={() => router.push('/(app)/(tabs)/mirror')} activeOpacity={0.7}>
-              <Text style={styles.sectionAction}>VIEW ALL →</Text>
-            </TouchableOpacity>
-            <TouchableOpacity onPress={() => router.push('/(app)/modal/mirror-capture')} activeOpacity={0.7}>
-              <Text style={styles.sectionAction}>CAPTURE +</Text>
-            </TouchableOpacity>
-          </View>
-        </View>
-        {photos && photos.length > 0 ? (
-          <ScrollView
-            horizontal
-            showsHorizontalScrollIndicator={false}
-            style={styles.mirrorScroll}
-            contentContainerStyle={{ gap: 8 }}
-          >
-            {photos.slice(0, 8).map((p) => (
-              <TouchableOpacity
-                key={p.id}
-                onPress={() =>
-                  router.push({ pathname: '/(app)/modal/mirror-day/[date]', params: { date: p.date } })
-                }
-                activeOpacity={0.85}
-              >
-                <Image source={{ uri: p.photo_url }} style={styles.mirrorThumb} />
-                <Text style={styles.mirrorDay}>DAY {p.day_number}</Text>
-              </TouchableOpacity>
-            ))}
-          </ScrollView>
-        ) : (
-          <Text style={styles.emptyHint}>Take your first mirror selfie to start tracking.</Text>
-        )}
-      </View>
-
-      <Rule strong />
-
       {/* ── Trends */}
       <View style={styles.section}>
         <View style={styles.sectionHeader}>
@@ -268,7 +222,9 @@ export default function ProfileScreen() {
                 onPress={() => setTrendsRange(r)}
                 activeOpacity={0.7}
               >
-                <Text style={[styles.trendsPillText, trendsRange === r && styles.trendsPillTextActive]}>
+                <Text
+                  style={[styles.trendsPillText, trendsRange === r && styles.trendsPillTextActive]}
+                >
                   {r}D
                 </Text>
               </TouchableOpacity>
@@ -281,7 +237,7 @@ export default function ProfileScreen() {
             <View style={styles.trendsStats}>
               {[
                 { label: 'AVG', val: trendsAvg },
-                { label: 'BEST', val: Math.max(...rows.map(r => r.total_score)) },
+                { label: 'BEST', val: Math.max(...rows.map((r) => r.total_score)) },
                 { label: 'DAYS', val: rows.length },
               ].map(({ label, val }) => (
                 <View key={label} style={styles.trendsStat}>
@@ -290,20 +246,31 @@ export default function ProfileScreen() {
                 </View>
               ))}
             </View>
-            <ScrollView horizontal showsHorizontalScrollIndicator={false} style={styles.sparkScroll}>
+            <ScrollView
+              horizontal
+              showsHorizontalScrollIndicator={false}
+              style={styles.sparkScroll}
+            >
               <View style={styles.sparkRow}>
-                {rows.slice().reverse().map((r) => {
-                  const h = (r.total_score / trendsMax) * 40;
-                  return (
-                    <View
-                      key={r.id}
-                      style={[
-                        styles.sparkBar,
-                        { height: Math.max(h, 2), backgroundColor: r.total_score >= trendsAvg ? colors.amber : colors.lineStrong },
-                      ]}
-                    />
-                  );
-                })}
+                {rows
+                  .slice()
+                  .reverse()
+                  .map((r) => {
+                    const h = (r.total_score / trendsMax) * 40;
+                    return (
+                      <View
+                        key={r.id}
+                        style={[
+                          styles.sparkBar,
+                          {
+                            height: Math.max(h, 2),
+                            backgroundColor:
+                              r.total_score >= trendsAvg ? colors.amber : colors.lineStrong,
+                          },
+                        ]}
+                      />
+                    );
+                  })}
               </View>
             </ScrollView>
             <View style={styles.calendarWrap}>
@@ -311,7 +278,9 @@ export default function ProfileScreen() {
             </View>
             <View style={styles.bracketRows}>
               {(['identity', 'execution', 'outcome', 'penalty'] as const).map((bracket) => {
-                const bAvg = Math.round(rows.reduce((s, r) => s + (r[`${bracket}_score`] ?? 0), 0) / rows.length);
+                const bAvg = Math.round(
+                  rows.reduce((s, r) => s + (r[`${bracket}_score`] ?? 0), 0) / rows.length,
+                );
                 return (
                   <View key={bracket} style={styles.bracketRow}>
                     <Text style={styles.bracketLabel}>{bracket.toUpperCase()}</Text>
@@ -353,7 +322,12 @@ export default function ProfileScreen() {
 const styles = StyleSheet.create({
   container: { flex: 1, backgroundColor: colors.base, paddingHorizontal: spacing.pagePad },
   headerSection: { marginBottom: 20 },
-  name: { fontFamily: fonts.displayBold, fontSize: 24, color: colors.textPrimary, letterSpacing: -0.3 },
+  name: {
+    fontFamily: fonts.displayBold,
+    fontSize: 24,
+    color: colors.textPrimary,
+    letterSpacing: -0.3,
+  },
   identitySentence: {
     fontFamily: fonts.display,
     fontSize: 14,
@@ -384,10 +358,26 @@ const styles = StyleSheet.create({
     color: colors.textPrimary,
     fontVariant: ['tabular-nums'],
   },
-  statUnit: { fontFamily: fonts.mono, fontSize: 9, letterSpacing: 1.5, color: colors.textTertiary, marginTop: 1 },
+  statUnit: {
+    fontFamily: fonts.mono,
+    fontSize: 9,
+    letterSpacing: 1.5,
+    color: colors.textTertiary,
+    marginTop: 1,
+  },
   section: { paddingVertical: 14 },
-  sectionHeader: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', marginBottom: 12 },
-  sectionAction: { fontFamily: fonts.monoBold, fontSize: 11, letterSpacing: 1.5, color: colors.amber },
+  sectionHeader: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    marginBottom: 12,
+  },
+  sectionAction: {
+    fontFamily: fonts.monoBold,
+    fontSize: 11,
+    letterSpacing: 1.5,
+    color: colors.amber,
+  },
   navRow: {
     flexDirection: 'row',
     justifyContent: 'space-between',
@@ -399,7 +389,12 @@ const styles = StyleSheet.create({
   navText: { fontFamily: fonts.display, fontSize: 15, color: colors.textPrimary },
   navArrow: { fontFamily: fonts.display, fontSize: 20, color: colors.textTertiary },
   editIdentityBtn: { paddingVertical: 8 },
-  editIdentityText: { fontFamily: fonts.mono, fontSize: 11, letterSpacing: 1.5, color: colors.amber },
+  editIdentityText: {
+    fontFamily: fonts.mono,
+    fontSize: 11,
+    letterSpacing: 1.5,
+    color: colors.amber,
+  },
   pillRow: { flexDirection: 'row', gap: 8, paddingTop: 10 },
   pill: {
     flex: 1,
@@ -410,20 +405,21 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   pillActive: { backgroundColor: colors.accentMuted, borderColor: colors.accentDim },
-  pillText: { fontFamily: fonts.mono, fontSize: 10, letterSpacing: 1.5, color: colors.textTertiary },
+  pillText: {
+    fontFamily: fonts.mono,
+    fontSize: 10,
+    letterSpacing: 1.5,
+    color: colors.textTertiary,
+  },
   pillTextActive: { color: colors.amber },
   calendarWrap: { marginTop: 12, marginBottom: 4 },
-  sectionActions: { flexDirection: 'row', gap: 12, alignItems: 'center' },
-  // Mirror
-  mirrorScroll: { marginTop: 4 },
-  mirrorThumb: {
-    width: MIRROR_THUMB,
-    height: MIRROR_THUMB * 1.25,
-    borderRadius: 6,
-    backgroundColor: colors.elevated,
+  emptyHint: {
+    fontFamily: fonts.display,
+    fontSize: 13,
+    color: colors.textTertiary,
+    paddingTop: 8,
+    lineHeight: 18,
   },
-  mirrorDay: { fontFamily: fonts.mono, fontSize: 9, color: colors.textTertiary, marginTop: 4, textAlign: 'center', letterSpacing: 0.5 },
-  emptyHint: { fontFamily: fonts.display, fontSize: 13, color: colors.textTertiary, paddingTop: 8, lineHeight: 18 },
   // Trends
   trendsPills: { flexDirection: 'row', gap: 6 },
   trendsPill: {
@@ -434,19 +430,52 @@ const styles = StyleSheet.create({
     borderColor: colors.lineStrong,
   },
   trendsPillActive: { backgroundColor: colors.amber, borderColor: colors.amber },
-  trendsPillText: { fontFamily: fonts.mono, fontSize: 10, letterSpacing: 1, color: colors.textTertiary },
+  trendsPillText: {
+    fontFamily: fonts.mono,
+    fontSize: 10,
+    letterSpacing: 1,
+    color: colors.textTertiary,
+  },
   trendsPillTextActive: { color: colors.base },
   trendsStats: { flexDirection: 'row', marginVertical: 12 },
   trendsStat: { flex: 1, alignItems: 'center', gap: 4 },
-  trendsStatVal: { fontFamily: fonts.monoBold, fontSize: 22, color: colors.textPrimary, fontVariant: ['tabular-nums'] },
+  trendsStatVal: {
+    fontFamily: fonts.monoBold,
+    fontSize: 22,
+    color: colors.textPrimary,
+    fontVariant: ['tabular-nums'],
+  },
   sparkScroll: { marginVertical: 8 },
   sparkRow: { flexDirection: 'row', alignItems: 'flex-end', height: 44, gap: 2 },
   sparkBar: { width: 4, borderRadius: 1 },
   bracketRows: { marginTop: 8 },
-  bracketRow: { flexDirection: 'row', justifyContent: 'space-between', paddingVertical: 8, borderBottomWidth: StyleSheet.hairlineWidth, borderBottomColor: colors.lineRegular },
-  bracketLabel: { fontFamily: fonts.mono, fontSize: 11, letterSpacing: 1.5, color: colors.textTertiary },
-  bracketVal: { fontFamily: fonts.monoBold, fontSize: 15, color: colors.textPrimary, fontVariant: ['tabular-nums'] },
-  footer: { fontFamily: fonts.mono, fontSize: 10, letterSpacing: 2, color: colors.textQuiet, textAlign: 'center', paddingVertical: 24 },
+  bracketRow: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    paddingVertical: 8,
+    borderBottomWidth: StyleSheet.hairlineWidth,
+    borderBottomColor: colors.lineRegular,
+  },
+  bracketLabel: {
+    fontFamily: fonts.mono,
+    fontSize: 11,
+    letterSpacing: 1.5,
+    color: colors.textTertiary,
+  },
+  bracketVal: {
+    fontFamily: fonts.monoBold,
+    fontSize: 15,
+    color: colors.textPrimary,
+    fontVariant: ['tabular-nums'],
+  },
+  footer: {
+    fontFamily: fonts.mono,
+    fontSize: 10,
+    letterSpacing: 2,
+    color: colors.textQuiet,
+    textAlign: 'center',
+    paddingVertical: 24,
+  },
 });
 
 const calStyles = StyleSheet.create({
