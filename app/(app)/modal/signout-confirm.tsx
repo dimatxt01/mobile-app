@@ -3,6 +3,7 @@ import { router } from 'expo-router';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { useAuth } from '@/features/auth/hooks/use-auth';
 import { colors, fonts, spacing } from '@/lib/hmc-colors';
+import { radius } from '@/lib/hmc-tokens';
 import { Eyebrow } from '@/components/hmc/Eyebrow';
 
 export default function SignoutConfirmScreen() {
@@ -18,6 +19,7 @@ export default function SignoutConfirmScreen() {
     <View
       style={[styles.container, { paddingTop: insets.top + 32, paddingBottom: insets.bottom + 16 }]}
     >
+      <View style={styles.dragHandle} />
       <Eyebrow label="SIGN OUT" />
       <Text style={styles.body}>Are you sure you want to sign out?</Text>
       <TouchableOpacity style={styles.dangerBtn} onPress={handleSignOut}>
@@ -38,6 +40,14 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     paddingHorizontal: spacing.pagePad,
   },
+  dragHandle: {
+    width: 36,
+    height: 4,
+    backgroundColor: colors.borderDefault,
+    borderRadius: 2,
+    alignSelf: 'center',
+    marginBottom: 20,
+  },
   body: {
     fontFamily: fonts.display,
     fontSize: 16,
@@ -47,7 +57,7 @@ const styles = StyleSheet.create({
   },
   dangerBtn: {
     backgroundColor: colors.danger,
-    borderRadius: 8,
+    borderRadius: radius.md,
     paddingVertical: 16,
     alignSelf: 'stretch',
     alignItems: 'center',

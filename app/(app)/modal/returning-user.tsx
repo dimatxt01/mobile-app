@@ -2,12 +2,14 @@ import { View, Text, TouchableOpacity, StyleSheet } from 'react-native';
 import { router } from 'expo-router';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { colors, fonts, spacing } from '@/lib/hmc-colors';
+import { radius } from '@/lib/hmc-tokens';
 import { Eyebrow } from '@/components/hmc/Eyebrow';
 
 export default function ReturningUserScreen() {
   const insets = useSafeAreaInsets();
   return (
     <View style={[styles.container, { paddingTop: insets.top }]}>
+      <View style={styles.dragHandle} />
       <View style={styles.content}>
         <Text style={styles.logo}>HMC.</Text>
         <Eyebrow label="WELCOME BACK" />
@@ -28,6 +30,14 @@ export default function ReturningUserScreen() {
 
 const styles = StyleSheet.create({
   container: { flex: 1, backgroundColor: colors.elevated, paddingHorizontal: spacing.pagePad },
+  dragHandle: {
+    width: 36,
+    height: 4,
+    backgroundColor: colors.borderDefault,
+    borderRadius: 2,
+    alignSelf: 'center',
+    marginTop: 12,
+  },
   content: { flex: 1, alignItems: 'center', justifyContent: 'center', gap: 12 },
   logo: { fontFamily: fonts.monoBold, fontSize: 48, color: colors.textPrimary, letterSpacing: 4 },
   body: {
@@ -40,7 +50,7 @@ const styles = StyleSheet.create({
   },
   cta: {
     backgroundColor: colors.amber,
-    borderRadius: 8,
+    borderRadius: radius.md,
     paddingVertical: 18,
     alignItems: 'center',
   },

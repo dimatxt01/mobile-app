@@ -3,11 +3,15 @@ import { colors, fonts, spacing } from '@/lib/hmc-colors';
 
 type Props = { step: number; total?: number };
 export function POBar({ step, total = 13 }: Props) {
-  const pct = Math.min((step / total) * 100, 100);
   return (
     <View style={styles.container}>
       <View style={styles.track}>
-        <View style={[styles.fill, { width: `${pct}%` }]} />
+        {Array.from({ length: total }, (_, i) => (
+          <View
+            key={i}
+            style={[styles.segment, i < step ? styles.segmentActive : styles.segmentInactive]}
+          />
+        ))}
       </View>
       <Text style={styles.label}>
         {step}/{total}
@@ -23,7 +27,9 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     gap: 12,
   },
-  track: { flex: 1, height: 2, backgroundColor: colors.lineStrong, borderRadius: 1 },
-  fill: { height: '100%', backgroundColor: colors.amber, borderRadius: 1 },
+  track: { flex: 1, flexDirection: 'row', gap: 3 },
+  segment: { flex: 1, height: 4, borderRadius: 2 },
+  segmentActive: { backgroundColor: colors.amber },
+  segmentInactive: { backgroundColor: colors.surface03 },
   label: { fontFamily: fonts.mono, fontSize: 11, color: colors.textTertiary },
 });

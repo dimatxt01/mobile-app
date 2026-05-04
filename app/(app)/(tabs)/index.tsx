@@ -10,6 +10,7 @@ import { useLockCheckin } from '@/features/checkin/lock-checkin';
 import { useHistory } from '@/features/history/use-history';
 import { computeScore } from '@/lib/score';
 import { colors, fonts, spacing } from '@/lib/hmc-colors';
+import { scale, radius } from '@/lib/hmc-tokens';
 import { PrintBar } from '@/components/hmc/PrintBar';
 import { BracketBlock } from '@/components/hmc/BracketBlock';
 import { HabitRow } from '@/components/hmc/HabitRow';
@@ -155,7 +156,7 @@ export default function TodayScreen() {
           <Text style={styles.lateText}>LATE CHECK-IN · −10 PTS</Text>
         </View>
       )}
-      <ScrollView contentContainerStyle={{ paddingBottom: 120 }}>
+      <ScrollView contentContainerStyle={{ paddingBottom: 120, paddingTop: 0 }}>
         <PrintBar dayNumber={(profile?.day_count ?? 0) + 1} />
 
         {/* Yesterday's letter */}
@@ -179,59 +180,56 @@ export default function TodayScreen() {
           </View>
         )}
 
-        <BracketBlock title="IDENTITY" subtotal={score?.identity ?? 0}>
-          {config.data?.identityHabits.map((h) => (
-            <HabitRow
-              key={h.id}
-              label={h.label}
-              points={h.points}
-              checked={identityChecks[h.id] ?? false}
-              onToggle={() => setIdentityChecks((prev) => ({ ...prev, [h.id]: !prev[h.id] }))}
-              disabled={isLocked}
-            />
-          ))}
-        </BracketBlock>
-        <Rule />
-        <BracketBlock title="EXECUTION" subtotal={score?.execution ?? 0}>
-          {config.data?.executionHabits.map((h) => (
-            <HabitRow
-              key={h.id}
-              label={h.label}
-              points={h.points}
-              checked={executionChecks[h.id] ?? false}
-              onToggle={() => setExecutionChecks((prev) => ({ ...prev, [h.id]: !prev[h.id] }))}
-              disabled={isLocked}
-            />
-          ))}
-          <Slider10 value={perf9to5} onChange={setPerf9to5} disabled={isLocked} />
-        </BracketBlock>
-        <Rule />
-        <BracketBlock title="OUTCOMES" subtotal={score?.outcome ?? 0}>
-          {config.data?.outcomes.map((m) => (
-            <Step05
-              key={m.id}
-              label={m.label}
-              value={outcomeScores[m.id] ?? 0}
-              onChange={(v) => setOutcomeScores((prev) => ({ ...prev, [m.id]: v }))}
-              disabled={isLocked}
-            />
-          ))}
-        </BracketBlock>
-        <Rule />
-        <BracketBlock title="PENALTY" subtotal={score?.penalty ?? 0} danger>
-          {config.data?.penalties.map((p) => (
-            <Step05
-              key={p.id}
-              label={p.label}
-              value={penaltyScores[p.id] ?? 0}
-              onChange={(v) => setPenaltyScores((prev) => ({ ...prev, [p.id]: v }))}
-              danger
-              disabled={isLocked}
-            />
-          ))}
-        </BracketBlock>
-
-        <Rule />
+        <View style={styles.brackets}>
+          <BracketBlock title="IDENTITY" subtotal={score?.identity ?? 0}>
+            {config.data?.identityHabits.map((h) => (
+              <HabitRow
+                key={h.id}
+                label={h.label}
+                points={h.points}
+                checked={identityChecks[h.id] ?? false}
+                onToggle={() => setIdentityChecks((prev) => ({ ...prev, [h.id]: !prev[h.id] }))}
+                disabled={isLocked}
+              />
+            ))}
+          </BracketBlock>
+          <BracketBlock title="EXECUTION" subtotal={score?.execution ?? 0}>
+            {config.data?.executionHabits.map((h) => (
+              <HabitRow
+                key={h.id}
+                label={h.label}
+                points={h.points}
+                checked={executionChecks[h.id] ?? false}
+                onToggle={() => setExecutionChecks((prev) => ({ ...prev, [h.id]: !prev[h.id] }))}
+                disabled={isLocked}
+              />
+            ))}
+            <Slider10 value={perf9to5} onChange={setPerf9to5} disabled={isLocked} />
+          </BracketBlock>
+          <BracketBlock title="OUTCOMES" subtotal={score?.outcome ?? 0}>
+            {config.data?.outcomes.map((m) => (
+              <Step05
+                key={m.id}
+                label={m.label}
+                value={outcomeScores[m.id] ?? 0}
+                onChange={(v) => setOutcomeScores((prev) => ({ ...prev, [m.id]: v }))}
+                disabled={isLocked}
+              />
+            ))}
+          </BracketBlock>
+          <BracketBlock title="PENALTY" subtotal={score?.penalty ?? 0} danger>
+            {config.data?.penalties.map((p) => (
+              <Step05
+                key={p.id}
+                label={p.label}
+                value={penaltyScores[p.id] ?? 0}
+                onChange={(v) => setPenaltyScores((prev) => ({ ...prev, [p.id]: v }))}
+                danger
+                disabled={isLocked}
+              />
+            ))}
+          </BracketBlock>
+        </View>
 
         {/* Reflection */}
         <View style={styles.reflectionSection}>
@@ -275,8 +273,6 @@ export default function TodayScreen() {
             />
           </View>
         </View>
-
-        <Rule strong />
 
         <TouchableOpacity
           style={styles.totalSection}
@@ -332,13 +328,18 @@ const styles = StyleSheet.create({
     letterSpacing: 1.5,
     color: colors.textPrimary,
   },
+  brackets: {
+    paddingHorizontal: spacing.pagePad,
+    paddingTop: 20,
+    gap: scale.xl2,
+  },
   letterCard: {
     marginHorizontal: spacing.pagePad,
     marginTop: 12,
     marginBottom: 4,
     padding: 14,
     backgroundColor: colors.accentMuted,
-    borderRadius: 4,
+    borderRadius: radius.sm,
     borderLeftWidth: 2,
     borderLeftColor: colors.amber,
     gap: 6,
@@ -364,9 +365,9 @@ const styles = StyleSheet.create({
   },
   sentenceText: {
     fontFamily: fonts.displayBold,
-    fontSize: 22,
+    fontSize: 24,
     color: colors.textPrimary,
-    lineHeight: 28,
+    lineHeight: 32,
     letterSpacing: -0.4,
     marginTop: 8,
   },
@@ -382,7 +383,7 @@ const styles = StyleSheet.create({
     fontSize: 10,
     letterSpacing: 1.5,
     color: colors.textTertiary,
-    marginBottom: 8,
+    marginBottom: 12,
   },
   reflInput: {
     fontFamily: fonts.display,
@@ -397,8 +398,14 @@ const styles = StyleSheet.create({
     color: colors.textSecondary,
   },
   totalSection: {
-    paddingHorizontal: spacing.pagePad,
+    marginHorizontal: spacing.pagePad,
+    marginTop: scale.xl3,
+    paddingHorizontal: 16,
     paddingVertical: spacing.sectionGap,
+    backgroundColor: colors.surface02,
+    borderRadius: radius.lg,
+    borderWidth: StyleSheet.hairlineWidth,
+    borderColor: colors.borderMuted,
   },
   hint: {
     fontFamily: fonts.mono,

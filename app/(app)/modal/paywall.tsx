@@ -1,10 +1,12 @@
 import { View, Text, TouchableOpacity, StyleSheet } from 'react-native';
 import { router } from 'expo-router';
 import { colors, fonts, spacing } from '@/lib/hmc-colors';
+import { radius } from '@/lib/hmc-tokens';
 import { Eyebrow } from '@/components/hmc/Eyebrow';
 export default function PaywallScreen() {
   return (
     <View style={styles.c}>
+      <View style={styles.dragHandle} />
       <Eyebrow label="PREMIUM" />
       <Text style={styles.body}>Coming soon.</Text>
       <TouchableOpacity style={styles.close} onPress={() => router.back()}>
@@ -21,6 +23,14 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     paddingHorizontal: spacing.pagePad,
   },
+  dragHandle: {
+    width: 36,
+    height: 4,
+    backgroundColor: colors.borderDefault,
+    borderRadius: 2,
+    alignSelf: 'center',
+    marginBottom: 20,
+  },
   body: {
     fontFamily: fonts.display,
     color: colors.textSecondary,
@@ -32,9 +42,9 @@ const styles = StyleSheet.create({
     marginTop: 32,
     paddingVertical: 14,
     paddingHorizontal: 32,
-    borderRadius: 8,
+    borderRadius: radius.md,
     borderWidth: StyleSheet.hairlineWidth,
-    borderColor: colors.lineStrong,
+    borderColor: colors.borderDefault,
   },
   closeText: {
     fontFamily: fonts.mono,

@@ -14,6 +14,7 @@ import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { useAuth } from '@/features/auth/hooks/use-auth';
 import { supabase } from '@/lib/supabase';
 import { colors, fonts, spacing } from '@/lib/hmc-colors';
+import { radius, scale } from '@/lib/hmc-tokens';
 import { Eyebrow } from '@/components/hmc/Eyebrow';
 import type { Habit, HabitType } from '@/types/database';
 
@@ -99,6 +100,7 @@ export default function EditHabitsScreen() {
     <View
       style={[styles.container, { paddingTop: insets.top + 16, paddingBottom: insets.bottom + 16 }]}
     >
+      <View style={styles.dragHandle} />
       <Eyebrow label={`${habitType.toUpperCase()} HABITS`} />
       <FlatList
         data={habits}
@@ -148,18 +150,33 @@ export default function EditHabitsScreen() {
 
 const styles = StyleSheet.create({
   container: { flex: 1, backgroundColor: colors.elevated, paddingHorizontal: spacing.pagePad },
+  dragHandle: {
+    width: 36,
+    height: 4,
+    backgroundColor: colors.borderDefault,
+    borderRadius: 2,
+    alignSelf: 'center',
+    marginBottom: 20,
+  },
   centered: { alignItems: 'center', justifyContent: 'center' },
-  row: { flexDirection: 'row', alignItems: 'center', gap: 8, marginBottom: 8 },
+  row: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 8,
+    paddingVertical: 14,
+    borderBottomWidth: StyleSheet.hairlineWidth,
+    borderBottomColor: colors.borderSubtle,
+  },
   input: {
     fontFamily: fonts.display,
     fontSize: 15,
     color: colors.textPrimary,
     backgroundColor: colors.high,
-    borderRadius: 8,
+    borderRadius: radius.sm,
     paddingHorizontal: 12,
-    paddingVertical: 10,
+    paddingVertical: 12,
     borderWidth: StyleSheet.hairlineWidth,
-    borderColor: colors.lineStrong,
+    borderColor: colors.borderMuted,
   },
   ptsInput: { width: 56, textAlign: 'center' },
   removeBtn: {
@@ -173,12 +190,13 @@ const styles = StyleSheet.create({
     fontSize: 12,
     color: colors.amber,
     letterSpacing: 1.5,
-    marginTop: 8,
-    paddingVertical: 8,
+    paddingVertical: 14,
+    borderTopWidth: StyleSheet.hairlineWidth,
+    borderTopColor: colors.borderMuted,
   },
   saveBtn: {
     backgroundColor: colors.amber,
-    borderRadius: 8,
+    borderRadius: radius.md,
     paddingVertical: 16,
     alignItems: 'center',
     marginTop: 24,

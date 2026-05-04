@@ -1,11 +1,13 @@
 import { View, Text, TouchableOpacity, StyleSheet, Alert } from 'react-native';
 import { router } from 'expo-router';
 import { colors, fonts, spacing } from '@/lib/hmc-colors';
+import { radius } from '@/lib/hmc-tokens';
 import { Eyebrow } from '@/components/hmc/Eyebrow';
 import { Rule } from '@/components/hmc/Rule';
 export default function PrivacyDataScreen() {
   return (
     <View style={styles.c}>
+      <View style={styles.dragHandle} />
       <Eyebrow label="PRIVACY & DATA" />
       <View style={styles.list}>
         <TouchableOpacity
@@ -42,7 +44,23 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     paddingHorizontal: spacing.pagePad,
   },
-  list: { width: '100%', marginTop: 16 },
+  dragHandle: {
+    width: 36,
+    height: 4,
+    backgroundColor: colors.borderDefault,
+    borderRadius: 2,
+    alignSelf: 'center',
+    marginBottom: 20,
+  },
+  list: {
+    width: '100%',
+    marginTop: 16,
+    backgroundColor: colors.surface02,
+    borderRadius: radius.lg,
+    borderWidth: StyleSheet.hairlineWidth,
+    borderColor: colors.borderMuted,
+    paddingHorizontal: 16,
+  },
   row: { flexDirection: 'row', justifyContent: 'space-between', paddingVertical: 16 },
   rowText: { fontFamily: fonts.display, fontSize: 15, color: colors.textPrimary },
   arrow: { fontFamily: fonts.display, fontSize: 20, color: colors.textTertiary },
@@ -51,9 +69,9 @@ const styles = StyleSheet.create({
     marginTop: 32,
     paddingVertical: 14,
     paddingHorizontal: 32,
-    borderRadius: 8,
+    borderRadius: radius.md,
     borderWidth: StyleSheet.hairlineWidth,
-    borderColor: colors.lineStrong,
+    borderColor: colors.borderDefault,
   },
   closeText: {
     fontFamily: fonts.mono,

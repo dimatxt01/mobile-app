@@ -17,6 +17,7 @@ import { useMirror } from '@/features/mirror/use-mirror';
 import { useHistory, type HistoryRow } from '@/features/history/use-history';
 import { supabase } from '@/lib/supabase';
 import { colors, fonts, spacing } from '@/lib/hmc-colors';
+import { scale, radius } from '@/lib/hmc-tokens';
 import { Eyebrow } from '@/components/hmc/Eyebrow';
 import { Rule } from '@/components/hmc/Rule';
 import { useScoreDensity } from '@/lib/score-density';
@@ -137,19 +138,24 @@ export default function ProfileScreen() {
         ) : null}
       </View>
 
-      {/* ── Stats row */}
-      <View style={styles.statsRow}>
-        <View style={styles.statItem}>
+      {/* ── Stats grid */}
+      <View style={styles.statsGrid}>
+        <View style={styles.statCard}>
           <Eyebrow label="STREAK" />
           <Text style={styles.statValue}>{stats?.streak ?? 0}</Text>
           <Text style={styles.statUnit}>DAYS</Text>
         </View>
-        <View style={[styles.statItem, styles.statItemCenter]}>
+        <View style={styles.statCard}>
+          <Eyebrow label="DAY COUNT" />
+          <Text style={styles.statValue}>{stats?.day_count ?? 0}</Text>
+          <Text style={styles.statUnit}>DAYS</Text>
+        </View>
+        <View style={styles.statCard}>
           <Eyebrow label="LIFETIME AVG" />
           <Text style={styles.statValue}>{stats?.lifetime_avg ?? 0}</Text>
           <Text style={styles.statUnit}>PTS</Text>
         </View>
-        <View style={styles.statItem}>
+        <View style={styles.statCard}>
           <Eyebrow label="BEST DAY" />
           <Text style={styles.statValue}>{stats?.best_score ?? 0}</Text>
           {stats?.best_date ? (
@@ -355,19 +361,22 @@ const styles = StyleSheet.create({
     marginTop: 6,
     lineHeight: 20,
   },
-  statsRow: {
+  statsGrid: {
     flexDirection: 'row',
+    flexWrap: 'wrap',
+    gap: 10,
     marginBottom: 20,
-    paddingVertical: 16,
-    borderTopWidth: StyleSheet.hairlineWidth,
-    borderBottomWidth: StyleSheet.hairlineWidth,
-    borderColor: colors.lineStrong,
   },
-  statItem: { flex: 1, alignItems: 'center', gap: 4 },
-  statItemCenter: {
-    borderLeftWidth: StyleSheet.hairlineWidth,
-    borderRightWidth: StyleSheet.hairlineWidth,
-    borderColor: colors.lineRegular,
+  statCard: {
+    flex: 1,
+    minWidth: '45%',
+    backgroundColor: colors.surface02,
+    borderRadius: radius.md,
+    padding: 16,
+    borderWidth: StyleSheet.hairlineWidth,
+    borderColor: colors.borderMuted,
+    alignItems: 'center',
+    gap: 4,
   },
   statValue: {
     fontFamily: fonts.monoBold,
@@ -383,9 +392,9 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
-    paddingVertical: 14,
+    paddingVertical: 16,
     borderBottomWidth: StyleSheet.hairlineWidth,
-    borderBottomColor: colors.lineRegular,
+    borderBottomColor: colors.borderSubtle,
   },
   navText: { fontFamily: fonts.display, fontSize: 15, color: colors.textPrimary },
   navArrow: { fontFamily: fonts.display, fontSize: 20, color: colors.textTertiary },
