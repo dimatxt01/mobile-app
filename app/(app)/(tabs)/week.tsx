@@ -48,6 +48,7 @@ export default function WeekScreen() {
         challenge: string | null;
         next_week: string | null;
         weekly_avg: number | null;
+        photo_urls: string[];
       }[];
     },
     enabled: !!user,
@@ -92,12 +93,14 @@ export default function WeekScreen() {
           <View style={styles.avgMeta}>
             {weekDelta !== null && (
               <Text style={[styles.deltaText, weekDelta >= 0 ? styles.deltaPos : styles.deltaNeg]}>
-                {weekDelta >= 0 ? '+' : ''}{weekDelta} VS LAST WK
+                {weekDelta >= 0 ? '+' : ''}
+                {weekDelta} VS LAST WK
               </Text>
             )}
             {thisWeek[bestIdx] && (
               <Text style={styles.bestText}>
-                BEST: {DAY_LABELS[new Date(thisWeek[bestIdx]!.date + 'T00:00:00').getDay()] ?? '—'} · {thisWeek[bestIdx]!.total_score}
+                BEST: {DAY_LABELS[new Date(thisWeek[bestIdx]!.date + 'T00:00:00').getDay()] ?? '—'}{' '}
+                · {thisWeek[bestIdx]!.total_score}
               </Text>
             )}
           </View>
@@ -159,20 +162,33 @@ export default function WeekScreen() {
         </View>
         {(['identity', 'execution', 'outcome', 'penalty'] as const).map((bracket) => {
           const thisVal = thisWeek.length
-            ? Math.round(thisWeek.reduce((s, r) => s + (r[`${bracket}_score`] ?? 0), 0) / thisWeek.length)
+            ? Math.round(
+                thisWeek.reduce((s, r) => s + (r[`${bracket}_score`] ?? 0), 0) / thisWeek.length,
+              )
             : 0;
           const lastVal = lastWeek.length
-            ? Math.round(lastWeek.reduce((s, r) => s + (r[`${bracket}_score`] ?? 0), 0) / lastWeek.length)
+            ? Math.round(
+                lastWeek.reduce((s, r) => s + (r[`${bracket}_score`] ?? 0), 0) / lastWeek.length,
+              )
             : 0;
           const d = lastVal > 0 ? thisVal - lastVal : null;
           return (
             <View key={bracket} style={styles.bracketRow}>
-              <Text style={[styles.bracketCol, styles.bracketLabelText]}>{bracket.toUpperCase()}</Text>
+              <Text style={[styles.bracketCol, styles.bracketLabelText]}>
+                {bracket.toUpperCase()}
+              </Text>
               <Text style={[styles.bracketCol, styles.bracketValue]}>{thisVal}</Text>
               <Text style={[styles.bracketCol, styles.bracketDim]}>{lastVal || '—'}</Text>
               {d !== null ? (
-                <Text style={[styles.bracketCol, styles.bracketValue, d >= 0 ? styles.deltaPos : styles.deltaNeg]}>
-                  {d >= 0 ? '+' : ''}{d}
+                <Text
+                  style={[
+                    styles.bracketCol,
+                    styles.bracketValue,
+                    d >= 0 ? styles.deltaPos : styles.deltaNeg,
+                  ]}
+                >
+                  {d >= 0 ? '+' : ''}
+                  {d}
                 </Text>
               ) : (
                 <Text style={[styles.bracketCol, styles.bracketDim]}>—</Text>
@@ -197,10 +213,13 @@ export default function WeekScreen() {
           >
             <View style={styles.dayLeft}>
               <Text style={styles.dayDate}>
-                {DAY_LABELS[new Date(r.date + 'T00:00:00').getDay()] ?? r.date} · <Text style={styles.dayDateMono}>{r.date.slice(5)}</Text>
+                {DAY_LABELS[new Date(r.date + 'T00:00:00').getDay()] ?? r.date} ·{' '}
+                <Text style={styles.dayDateMono}>{r.date.slice(5)}</Text>
               </Text>
               {r.reflection_win ? (
-                <Text style={styles.dayWin} numberOfLines={1}>{r.reflection_win}</Text>
+                <Text style={styles.dayWin} numberOfLines={1}>
+                  {r.reflection_win}
+                </Text>
               ) : null}
             </View>
             <Text style={styles.dayScore}>{r.total_score}</Text>
@@ -210,36 +229,35 @@ export default function WeekScreen() {
 
       <Rule strong />
 
-      {/* Weekly check-up CTA / countdown */}
+      {/* Weekly check-ups — unified section */}
       <View style={styles.section}>
+        <Eyebrow label="WEEKLY CHECK-UPS" />
+
         {isSunday ? (
           <TouchableOpacity
-            style={styles.ctaBtn}
+            style={styles.activeRow}
             onPress={() => router.push('/(app)/modal/weekly-review')}
             activeOpacity={0.8}
           >
-            <Text style={styles.ctaText}>WEEKLY CHECK-UP →</Text>
+            <Text style={styles.activeLabel}>THIS WEEK · CHECK-UP OPEN →</Text>
+            <Text style={styles.activeHint}>Tap to complete your weekly reflection</Text>
           </TouchableOpacity>
         ) : (
           <View style={styles.countdownBlock}>
-            <Eyebrow label="NEXT WEEKLY CHECK-UP IN" />
             <View style={styles.countdownRow}>
               <Text style={styles.countdownNum}>{daysUntilSunday}</Text>
               <Text style={styles.countdownUnit}>DAYS</Text>
             </View>
           </View>
         )}
-      </View>
 
-      {/* Past weekly reviews */}
-      {weeklyReviews && weeklyReviews.length > 0 && (
-        <>
-          <Rule />
-          <View style={styles.section}>
-            <Eyebrow label="PAST WEEKLY REVIEWS" />
+        {weeklyReviews && weeklyReviews.length > 0 && (
+          <View style={styles.reviewsList}>
             {weeklyReviews.map((r) => {
               const endDate = new Date(r.week_end + 'T00:00:00');
-              const label = endDate.toLocaleDateString('en-US', { month: 'short', day: 'numeric' }).toUpperCase();
+              const label = endDate
+                .toLocaleDateString('en-US', { month: 'short', day: 'numeric' })
+                .toUpperCase();
               return (
                 <TouchableOpacity
                   key={r.id}
@@ -259,7 +277,9 @@ export default function WeekScreen() {
                   <View style={styles.reviewLeft}>
                     <Text style={styles.reviewLabel}>WK OF {label}</Text>
                     {r.win ? (
-                      <Text style={styles.reviewWin} numberOfLines={1}>{r.win}</Text>
+                      <Text style={styles.reviewWin} numberOfLines={1}>
+                        {r.win}
+                      </Text>
                     ) : null}
                   </View>
                   {r.weekly_avg != null && (
@@ -269,15 +289,21 @@ export default function WeekScreen() {
               );
             })}
           </View>
-        </>
-      )}
+        )}
+      </View>
     </ScrollView>
   );
 }
 
 const styles = StyleSheet.create({
   container: { flex: 1, backgroundColor: colors.base },
-  centered: { flex: 1, alignItems: 'center', justifyContent: 'center', paddingHorizontal: spacing.pagePad, paddingTop: 60 },
+  centered: {
+    flex: 1,
+    alignItems: 'center',
+    justifyContent: 'center',
+    paddingHorizontal: spacing.pagePad,
+    paddingTop: 60,
+  },
   emptyText: {
     fontFamily: fonts.display,
     fontSize: 14,
@@ -289,7 +315,12 @@ const styles = StyleSheet.create({
     paddingHorizontal: spacing.pagePad,
     paddingVertical: 20,
   },
-  avgRow: { flexDirection: 'row', alignItems: 'flex-end', justifyContent: 'space-between', marginTop: 8 },
+  avgRow: {
+    flexDirection: 'row',
+    alignItems: 'flex-end',
+    justifyContent: 'space-between',
+    marginTop: 8,
+  },
   avgMeta: { alignItems: 'flex-end', paddingBottom: 8, gap: 4 },
   deltaText: { fontFamily: fonts.mono, fontSize: 11, letterSpacing: 1.2 },
   deltaPos: { color: colors.amber },
@@ -326,7 +357,12 @@ const styles = StyleSheet.create({
     borderBottomColor: colors.lineRegular,
   },
   bracketCol: { flex: 1 },
-  bracketLabelText: { fontFamily: fonts.mono, fontSize: 10, letterSpacing: 1.5, color: colors.textTertiary },
+  bracketLabelText: {
+    fontFamily: fonts.mono,
+    fontSize: 10,
+    letterSpacing: 1.5,
+    color: colors.textTertiary,
+  },
   bracketValue: {
     fontFamily: fonts.monoBold,
     fontSize: 13,
@@ -351,7 +387,12 @@ const styles = StyleSheet.create({
   },
   dayRowLast: { borderBottomWidth: 0 },
   dayLeft: { flex: 1, gap: 2 },
-  dayDate: { fontFamily: fonts.display, fontSize: 14, color: colors.textPrimary, fontWeight: '500' },
+  dayDate: {
+    fontFamily: fonts.display,
+    fontSize: 14,
+    color: colors.textPrimary,
+    fontWeight: '500',
+  },
   dayDateMono: { fontFamily: fonts.mono, fontSize: 12, color: colors.textTertiary },
   dayWin: { fontFamily: fonts.display, fontSize: 12, color: colors.textTertiary },
   dayScore: {
@@ -360,15 +401,28 @@ const styles = StyleSheet.create({
     color: colors.textPrimary,
     fontVariant: ['tabular-nums'],
   },
-  ctaBtn: {
+  activeRow: {
     paddingVertical: 16,
+    paddingHorizontal: 14,
     borderWidth: 1,
-    borderColor: colors.amber,
+    borderColor: colors.danger,
     borderRadius: radius.md,
-    alignItems: 'center',
+    marginTop: 12,
+    gap: 4,
   },
-  ctaText: { fontFamily: fonts.monoBold, fontSize: 13, letterSpacing: 2, color: colors.amber },
-  countdownBlock: { gap: 8 },
+  activeLabel: {
+    fontFamily: fonts.monoBold,
+    fontSize: 13,
+    letterSpacing: 1.5,
+    color: colors.danger,
+  },
+  activeHint: {
+    fontFamily: fonts.display,
+    fontSize: 12,
+    color: colors.textTertiary,
+  },
+  reviewsList: { marginTop: 16 },
+  countdownBlock: { gap: 8, marginTop: 12 },
   countdownRow: { flexDirection: 'row', alignItems: 'baseline', gap: 6 },
   countdownNum: {
     fontFamily: fonts.monoBold,
@@ -377,7 +431,12 @@ const styles = StyleSheet.create({
     fontVariant: ['tabular-nums'],
     lineHeight: 52,
   },
-  countdownUnit: { fontFamily: fonts.mono, fontSize: 12, letterSpacing: 2, color: colors.textTertiary },
+  countdownUnit: {
+    fontFamily: fonts.mono,
+    fontSize: 12,
+    letterSpacing: 2,
+    color: colors.textTertiary,
+  },
   reviewRow: {
     flexDirection: 'row',
     justifyContent: 'space-between',
@@ -387,7 +446,12 @@ const styles = StyleSheet.create({
     borderBottomColor: colors.lineRegular,
   },
   reviewLeft: { flex: 1, gap: 3 },
-  reviewLabel: { fontFamily: fonts.mono, fontSize: 11, letterSpacing: 1.5, color: colors.textPrimary },
+  reviewLabel: {
+    fontFamily: fonts.mono,
+    fontSize: 11,
+    letterSpacing: 1.5,
+    color: colors.textPrimary,
+  },
   reviewWin: { fontFamily: fonts.display, fontSize: 13, color: colors.textSecondary },
   reviewScore: {
     fontFamily: fonts.monoBold,

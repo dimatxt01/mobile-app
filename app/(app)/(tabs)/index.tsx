@@ -1,5 +1,13 @@
 import { useState, useEffect, useMemo } from 'react';
-import { Alert, View, Text, TextInput, ScrollView, TouchableOpacity, StyleSheet } from 'react-native';
+import {
+  Alert,
+  View,
+  Text,
+  TextInput,
+  ScrollView,
+  TouchableOpacity,
+  StyleSheet,
+} from 'react-native';
 import { router } from 'expo-router';
 import { useAuth } from '@/features/auth/hooks/use-auth';
 import { useProfileStore } from '@/store/profile-store';
@@ -99,7 +107,16 @@ export default function TodayScreen() {
       reflection_broke: reflectionBroke || null,
       reflection_tomorrow: reflectionTomorrow || null,
     });
-  }, [identityChecks, executionChecks, perf9to5, outcomeScores, penaltyScores, reflectionWin, reflectionBroke, reflectionTomorrow]);
+  }, [
+    identityChecks,
+    executionChecks,
+    perf9to5,
+    outcomeScores,
+    penaltyScores,
+    reflectionWin,
+    reflectionBroke,
+    reflectionTomorrow,
+  ]);
 
   useEffect(() => {
     if (!checkin?.is_locked || !score) return;
@@ -120,7 +137,7 @@ export default function TodayScreen() {
         checkinId: checkin.id,
       },
     });
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [checkin?.is_locked]);
 
   useEffect(() => {
@@ -132,7 +149,8 @@ export default function TodayScreen() {
   }, [history]);
 
   useEffect(() => {
-    if (lockCheckin.isError) Alert.alert('Lock Failed', "Could not lock today's check-in. Please try again.");
+    if (lockCheckin.isError)
+      Alert.alert('Lock Failed', "Could not lock today's check-in. Please try again.");
   }, [lockCheckin.isError]);
 
   const handleLock = () => {
@@ -163,11 +181,12 @@ export default function TodayScreen() {
         {(() => {
           const today = new Date().toISOString().slice(0, 10);
           const yesterdayCheckin = history?.find((r) => r.date !== today);
-          const letter = (yesterdayCheckin as { reflection_tomorrow?: string } | undefined)?.reflection_tomorrow;
+          const letter = (yesterdayCheckin as { reflection_tomorrow?: string } | undefined)
+            ?.reflection_tomorrow;
           if (!letter || isLocked) return null;
           return (
             <View style={styles.letterCard}>
-              <Text style={styles.letterCardEyebrow}>✉  A LETTER FROM YESTERDAY-YOU</Text>
+              <Text style={styles.letterCardEyebrow}>✉ A LETTER FROM YESTERDAY-YOU</Text>
               <Text style={styles.letterCardText}>{letter}</Text>
             </View>
           );

@@ -147,7 +147,9 @@ export default function DayCompleteScreen() {
               activeOpacity={0.8}
             >
               <Text style={styles.letterCtaText}>WRITE A LETTER →</Text>
-              <Text style={styles.letterCtaHint}>{"A note you'll read before tomorrow's check-in"}</Text>
+              <Text style={styles.letterCtaHint}>
+                {"A note you'll read before tomorrow's check-in"}
+              </Text>
             </TouchableOpacity>
           )}
         </View>
@@ -158,7 +160,11 @@ export default function DayCompleteScreen() {
         {(isSunday || isLastDay) && (
           <View style={styles.section}>
             {isSunday && (
-              <TouchableOpacity style={styles.reviewBtn} onPress={handleWeeklyReview} activeOpacity={0.8}>
+              <TouchableOpacity
+                style={styles.reviewBtn}
+                onPress={handleWeeklyReview}
+                activeOpacity={0.8}
+              >
                 <Text style={styles.reviewBtnText}>WEEKLY CHECK-UP →</Text>
                 <Text style={styles.reviewBtnHint}>Reflect on the week</Text>
               </TouchableOpacity>
@@ -214,11 +220,26 @@ const styles = StyleSheet.create({
     borderBottomWidth: StyleSheet.hairlineWidth,
     borderBottomColor: colors.lineRegular,
   },
-  bracketLabel: { fontFamily: fonts.mono, fontSize: 11, letterSpacing: 1.5, color: colors.textTertiary },
-  bracketVal: { fontFamily: fonts.monoBold, fontSize: 14, color: colors.textPrimary, fontVariant: ['tabular-nums'] },
+  bracketLabel: {
+    fontFamily: fonts.mono,
+    fontSize: 11,
+    letterSpacing: 1.5,
+    color: colors.textTertiary,
+  },
+  bracketVal: {
+    fontFamily: fonts.monoBold,
+    fontSize: 14,
+    color: colors.textPrimary,
+    fontVariant: ['tabular-nums'],
+  },
   bracketDanger: { color: colors.danger },
   bracketTotal: { borderBottomWidth: 0, paddingTop: 12 },
-  totalLabel: { fontFamily: fonts.monoBold, fontSize: 13, letterSpacing: 2, color: colors.textPrimary },
+  totalLabel: {
+    fontFamily: fonts.monoBold,
+    fontSize: 13,
+    letterSpacing: 2,
+    color: colors.textPrimary,
+  },
   totalVal: {
     fontFamily: fonts.monoBold,
     fontSize: 22,
@@ -234,7 +255,12 @@ const styles = StyleSheet.create({
     marginTop: 10,
     gap: 4,
   },
-  letterCtaText: { fontFamily: fonts.monoBold, fontSize: 12, letterSpacing: 2, color: colors.amber },
+  letterCtaText: {
+    fontFamily: fonts.monoBold,
+    fontSize: 12,
+    letterSpacing: 2,
+    color: colors.amber,
+  },
   letterCtaHint: { fontFamily: fonts.display, fontSize: 12, color: colors.textTertiary },
   letterBlock: { marginTop: 10, gap: 12 },
   letterInput: {
@@ -275,7 +301,12 @@ const styles = StyleSheet.create({
     borderRadius: radius.md,
     gap: 4,
   },
-  reviewBtnText: { fontFamily: fonts.monoBold, fontSize: 13, letterSpacing: 2, color: colors.amber },
+  reviewBtnText: {
+    fontFamily: fonts.monoBold,
+    fontSize: 13,
+    letterSpacing: 2,
+    color: colors.amber,
+  },
   reviewBtnHint: { fontFamily: fonts.display, fontSize: 12, color: colors.textTertiary },
   doneBtn: {
     paddingVertical: 16,
@@ -284,5 +315,10 @@ const styles = StyleSheet.create({
     borderRadius: radius.md,
     alignItems: 'center',
   },
-  doneBtnText: { fontFamily: fonts.mono, fontSize: 13, letterSpacing: 2, color: colors.textSecondary },
+  doneBtnText: {
+    fontFamily: fonts.mono,
+    fontSize: 13,
+    letterSpacing: 2,
+    color: colors.textSecondary,
+  },
 });

@@ -12,7 +12,20 @@ import { Rule } from '@/components/hmc/Rule';
 import { PrintBar } from '@/components/hmc/PrintBar';
 import { BigNum } from '@/components/hmc/BigNum';
 
-const MONTH_NAMES = ['JAN', 'FEB', 'MAR', 'APR', 'MAY', 'JUN', 'JUL', 'AUG', 'SEP', 'OCT', 'NOV', 'DEC'] as const;
+const MONTH_NAMES = [
+  'JAN',
+  'FEB',
+  'MAR',
+  'APR',
+  'MAY',
+  'JUN',
+  'JUL',
+  'AUG',
+  'SEP',
+  'OCT',
+  'NOV',
+  'DEC',
+] as const;
 
 export default function MonthScreen() {
   const insets = useSafeAreaInsets();
@@ -252,7 +265,12 @@ const styles = StyleSheet.create({
     paddingVertical: 32,
     alignItems: 'center',
   },
-  emptyText: { fontFamily: fonts.display, fontSize: 14, color: colors.textTertiary, textAlign: 'center' },
+  emptyText: {
+    fontFamily: fonts.display,
+    fontSize: 14,
+    color: colors.textTertiary,
+    textAlign: 'center',
+  },
   section: { paddingHorizontal: spacing.pagePad, paddingVertical: 16 },
   bracketRow: {
     flexDirection: 'row',
@@ -261,8 +279,18 @@ const styles = StyleSheet.create({
     borderBottomWidth: StyleSheet.hairlineWidth,
     borderBottomColor: colors.lineRegular,
   },
-  bracketLabel: { fontFamily: fonts.mono, fontSize: 11, letterSpacing: 1.5, color: colors.textTertiary },
-  bracketVal: { fontFamily: fonts.monoBold, fontSize: 15, color: colors.textPrimary, fontVariant: ['tabular-nums'] },
+  bracketLabel: {
+    fontFamily: fonts.mono,
+    fontSize: 11,
+    letterSpacing: 1.5,
+    color: colors.textTertiary,
+  },
+  bracketVal: {
+    fontFamily: fonts.monoBold,
+    fontSize: 15,
+    color: colors.textPrimary,
+    fontVariant: ['tabular-nums'],
+  },
   ctaBtn: {
     paddingVertical: 16,
     borderWidth: 1,
@@ -280,7 +308,12 @@ const styles = StyleSheet.create({
     fontVariant: ['tabular-nums'],
     lineHeight: 52,
   },
-  countdownUnit: { fontFamily: fonts.mono, fontSize: 12, letterSpacing: 2, color: colors.textTertiary },
+  countdownUnit: {
+    fontFamily: fonts.mono,
+    fontSize: 12,
+    letterSpacing: 2,
+    color: colors.textTertiary,
+  },
   reviewRow: {
     flexDirection: 'row',
     justifyContent: 'space-between',
@@ -290,7 +323,12 @@ const styles = StyleSheet.create({
     borderBottomColor: colors.lineRegular,
   },
   reviewLeft: { flex: 1, gap: 3 },
-  reviewMonth: { fontFamily: fonts.mono, fontSize: 12, letterSpacing: 1.5, color: colors.textPrimary },
+  reviewMonth: {
+    fontFamily: fonts.mono,
+    fontSize: 12,
+    letterSpacing: 1.5,
+    color: colors.textPrimary,
+  },
   reviewVerdict: { fontFamily: fonts.display, fontSize: 13, color: colors.textSecondary },
   reviewScore: {
     fontFamily: fonts.monoBold,

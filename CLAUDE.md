@@ -1,4 +1,3 @@
-
 # Half Milly Club (HMC) — Project Reference
 
 ## What This App Is
@@ -187,18 +186,18 @@ app/(app)/_layout.tsx:
 
 ## Packages — Status
 
-| Package                           | Status         | Notes                 |
-| --------------------------------- | -------------- | --------------------- |
-| expo-font                         | installed      | font loading          |
-| @expo-google-fonts/inter          | installed      | Inter display font    |
-| @expo-google-fonts/jetbrains-mono | installed      | JetBrains Mono        |
-| @react-native-async-storage/async-storage | installed | score-density display preference |
-| expo-camera                       | needs install  | MIRROR tab            |
-| expo-image-picker                 | needs install  | MIRROR tab alt        |
-| expo-notifications                | needs install  | local reminders       |
-| expo-file-system                  | needs install  | photo handling        |
-| react-native-svg                  | SKIP (Expo Go) | use View-based charts |
-| react-native-purchases            | SKIP (stub)    | paywall "coming soon" |
+| Package                                   | Status         | Notes                            |
+| ----------------------------------------- | -------------- | -------------------------------- |
+| expo-font                                 | installed      | font loading                     |
+| @expo-google-fonts/inter                  | installed      | Inter display font               |
+| @expo-google-fonts/jetbrains-mono         | installed      | JetBrains Mono                   |
+| @react-native-async-storage/async-storage | installed      | score-density display preference |
+| expo-camera                               | needs install  | MIRROR tab                       |
+| expo-image-picker                         | needs install  | MIRROR tab alt                   |
+| expo-notifications                        | needs install  | local reminders                  |
+| expo-file-system                          | needs install  | photo handling                   |
+| react-native-svg                          | SKIP (Expo Go) | use View-based charts            |
+| react-native-purchases                    | SKIP (stub)    | paywall "coming soon"            |
 
 All packages except react-native-svg and react-native-purchases work in Expo Go SDK 54.
 

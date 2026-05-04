@@ -36,13 +36,9 @@ export default function LifeInWeeksScreen() {
       <Rule />
       <View style={styles.statsBlock}>
         <Text style={styles.statPrimary}>
-          You have lived{' '}
-          <Text style={styles.statNum}>{weeksLived.toLocaleString()}</Text>
-          {' '}weeks
+          You have lived <Text style={styles.statNum}>{weeksLived.toLocaleString()}</Text> weeks
         </Text>
-        <Text style={styles.statSecondary}>
-          ~{weeksRemaining.toLocaleString()} weeks remaining
-        </Text>
+        <Text style={styles.statSecondary}>~{weeksRemaining.toLocaleString()} weeks remaining</Text>
       </View>
       <Rule />
       <View style={styles.gridPad} />
@@ -55,10 +51,7 @@ export default function LifeInWeeksScreen() {
         data={weeks}
         renderItem={({ item }) => (
           <View
-            style={[
-              styles.square,
-              item < weeksLived ? styles.squareLived : styles.squareFuture,
-            ]}
+            style={[styles.square, item < weeksLived ? styles.squareLived : styles.squareFuture]}
           />
         )}
         keyExtractor={(item) => String(item)}
